@@ -51,28 +51,37 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="JUMPSHOT">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+  <meta name="description" content="mathjax: true 波束形成技术（Beamforming）​        近年来，语音识别带起了前端信号处理的小高潮，经由前端处理之后馈送给识别引擎信号的质量（信噪比、语音保真度等）对识别率至关重要。远场、混响、噪声等不利于语音质量的因素等在前端信号处理之后，都会在某种程度上得到削弱，同时这也意味着语音信号会在某种程度上得到增强。  ​        语音增强，总体来说有三种方法，即在三">
+<meta property="og:type" content="article">
+<meta property="og:title" content="波束形成技术（Beamforming）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;06&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88Beamforming%EF%BC%89&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="mathjax: true 波束形成技术（Beamforming）​        近年来，语音识别带起了前端信号处理的小高潮，经由前端处理之后馈送给识别引擎信号的质量（信噪比、语音保真度等）对识别率至关重要。远场、混响、噪声等不利于语音质量的因素等在前端信号处理之后，都会在某种程度上得到削弱，同时这也意味着语音信号会在某种程度上得到增强。  ​        语音增强，总体来说有三种方法，即在三">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;前端增强流程.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;波阵面.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;扩散声场.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;房间声学.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;阵列模型.png">
+<meta property="og:updated_time" content="2019-11-08T09:10:38.360Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;前端增强流程.png">
 
-<link rel="canonical" href="http://yoursite.com/">
+<link rel="canonical" href="http://yoursite.com/2019/11/06/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88Beamforming%EF%BC%89/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false,
+    isHome: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>JUMPSHOT</title>
+  <title>波束形成技术（Beamforming） | JUMPSHOT</title>
   
 
 
@@ -167,135 +176,10 @@
             
 
   <div class="posts-expand">
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/08/%E5%85%AC%E5%BC%8F%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JUMPSHOT">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/08/%E5%85%AC%E5%BC%8F%EF%BC%9F/" class="post-title-link" itemprop="url">公式？</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2019-11-08 22:51:38 / Modified: 22:52:32" itemprop="dateCreated datePublished" datetime="2019-11-08T22:51:38+08:00">2019-11-08</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-          <p>$cos(\theta_d)$</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
   
   
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/08/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JUMPSHOT">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/08/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-11-08 22:34:11" itemprop="dateCreated datePublished" datetime="2019-11-08T22:34:11+08:00">2019-11-08</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/06/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88Beamforming%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -309,8 +193,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/06/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88Beamforming%EF%BC%89/" class="post-title-link" itemprop="url">波束形成技术（Beamforming）</a>
+          波束形成技术（Beamforming）
         </h1>
 
         <div class="post-meta">
@@ -341,7 +224,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>mathjax: true</p>
+        <p>mathjax: true</p>
 <h1 id="波束形成技术（Beamforming）"><a href="#波束形成技术（Beamforming）" class="headerlink" title="波束形成技术（Beamforming）"></a>波束形成技术（Beamforming）</h1><p>​        近年来，语音识别带起了前端信号处理的小高潮，经由前端处理之后馈送给识别引擎信号的质量（信噪比、语音保真度等）对识别率至关重要。远场、混响、噪声等不利于语音质量的因素等在前端信号处理之后，都会在某种程度上得到削弱，同时这也意味着语音信号会在某种程度上得到增强。</p>
 <p><img src="/Users/zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/前端增强流程.png" alt=""></p>
 <p>​        语音增强，总体来说有三种方法，即在三个不同域上的操作，比如频域上的谱减法降噪，时域上的自适应滤波器做回声消除，以及本项目研究的空域上的波束形成（Beamforming）。波束形成可以看作是空间滤波器，其许多原理都可以类比经典数字信号处理中的滤波器（混叠、加窗）。这很好理解，毕竟都是采样，只不过一个是对空间，一个是对时间罢了。波束形成的形状，指向，旁瓣的大小都是可设计的。本文档即基于Python进行模拟仿真一些基础常见的波束形成技术，包括频域（Delay and Sum/ MaxDF等）及时域的波束形成技术。</p>
@@ -418,24 +301,36 @@
 <p>steering vector中的任一项是满足在两个角度下相等的，所以，此时发生了混叠。由基本三角函数定理</p>
 <p>$\frac{1}{|\cos(\theta_1)-\cos(\theta_2)|} &gt;= \frac{1}{2}$ ，所以 $\frac{d}{\lambda} = \frac{1}{\cos(\theta_1)-\cos(\theta_2)} &lt; \frac{1}{2}$，空间混叠才不会发生。</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/08/hello-world/" rel="prev" title="Hello World">
+                  Hello World <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
       </footer>
+    
   </article>
   
   
   
 
   </div>
-
-  
-
 
 
           </div>
@@ -464,6 +359,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#波束形成技术（Beamforming）"><span class="nav-number">1.</span> <span class="nav-text">波束形成技术（Beamforming）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、声场统计模型（Acoustic-Model）"><span class="nav-number">1.1.</span> <span class="nav-text">一、声场统计模型（Acoustic Model）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#声传播模型"><span class="nav-number">1.1.1.</span> <span class="nav-text">声传播模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声场统计模型"><span class="nav-number">1.1.2.</span> <span class="nav-text">声场统计模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#房间声学"><span class="nav-number">1.1.3.</span> <span class="nav-text">房间声学</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、固定波束形成技术（FixedBeaming）"><span class="nav-number">1.2.</span> <span class="nav-text">二、固定波束形成技术（FixedBeaming）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-问题建模及求解"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 问题建模及求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-线阵模型"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 线阵模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-性能指标"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.性能指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-空间混叠"><span class="nav-number">1.2.4.</span> <span class="nav-text">3.空间混叠</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -570,54 +466,6 @@
   
 
   
-      
-<script type="text/x-mathjax-config">
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') {
-          next = next.nextSibling;
-        }
-        if (next && next.nodeName.toLowerCase() === 'br') {
-          next.parentNode.removeChild(next);
-        }
-      }
-    });
-  });
-
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
-      if (element.nodeName.toLowerCase() == 'li') {
-        element = element.parentNode;
-      }
-      element.classList.add('has-jax');
-    }
-  });
-</script>
-<script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
-    MathJax.Hub.Typeset();
-  }, window.MathJax);
-</script>
-
-    
 
   
 
