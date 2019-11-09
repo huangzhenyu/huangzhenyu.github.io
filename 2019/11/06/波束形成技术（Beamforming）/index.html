@@ -58,14 +58,14 @@
 <meta property="og:site_name" content="JUMPSHOT">
 <meta property="og:description" content="波束形成技术（Beamforming）​        近年来，语音识别带起了前端信号处理的小高潮，经由前端处理之后馈送给识别引擎信号的质量（信噪比、语音保真度等）对识别率至关重要。远场、混响、噪声等不利于语音质量的因素等在前端信号处理之后，都会在某种程度上得到削弱，同时这也意味着语音信号会在某种程度上得到增强。  ​        语音增强，总体来说有三种方法，即在三个不同域上的操作，比如频域上">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;前端增强流程.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;波阵面.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;扩散声场.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;房间声学.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;阵列模型.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;.com&#x2F;&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;前端增强流程.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;.com&#x2F;&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;波阵面.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;.com&#x2F;&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;扩散声场.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;.com&#x2F;&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;房间声学.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;.com&#x2F;&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;阵列模型.png">
 <meta property="og:updated_time" content="2019-11-08T15:47:24.872Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;Users&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;前端增强流程.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;.com&#x2F;&#x2F;zhenyuhuang&#x2F;Documents&#x2F;notes&#x2F;01_语音增强个人总结&#x2F;01_Beamforming&#x2F;前端增强流程.png">
 
 <link rel="canonical" href="http://yoursite.com/2019/11/06/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88Beamforming%EF%BC%89/">
 
@@ -129,6 +129,7 @@
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
   </div>
 
   <div class="site-nav-toggle">
@@ -184,8 +185,8 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="NBA数据分析可视化/音频算法">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -225,13 +226,13 @@
 
       
         <h1 id="波束形成技术（Beamforming）"><a href="#波束形成技术（Beamforming）" class="headerlink" title="波束形成技术（Beamforming）"></a>波束形成技术（Beamforming）</h1><p>​        近年来，语音识别带起了前端信号处理的小高潮，经由前端处理之后馈送给识别引擎信号的质量（信噪比、语音保真度等）对识别率至关重要。远场、混响、噪声等不利于语音质量的因素等在前端信号处理之后，都会在某种程度上得到削弱，同时这也意味着语音信号会在某种程度上得到增强。</p>
-<p><img src="/Users/zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/前端增强流程.png" alt=""></p>
+<p><img src="/.com//zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/前端增强流程.png" alt></p>
 <p>​        语音增强，总体来说有三种方法，即在三个不同域上的操作，比如频域上的谱减法降噪，时域上的自适应滤波器做回声消除，以及本项目研究的空域上的波束形成（Beamforming）。波束形成可以看作是空间滤波器，其许多原理都可以类比经典数字信号处理中的滤波器（混叠、加窗）。这很好理解，毕竟都是采样，只不过一个是对空间，一个是对时间罢了。波束形成的形状，指向，旁瓣的大小都是可设计的。本文档即基于Python进行模拟仿真一些基础常见的波束形成技术，包括频域（Delay and Sum/ MaxDF等）及时域的波束形成技术。</p>
 <p>Python环境为Python3.6，需要的包有numpy/scipy/matplotlib, 参考文献主要为:</p>
 <p>[1] J.Benesty, I.Cohen, and J.Chen, Fundamentals of Signal Enhancement and Array Signal Processing. Weily-IEEE Press 2017.</p>
 <p>[2] Nuance 内部培训材料</p>
 <h2 id="一、声场统计模型（Acoustic-Model）"><a href="#一、声场统计模型（Acoustic-Model）" class="headerlink" title="一、声场统计模型（Acoustic Model）"></a>一、声场统计模型（Acoustic Model）</h2><h3 id="声传播模型"><a href="#声传播模型" class="headerlink" title="声传播模型"></a>声传播模型</h3><p>​        声传播的过程，即波动的过程，是一个涉及到空间、时间的物理过程。根据波阵面的不同，可以简单的分为球面波和平面波（还有线型声源扩散，波阵面为圆柱面）。石头落入水中荡起的涟漪好比是球面波的横截面，能量不停的往外扩散，其波阵面是球形。而平面波则更好理解了。两张图，下面左侧为球面波的截面，右侧为平面波的截面。</p>
-<p><img src="/Users/zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/波阵面.png" alt=""></p>
+<p><img src="/.com//zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/波阵面.png" alt></p>
 <p>​        实际上我们身处的声学环境，大部分都可假设是球面波，即可认为发声源是一点源。从上面左图可以看到，当距离声源足够远时（左图两个黑点），圆弧近似看作为直线，此时认为左侧的场景同右侧一样，是为平面波。这就好比我们站在地球上，感觉不到地球是圆的一样，是同一个道理。以上就是平面波假设，是我们研究阵列及其他一些算法的重要前提假设。</p>
 <h3 id="声场统计模型"><a href="#声场统计模型" class="headerlink" title="声场统计模型"></a>声场统计模型</h3><p>​        假设声场中任一点的信号是一个时空域的随机采样过程。描述声场中任意两点不同时刻信号之间的<strong>相关系数</strong>为两点信号相乘的期望，可以写作为：</p>
 <p>$r_{y_i,y_l}(r_i,r_l) = E[Y(r_i,t_0,\eta)Y(r_l,t_1,\eta)]$</p>
@@ -247,21 +248,21 @@
 <p>一类比较特殊的声场——扩散场（能量分布均匀，各个方向作无规分布的声场），其MSC：</p>
 <p>$J_\Theta(\omega):= \frac{1}{4\pi}\int^{2\pi}_{0}\int_0^{2\pi}exp(-j\omega\tau\cos{\theta})\sin{\theta}d\theta d\phi<br>                = \frac{\sin(\omega\tau)}{\omega\tau}$</p>
 <p> 这在后面研究在不同声场下麦克风的表现都会用得到。</p>
-<p><img src="/Users/zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/扩散声场.png" alt=""></p>
+<p><img src="/.com//zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/扩散声场.png" alt></p>
 <p>上面是扩散声场中，不同距离之间的MSC变化图，可以看到</p>
 <p>1.低频时，MSC近似为1，可以认为是相干声场，高频时MSC接近于0，可以认为是不相干声场。</p>
 <p>2.两点之间的距离是MSC的重要决定参数，这个是肯定的，几乎所有于频率有关的参数，都要牵涉到距离。</p>
 <p>3.车内噪声场、后期混响场可以认为是典型的扩散场。</p>
 <p>其他的类型的声场（混合声场），都可以用上述模型进行加权逼近。</p>
 <h3 id="房间声学"><a href="#房间声学" class="headerlink" title="房间声学"></a>房间声学</h3><p>​        关于这部分，我其实算是科班出身，我研究生主攻建筑声学，其中一门重要的课程就是Kutruff的《Room Acoustics》，授课老师即是鄙人之导师，所以备课预习格外认真，且老师授课方式很新颖，教学内容印象深刻，受益匪浅。所以，下面也不仔细说了，流水账翻一翻吧。 </p>
-<p><img src="/Users/zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/房间声学.png" alt=""></p>
+<p><img src="/.com//zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/房间声学.png" alt></p>
 <p>​        上图，左侧小人是声源，可以认为是喇叭，右边的小人是听众，可以认为是麦克风，麦克风接受到的信号除了直达声，还有经过墙面一次反射延后到达的一次反射声，经过墙面二次反射延后到达的二次反射声。。</p>
 <p>墙面反射一次（或者传播途径远），可以认为声波能量产生了一定比列的损失（乘以损失系数），延后到达即认为产生一次时延，假设声源发出的信号为  $x(t)$  接收到的信号则为：</p>
 <p>$y(t) = x(t) + a_1x(t-t_0) + a_2x(t-t_1)+ a_3x(t-t_3)+…..$</p>
 <p>上式是不是和滤波器的差分方程很像？！没错，这就是房间的脉冲响应（Impulse Response），是房间传递函数在时域上的表现形式。别小瞧这个式子，时域卷积运算的时候为什么反转序列移序相乘再相加，参透上式即可得彀中玄妙。</p>
 <h2 id="二、固定波束形成技术（FixedBeaming）"><a href="#二、固定波束形成技术（FixedBeaming）" class="headerlink" title="二、固定波束形成技术（FixedBeaming）"></a>二、固定波束形成技术（FixedBeaming）</h2><p>​        其实波束形成的玩法本质上就是操作阵列不同麦克风上的信号加权系数，对于一类固定滤波器系数的阵列来说，无论输入信号或者噪声信号是啥样的（统计特征），其滤波器系数雷打不动，此类波束形成叫Fixed Beamforming，这好比传统数字信号处理里面的经典滤波器；可以联想到，现代数字信号里面有一类自适应滤波器，对应的，阵列里就有相应的Adaptive Beamforming，其滤波器的系数是跟随着噪声场的变化而变化的。</p>
 <p>​        此外，阵列根据形状不同还分为线阵、环针、中心阵等，为了便于理解，我们先从一维的Fixed Beamforming开始着手研究uniform linear arrays，由此情况推导其他以及引申到普适情况也不会是什么难事。</p>
-<h3 id="1-问题建模及求解"><a href="#1-问题建模及求解" class="headerlink" title="1. 问题建模及求解"></a>1. 问题建模及求解</h3><p><img src="/Users/zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/阵列模型.png" style="zoom:50%;" /></p>
+<h3 id="1-问题建模及求解"><a href="#1-问题建模及求解" class="headerlink" title="1. 问题建模及求解"></a>1. 问题建模及求解</h3><p><img src="/.com//zhenyuhuang/Documents/notes/01_语音增强个人总结/01_Beamforming/阵列模型.png" style="zoom:50%;"></p>
 <p>​        远场假设，一声源与共有M个麦克风线阵的轴线夹角呈$\theta_d$入射，麦克风间距为 $\delta$, 则每两个麦克风之间的单位时延为 $\tau_0 = cos(\theta_d)*\delta/c$ ，其中c为声速，则以最右侧，也即离声源最近的麦克风为参考可以定义一个导向矢量(Steering Vector)：</p>
 <p> $d(f, \cos(\theta)) = [1     e^{-j2\pi f\tau_{0}\cos(\theta)} …  e^{-j(M-1)2\pi f\tau_{0}\cos(\theta)}]^T$</p>
 <p>​        根据傅立叶变换的性质，时域左移或者右移动等于频域在相位上的改变。根据下式可以看出导向矢量是对频域相移的补偿。比如第一个元素是1，那么不需要任何补偿，第二个元素，波阵面延后到达，收到的信号应该应该是乘以一个 $e$ 指数为正的相移因子，导向矢量补偿因子之后使得麦克风2收到的信号与麦克风1收到的信号相位上是对齐的，便于后面进一步的加权操作。如果现在没有对麦克风信号进行任何的系数加权，则收到的裸信号为：</p>
@@ -367,17 +368,17 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <img class="site-author-image" itemprop="image" alt="John Doe"
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
     src="/images/avatar.gif">
-  <p class="site-author-name" itemprop="name">John Doe</p>
-  <div class="site-description" itemprop="description"></div>
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">NBA数据分析可视化/音频算法</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -412,7 +413,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
