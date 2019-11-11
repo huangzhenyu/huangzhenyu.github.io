@@ -53,13 +53,13 @@
   <meta name="description" content="NBA数据分析可视化&#x2F;音频算法">
 <meta property="og:type" content="website">
 <meta property="og:title" content="JUMPSHOT">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;archives&#x2F;2019&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;archives&#x2F;2019&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
 <meta property="og:description" content="NBA数据分析可视化&#x2F;音频算法">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/archives/2019/">
+<link rel="canonical" href="https://huangzhenyu.github.io/archives/2019/">
 
 
 <script id="page-configurations">
@@ -189,7 +189,7 @@
   <div class="post-block">
     <div class="posts-collapse">
       <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 4 篇日志。 继续努力。</span>
+        <span class="collection-header">嗯..! 目前共计 1 篇日志。 继续努力。</span>
       </div>
 
       
@@ -202,75 +202,15 @@
 
       <div class="post-meta">
         <time itemprop="dateCreated"
-              datetime="2019-11-09T22:20:17+08:00"
-              content="2019-11-09">
-          11-09
+              datetime="2019-11-11T07:17:15+08:00"
+              content="2019-11-11">
+          11-11
         </time>
       </div>
 
       <h2 class="post-title">
-          <a class="post-title-link" href="/2019/11/09/pages/" itemprop="url">
-            <span itemprop="name">pages</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-11-09T09:43:59+08:00"
-              content="2019-11-09">
-          11-09
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/11/09/beamforming/" itemprop="url">
-            <span itemprop="name">beamforming</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-11-08T23:53:15+08:00"
-              content="2019-11-08">
-          11-08
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/11/08/try/" itemprop="url">
-            <span itemprop="name">try</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-29T18:57:00+08:00"
-              content="2019-10-29">
-          10-29
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/10/29/ENUM%20class%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BD%BF%E7%94%A8/" itemprop="url">
-            <span itemprop="name">ENUM class枚举类型的使用</span>
+          <a class="post-title-link" href="/2019/11/11/ENUM-class%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BD%BF%E7%94%A8/" itemprop="url">
+            <span itemprop="name">C++中ENUM-Class枚举类型的使用</span>
           </a>
       </h2>
 
@@ -329,9 +269,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -373,6 +325,9 @@
   </div>
 
       </div>
+
+      
+
 
     </div>
   </aside>
@@ -485,6 +440,33 @@
   
 
   
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
 
 </body>
 </html>

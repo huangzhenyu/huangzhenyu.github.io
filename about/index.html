@@ -53,14 +53,14 @@
   <meta name="description" content="音频算法工程师热爱数据与分析热爱NBA">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;about&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;about&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
 <meta property="og:description" content="音频算法工程师热爱数据与分析热爱NBA">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-11-09T14:28:29.972Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/about/">
+<link rel="canonical" href="https://huangzhenyu.github.io/about/">
 
 
 <script id="page-configurations">
@@ -224,6 +224,7 @@
 
           </div>
           
+    <div class="comments" id="comments"></div>
 
         </div>
           
@@ -263,9 +264,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -307,6 +320,9 @@
   </div>
 
       </div>
+
+      
+
 
     </div>
   </aside>
@@ -419,6 +435,33 @@
   
 
   
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
 
 </body>
 </html>

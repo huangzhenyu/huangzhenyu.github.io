@@ -53,14 +53,14 @@
   <meta name="description" content="NBA数据分析可视化&#x2F;音频算法">
 <meta property="og:type" content="website">
 <meta property="og:title" content="分类">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;categories&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;categories&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
 <meta property="og:description" content="NBA数据分析可视化&#x2F;音频算法">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-11-09T14:25:27.777Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/categories/">
+<link rel="canonical" href="https://huangzhenyu.github.io/categories/">
 
 
 <script id="page-configurations">
@@ -210,10 +210,10 @@
       <div class="post-body">
           <div class="category-all-page">
             <div class="category-all-title">
-              暂无分类
+              目前共计 1 个分类
             </div>
             <div class="category-all">
-              
+              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><span class="category-list-count">1</span></li></ul>
             </div>
           </div>
         
@@ -232,6 +232,7 @@
 
           </div>
           
+    <div class="comments" id="comments"></div>
 
         </div>
           
@@ -271,9 +272,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -315,6 +328,9 @@
   </div>
 
       </div>
+
+      
+
 
     </div>
   </aside>
@@ -427,6 +443,33 @@
   
 
   
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
 
 </body>
 </html>
