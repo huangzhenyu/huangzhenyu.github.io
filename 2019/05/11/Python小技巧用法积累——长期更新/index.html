@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到类似情况可以使用时又怎么都回想不起来，怎么办咧？记下来，自己慢慢琢磨使用呗。">
+<meta name="keywords" content="小知识点,Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python小技巧用法积累--长期更新">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到类似情况可以使用时又怎么都回想不起来，怎么办咧？记下来，自己慢慢琢磨使用呗。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;glob的使用.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;分割文件路径.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;文件状态.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;文件状态2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;分割文件路径.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;数据的标准化.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;plotly1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;plotly2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;super用法.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;静态方法.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;抽象类的定义.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;numpy矩阵的链接.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;windows启动tensorboard.png">
+<meta property="og:updated_time" content="2019-11-11T13:14:39.716Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;glob的使用.png">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python小技巧用法积累--长期更新 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="NBA数据分析可视化/音频算法">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python小技巧用法积累--长期更新
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-11 07:17:15" itemprop="dateCreated datePublished" datetime="2019-05-11T07:17:15+08:00">2019-05-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-11 21:14:39" itemprop="dateModified" datetime="2019-11-11T21:14:39+08:00">2019-11-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+            <div class="post-description">如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到类似情况可以使用时又怎么都回想不起来，怎么办咧？记下来，自己慢慢琢磨使用呗。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li><p>glob 模块中的glob函数，用以寻找匹配字符串，可以用来寻找目录下特定的文件格式。<br>比如，在找dirName这个目录下的所有音频文件可以用法如下：</p>
+<p><img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/glob的使用.png" alt></p>
+<p>定义了一个可能的所有音频格式的元组，用循环遍历了所有的音频格式，并按照文件名称做了一个排序。</p>
+</li>
+</ul><ul>
+<li>python的格式化输出用print函数，可以以format后接各种数据类型来表达。<br>下图则分别输出 整型、整型与字符串。</li>
+</ul><a id="more"></a>
+
+<p>​    <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/分割文件路径.png" alt></p>
+<p>​    </p>
+<ul>
+<li>os.stat(file).st_size 看指定文件的大小，stat函数还可以查询指定文件的诸多信息，包括。用法例子如下，判断wav文件是否包含有效的数据长度，如果长度为0，则跳过此次循环。</li>
+</ul>
+<p>  <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/文件状态.png" alt>    </p>
+<p>​                                <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/文件状态2.png" alt></p>
+<ul>
+<li>python 内嵌的isinstance(x, int)<br>判断x实例是不是已知的int类型，int也可以选择类型列表，如isinstance(a,(int,str,list))等</li>
+</ul>
+<ul>
+<li>返回目录名称，并判断最后一位是否为分隔符，并使用字符串的split函数分割，获取文件名称中的最后一个单词，这个单词往往是分类。</li>
+</ul>
+<p>​                            <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/分割文件路径.png" alt></p>
+<p>​        </p>
+<ul>
+<li>数据预处理<br>去均值：它做的事情就是，对待训练的每一张图片的特征，都减去全部训练集图片的特征均值，这么做的直观意义就是，我们把输入数据各个维度的数据都中心化到0了。这么做的目的是减小计算量，把数据从原先的标准坐标系下的一个个向量组成的矩阵，变成以这些向量的均值为原点建立的坐标系，使用python的numpy工具包，这一步可以用X -= np.mean(X, axis = 0)轻松实现。<br>归一化：归一化的直观理解含义是，我们做一些工作去保证所有的维度上数据都在一个变化幅度上。通常我们有两种方法来实现归一化。一个是在数据都去均值之后，每个维度上的数据都除以这个维度上数据的标准差(X /= np.std(X, axis = 0))。 另外一种方式是我们除以数据绝对值最大值，以保证所有的数据归一化后都在-1到1之间。多说一句，其实在任何你觉得各维度幅度变化非常大的数据集上，你都 可以考虑归一化处理。</li>
+</ul>
+<p>​        <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/数据的标准化.png" alt></p>
+<ul>
+<li><p>Plotly绘图简介，最强大的绘图工具，绘图核心思路类似于建筑制图CAD中图层的理念，与R中ggplot理念一致。</p>
+<ul>
+<li><p>绘图方式有离线和在线两种，在线需要注册账号较麻烦。离线的有plotly.offline.plot 和 plotly.offline.iplot两种，后者主要用于jupyter  notebook，直接生成交换图形，运行前要先运行 plotly.offline.init_notebook_mode()初始化。前者则直接生成html格式的图像文件, 并自动打开。</p>
+<p>主要画图命令是 plotly.offline.iplot（），传入各个图层的参数。在根据绘图需求从graph_objs中导入相应的obj之后，接下来需要做的事情是基于待展示的数据，为指定的obj配置相关参数，这在plotly中称为构造traces(create traces)，</p>
+</li>
+</ul>
+<p><img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/plotly1.png" alt></p>
+</li>
+</ul>
+<ul>
+<li>plotly中图像的图层元素与底层的背景、坐标轴等是独立开来的，在我们通过前面介绍的内容，定义好绘制图像需要的对象之后，可以直接绘制，但如果想要在背景图层上有更多自定义化的内容，就需要定Layout()对象，示例如下。从上可以看出plotly绘图基本流程如下：<ul>
+<li>画什么样的图，导入graphy_go，创建一个对象如散点图，并传入数据，构成trace</li>
+<li>trace储存于列表之中，供后面构建Figure对象，然后创建layout对象，坐标轴、标题、图例可统统在    layout中构造定义</li>
+<li>构建fig对象，传入data和layout之后启用命令iplot绘图。</li>
+</ul>
+</li>
+</ul>
+<p>  ​        <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/plotly2.png" alt></p>
+<ul>
+<li>Python intersection 常用语list 或者 set对象，求交集。</li>
+</ul>
+<ul>
+<li><p>继承父类的属性，super函数的用法：<br>super() 函数是用于调用父类(超类)的一个方法。super 是用来解决多重继承问题的，直接用类名调用父类方法在使用单继承的时候没问题，但是如果使用多继承，会涉及到查找顺序（MRO）、重复调用（钻石继承）等种种问题。</p>
+<p><img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/super用法.png" alt></p>
+</li>
+</ul>
+<ul>
+<li><p>类 statsticmethod 的使用</p>
+<p><img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/静态方法.png" alt></p>
+</li>
+</ul>
+<p>​        </p>
+<ul>
+<li><p>抽象方法是基类中定义的方法，但却没有任何实现。在python中实现一个抽象方法的简单的方法是：</p>
+<p>这里实例化Sheep类或实例化任意从其继承的子类（未实现get_size）时候都会抛出异常。</p>
+</li>
+</ul>
+<p>​        <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/抽象类的定义.png" alt></p>
+<ul>
+<li><p>Numpy中c_, r_用于连接矩阵</p>
+<p><img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/numpy矩阵的链接.png" alt></p>
+</li>
+<li><p>本地tensorflow启动tensorboard命令，不能再忘了</p>
+</li>
+</ul>
+<p>​        <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/windows启动tensorboard.png" alt></p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag"><i class="fa fa-tag"></i> 小知识点</a>
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" rel="prev" title="vscode中Cpp编译多文件问题总结">
+                  vscode中Cpp编译多文件问题总结 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">NBA数据分析可视化/音频算法</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://fansided.com/nba/nylon-calculus/#" title="https:&#x2F;&#x2F;fansided.com&#x2F;nba&#x2F;nylon-calculus&#x2F;#" rel="noopener" target="_blank">nylon-calculus</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://squared2020.com/" title="https:&#x2F;&#x2F;squared2020.com&#x2F;" rel="noopener" target="_blank">NBA数据分析师</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">18k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17 分钟</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

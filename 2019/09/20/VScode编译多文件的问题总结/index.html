@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="vscode中编译多文件的配置问题，折腾了好久，终于搞清楚是咋回事了。。其实还是最开始对编译过程不熟悉。另外，vscode用来写C&#x2F;C++可真是个麻烦活。。最近转用sublime了。">
+<meta name="keywords" content="C++,VScode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vscode中Cpp编译多文件问题总结">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="vscode中编译多文件的配置问题，折腾了好久，终于搞清楚是咋回事了。。其实还是最开始对编译过程不熟悉。另外，vscode用来写C&#x2F;C++可真是个麻烦活。。最近转用sublime了。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;4.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;5.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;8.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;9.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;10.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;11.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;12.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;13.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;14.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;15.png">
+<meta property="og:updated_time" content="2019-11-11T13:48:06.730Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;1.png">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>vscode中Cpp编译多文件问题总结 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="NBA数据分析可视化/音频算法">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vscode中Cpp编译多文件问题总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-20 07:17:15" itemprop="dateCreated datePublished" datetime="2019-09-20T07:17:15+08:00">2019-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-11 21:48:06" itemprop="dateModified" datetime="2019-11-11T21:48:06+08:00">2019-11-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+            <div class="post-description">vscode中编译多文件的配置问题，折腾了好久，终于搞清楚是咋回事了。。其实还是最开始对编译过程不熟悉。另外，vscode用来写C/C++可真是个麻烦活。。最近转用sublime了。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>初学C++，在参照B站<a href="https://www.bilibili.com/video/av41559729?from=search&amp;seid=9852409698812774082" target="_blank" rel="noopener">https://www.bilibili.com/video/av41559729?from=search&amp;seid=9852409698812774082</a>       </p><p>课程学习C++时，有一节课程创建了两个类：圆和点，并赋予了两个类不同的属性，最终实现的功能是判断点和圆之间的关系。最开始的时候，Cpp程序写在同一个cpp的文件下，文件可以完美执行！但是课程中拆分了圆类和点类到不同的*.cpp和.h文件下，并在包含了主程序main的cpp调用执行，原本期望得到完美的结果我傻了眼，在windows和mac上都得到了一个懵逼的结果。</p><a id="more"></a>
+
+<p>mac上：</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/1.png" alt="image-20190920080145997"></p>
+<p>windows上也是类似的：</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/2.png" alt="image-20190920104746788"></p>
+<p>经过了一下午加晚上的折腾，还是没能找到错误，开始我以为环境配置有问题，按照<a href="https://code.visualstudio.com/docs/cpp/config-clang-mac" target="_blank" rel="noopener">https://code.visualstudio.com/docs/cpp/config-clang-mac</a>  上的教程又重新配置了一遍结果还是不行。在经历了一下午加一晚上的折腾后我心灰意冷，向大神发起求助。</p>
+<h2 id="插件code-run的运行"><a href="#插件code-run的运行" class="headerlink" title="插件code-run的运行"></a><strong>插件code-run的运行</strong></h2><p>上述mac是我安装的code-run执行的结果。默认用的是g++</p>
+<p>大神看到mac上的显示一眼就看出问题所在。g++ main.cpp -o main 中我只编译了main.cpp，并没有编译其他我自己定义的cpp文件，因此会抱这个错误，正确的做法是 g++ 所有的.cpp -o main完成编译，然后./加输出的文件名执行打印结果即可。在terminal中是如下结果：</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/3.png" alt="image-20190920080926153"></p>
+<p>但是code-run插件的默认编译当然是不带circle.cpp这个文件的所以出错了。于是我尝试要修改code-run执行编译task时候的json文件，手动把这些多余的cpp文件加载进去，但是截止现在。还没能成功。。。。。</p>
+<p><strong>所以要注意的是：当有多个cpp文件要参与编译的时候，或者引用第三方库的时候需要协同这些文件一些参与编译（第三方库有可能需要打包成so文件进行链接）</strong></p>
+<h2 id="vscode官方教程的编译"><a href="#vscode官方教程的编译" class="headerlink" title="vscode官方教程的编译"></a><strong>vscode官方教程的编译</strong></h2><p>头铁的我按照官网，也即上面的链接重新配置了环境，还是上述代码，重新shift+command+B进行编译，可想而知，还是差不多类似的错误。</p>
+<blockquote>
+<p>ld: symbol(s) not found for architecture x86_64<br>clang: error: linker command failed with exit code 1 (use -v to see invocation)<br>The terminal process terminated with exit code: 1</p>
+</blockquote>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/4.png" alt="image-20190920081703589"></p>
+<p>这一次用的是clang++ ，但编译的时候仍然只有main.cpp这个文件，所以还是错错错！</p>
+<p>但是我们可以在前面官方配置的task.json中找到配置, 并添加这cpp</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/5.png" alt="image-20190920081931145"></p>
+<p>再次编译，当然是没有任何错误啦！</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/6.png" alt="image-20190920082054041"></p>
+<p>当然，<strong>为了应对这些涉及到多文件编译的问题，最好是能在设置中配置json文件能关联到所有的cpp文件，我尝试了几种不同的配置，但都失败了。但我想一定是可以的。。。</strong></p>
+<p>以上的MAC系统下的，windows呢？运行结果如下，也是在main.cpp后又添加了其他的cpp文件，所以成功执行了结果，需要注意的是windows的vscode中我设置的又是clang++</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/7.png" alt="image-20190920104917065"></p>
+<h2 id="多文件编译问题"><a href="#多文件编译问题" class="headerlink" title="多文件编译问题"></a><strong>多文件编译问题</strong></h2><p>其实上面遇到的问题就是多文件编译的问题，在编辑器里面没有设置好时，自然会弹出这些错误。知乎上有个大神在 <a href="https://www.zhihu.com/question/30315894" target="_blank" rel="noopener">https://www.zhihu.com/question/30315894</a> 也谈及了多文件编译问题：</p>
+<blockquote>
+<p>如果你想进行少量的多文件编译，C语言直接用<code>gcc 源文件1.c 源文件2.c 头文件1.h</code>这样就好，C++用g++。默认生成a.exe，加-o可指定输出文件名，其余选项百度gcc使用教程。如果需要多次编译可以写一个批处理。 </p>
+<p>如果你想进行大量的多文件编译，请学习如何写makefile或使用cmake。然后把tasks的命令改成调用make等。</p>
+<p>如果你想使用别人的库，比如ffmpeg，可能需要在命令中指定<code>-I</code>、<code>-l</code>（小写的L）、<code>-L</code>。具体参数阅读那个库的文档。还可能需要把路径添加到c_cpp_properties.json和compile_flags.txt里来配置Intellisense。</p>
+<p>这些情况下可以考虑单独建一个工作区，不要和单文件编译的共用。其实不新建工程(Project)、只是单文件就能调试，是不利于以后使用和理解大型IDE的。不过初学也不用掌握那么多，不要觉得建工程很麻烦、不建工程就能编译很强就是了。</p>
+<p>总之这些和VSC无关，用其它IDE或是手动编译也会遇到差不多的问题，也有点复杂。本文就不多讨论这些了，自行解决。</p>
+</blockquote>
+<p>但是我想这样也太麻烦了吧。在工程目录下，简单的跑一些程序这么麻烦的话，很容易让人放弃，于是继续：</p>
+<h2 id="MAC系统下上述问题的修改"><a href="#MAC系统下上述问题的修改" class="headerlink" title="MAC系统下上述问题的修改"></a><strong>MAC系统下上述问题的修改</strong></h2><p>可以看到我在mac下所用的编译器很混乱，一会clang++ 一会g++，其中g++是vscode的插件code-runner默认的配置，我直接runcode肯定会执行g++，一个是我按照vscode官网配置的clang++，我编译时肯定又调用了clang++。为了统一二者，我继续探索。。不负苦心，我终于找到了配置其环境的setting.json（）， cpp的默认的编译器即是g++，这和上面是对应的，于是我把他改成vscode官方教程的clang++。</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/8.png" alt="image-20190920111228119"></p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/9.png" alt="image-20190920111457684"></p>
+<p>大家也看到了文件名的地方，我换成了*.cpp，调用coder-run果然可以直接跑起来啦！</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/10.png" alt="image-20190920111949718"></p>
+<p>同样的我在vscode官方配置的task.json中修改args参数</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/11.png" alt="image-20190920112122871"></p>
+<p>然后编译执行，哇哦。。终于搞定啦！</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/12.png" alt="image-20190920112339971"></p>
+<h2 id="windows下解决"><a href="#windows下解决" class="headerlink" title="windows下解决"></a><strong>windows下解决</strong></h2><p>同样的方法在windows下照搬却还是没有得到改正。这让我有点郁闷。。没事继续搞起来！</p>
+<p>问题主要有两个1.code-runner中的设置再怎么修改，执行时也不会执行里面的命令。2.crtl+shift+B编译没反应。</p>
+<p>第2个问题她妈的是搜狗输入法快捷键和vscode的快捷键冲突了，我删除搜狗之后就可以了。这个时候我在task中修改参数args，并改成*.cpp，于是这一部分解决了。哈哈哈哈！</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/13.png" alt="image-20190920121147731"></p>
+<p>第1个问题，我捣鼓了半天，无意中发现workspace中setting.json中也有个code-runner.excutorMap，而且我执行的命令跑的是workspace中的。于是我修改了workspace中的cpp的命令。于是直接coder-run也可以啦！</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/14.png" alt="image-20190920121405146"></p>
+<p>然后我回到code-runner的setting发现以下。。。于是我把user里面的也全部改过来了。。真的是，全部都是坑！！！啊</p>
+<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/15.png" alt="image-20190920121515671"></p>
+<p>多文件编译只适应于自己写的cpp文件，如果涉及到其他格式文件肯定就不行啦，不过肯定也可以在各种json文件中配置的。</p>
+<p>至此，已全豁然开朗矣！！！哈哈哈哈哈。编译是一个复杂的过程，这里面还没涉及到第三方库的使用，在后面想使用C++/C的第三方库矩阵运算的Armadillo包的时候，更叫一个崩溃。。</p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/VScode/" rel="tag"><i class="fa fa-tag"></i> VScode</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/" rel="next" title="Python小技巧用法积累--长期更新">
+                  <i class="fa fa-chevron-left"></i> Python小技巧用法积累--长期更新
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/09/29/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/" rel="prev" title="C/C++中指针使用小探">
+                  C/C++中指针使用小探 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#插件code-run的运行"><span class="nav-number">1.</span> <span class="nav-text">插件code-run的运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vscode官方教程的编译"><span class="nav-number">2.</span> <span class="nav-text">vscode官方教程的编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多文件编译问题"><span class="nav-number">3.</span> <span class="nav-text">多文件编译问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MAC系统下上述问题的修改"><span class="nav-number">4.</span> <span class="nav-text">MAC系统下上述问题的修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows下解决"><span class="nav-number">5.</span> <span class="nav-text">windows下解决</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">NBA数据分析可视化/音频算法</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://fansided.com/nba/nylon-calculus/#" title="https:&#x2F;&#x2F;fansided.com&#x2F;nba&#x2F;nylon-calculus&#x2F;#" rel="noopener" target="_blank">nylon-calculus</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://squared2020.com/" title="https:&#x2F;&#x2F;squared2020.com&#x2F;" rel="noopener" target="_blank">NBA数据分析师</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">18k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17 分钟</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

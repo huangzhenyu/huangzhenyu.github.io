@@ -54,14 +54,14 @@
 <meta name="keywords" content="C++,小知识点,指针">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C&#x2F;C++中指针使用小探">
-<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;29&#x2F;%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
 <meta property="og:description" content="初学者指针使用小探，还是要熟练使用才行啊！">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-11T00:41:03.752Z">
+<meta property="og:updated_time" content="2019-11-11T12:58:51.473Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://huangzhenyu.github.io/2019/11/11/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/">
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/09/29/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/">
 
 
 <script id="page-configurations">
@@ -190,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/11/11/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/09/29/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -212,10 +212,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-11-11 07:17:15 / 修改时间：08:41:03" itemprop="dateCreated datePublished" datetime="2019-11-11T07:17:15+08:00">2019-11-11</time>
+              <time title="创建时间：2019-09-29 07:17:15" itemprop="dateCreated datePublished" datetime="2019-09-29T07:17:15+08:00">2019-09-29</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-11 20:58:51" itemprop="dateModified" datetime="2019-11-11T20:58:51+08:00">2019-11-11</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -244,8 +250,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2019/11/11/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/11/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/" itemprop="commentCount"></span>
+    <a title="valine" href="/2019/09/29/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/09/29/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -307,7 +313,7 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b, <span class="keyword">int</span> *c)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> *a + *b + *c;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>; </span><br><span class="line">    <span class="keyword">int</span> c = <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; func(*a, *b, *c) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>所以总结下</p>
 <p>1.指针不能指向直接声明的常量。</p>
-<p>2.函数指针传入的是地址，所以如果要饮用的变量值，要在函数中解引用。</p>
+<p>2.函数指针传入的是地址，所以如果要引用的变量值，要在函数中解引用。</p>
 
     </div>
 
@@ -348,12 +354,15 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
+                <a href="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" rel="next" title="vscode中Cpp编译多文件问题总结">
+                  <i class="fa fa-chevron-left"></i> vscode中Cpp编译多文件问题总结
+                </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/11/11/ENUM-class%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="prev" title="C++中ENUM-Class枚举类型的使用">
+                <a href="/2019/10/11/ENUM-class%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="prev" title="C++中ENUM-Class枚举类型的使用">
                   C++中ENUM-Class枚举类型的使用 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -411,20 +420,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -475,7 +484,7 @@
           <h3 class="widget-title">云 标签</h3>
           <div id="myCanvasContainer" class="widget tagcloud">
               <canvas width="250" height="250" id="resCanvas" style="width=100%">
-                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li></ul>
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">2</span></li></ul>
               </canvas>
           </div>
         </div>
@@ -507,13 +516,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">5k</span>
+    <span title="站点总字数">18k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4 分钟</span>
+    <span title="站点阅读时长">17 分钟</span>
 </div>
 
 <!--

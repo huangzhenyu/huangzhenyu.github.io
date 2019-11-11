@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="固定波束形成技术问题建模及评价指标（白噪声增益、指向性因数、波束模式等）">
+<meta name="keywords" content="波束形成,beamforming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="波束形成技术（二）：固定波束形成简介">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="固定波束形成技术问题建模及评价指标（白噪声增益、指向性因数、波束模式等）">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B&#x2F;阵列模型.png">
+<meta property="og:updated_time" content="2019-11-11T14:53:49.623Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B&#x2F;阵列模型.png">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>波束形成技术（二）：固定波束形成简介 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="NBA数据分析可视化/音频算法">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          波束形成技术（二）：固定波束形成简介
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-11 07:17:15 / 修改时间：22:53:49" itemprop="dateCreated datePublished" datetime="2019-11-11T07:17:15+08:00">2019-11-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%AD%E9%9F%B3%E5%A2%9E%E5%BC%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">语音增强</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+            <div class="post-description">固定波束形成技术问题建模及评价指标（白噪声增益、指向性因数、波束模式等）</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>其实波束形成的玩法本质上就是操作阵列不同麦克风上的信号加权系数，对于一类固定滤波器系数的阵列来说，无论输入信号或者噪声信号是啥样的（统计特征），其滤波器系数雷打不动，此类波束形成叫Fixed Beamforming，这好比传统数字信号处理里面的经典滤波器；可以联想到，现代数字信号里面有一类自适应滤波器，对应的，阵列里就有相应的Adaptive Beamforming，其滤波器的系数是跟随着噪声场的变化而变化的。</p><a id="more"></a>
+<p>此外，阵列根据形状不同还分为线阵、环针、中心阵等，为了便于理解，我们先从一维的Fixed Beamforming开始着手研究uniform linear arrays，由此情况推导其他以及引申到普适情况也不会是什么难事。</p>
+<h3 id="问题建模及求解"><a href="#问题建模及求解" class="headerlink" title="问题建模及求解"></a>问题建模及求解</h3><p><img src="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/阵列模型.png" style="zoom:50%;"></p>
+<p>远场假设，一声源与共有M个麦克风线阵的轴线夹角呈$\theta_d$入射，麦克风间距为 $\delta$, 则每两个麦克风之间的单位时延为 $\tau_0 = cos(\theta_d)*\delta/c$ ，其中c为声速，则以最右侧，也即离声源最近的麦克风为参考可以定义一个导向矢量(Steering Vector)：</p>
+<script type="math/tex; mode=display">d(f, \cos(\theta)) = [1  \ \  e^{-j2\pi f\tau_{0}\cos(\theta)}\ ... \ e^{-j(M-1)2\pi f\tau_{0}\cos(\theta)}]^T</script><p>根据傅立叶变换的性质，时域左移或者右移动等于频域在相位上的改变。根据下式可以看出导向矢量是对频域相移的补偿。比如第一个元素是1，那么不需要任何补偿，第二个元素，波阵面延后到达，收到的信号应该应该是乘以一个 $e$ 指数为正的相移因子，导向矢量补偿因子之后使得麦克风2收到的信号与麦克风1收到的信号相位上是对齐的，便于后面进一步的加权操作。如果现在没有对麦克风信号进行任何的系数加权，则收到的裸信号为：</p>
+<script type="math/tex; mode=display">y(f) = [Y_{1}(f) \ Y_{2}(f) \ ... \ Y_{M}(f)]^T =x(f)+v(f)
+=d(f, \cos(\theta_d))X(f) + v(f)</script><p>其中 $v(f)$为噪声信号，上述前半部分是我们的desired signal，进而接受信号的功率谱密度:</p>
+<script type="math/tex; mode=display">\Phi_{y}(f)= E[y(f)y_{H}(f)]
+= \phi_{X}(f)d(f,\cos(\theta_d))d^{H}(f,\cos(\theta_d)) + \Phi_{V}(f)</script><p>其中 $\phi_{X}(f)$ 为信号的方差，$\Phi_{V}(f)$ 为噪声的相关系数矩阵。</p>
+<p>Fixed Beamforming过程中我们最终求解都是为了降低其他方向的噪声而尽可能不失真地提取到目标信号，操作核心思想是对接受信号 $y(f)$进行系数加权求和。</p>
+<h3 id="线阵模型"><a href="#线阵模型" class="headerlink" title="线阵模型"></a>线阵模型</h3><p>上一部分最后提到加权求和，这就有点滤波器的意思了，时域上的滤波器就对过去的输入或者输出进行加权求和。而麦克风阵列呢，就是对声场中不同的空间点信号进行加权求和。如下：</p>
+<script type="math/tex; mode=display">Z(f) = \sum_{m=1}^{M}H_m^{*}(f)Y_{m}(f) = h^{H}(f)y(f) = X_{fd}(f) + V_{rn}(f)</script><p>$Z(f)$ 是最终输出信号，$h(f) = [H_{1}(f),  H_{2}(f), …  H_{M}(f)]^T$ 是M个麦克风的加权系数，每个麦克风对应一个。$X_{fd}(f) = X(f)h^{H}(f)d(f,\cos(\theta_d))$ 是我们的desired 信号，<strong>要求做到不失真满足 $h^{H}(f)d(f,\cos(\theta_d))=1$ 即可。记住这个式子，对后面求解的简化非常重要。 </strong>  $V_{rn}(f) = h^{H}(f)v(f)$ 则是剩余的残留信号。</p>
+<h3 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h3><p>评价麦克风阵列的性能指标无非是考察麦克风在不同声场下的表现，直接可以想到的有信噪比提升和指向性因数等。</p>
+<ul>
+<li>波束模式（beam pattern），理解为阵列在不同方位空间上的响应，其平方的形式power pattern常常通过Polar画出。公式为:</li>
+</ul>
+<script type="math/tex; mode=display">\begin{aligned} \mathcal{B}[\mathbf{h}(f), \cos \theta] &=\mathbf{d}^{H}(f, \cos \theta) \mathbf{h}(f) =\sum_{m=1}^{M} H_{m}(f) e^{\jmath(m-1) 2 \pi f \tau_{0} \cos \theta} \end{aligned}</script><ul>
+<li>阵列增益，<strong>阵列的输出信噪比比阵列的输入信噪比</strong>，推导过程不上了，公式为：</li>
+</ul>
+<script type="math/tex; mode=display">\begin{aligned} \mathcal{G}[\mathbf{h}(f)] &=\frac{\operatorname{oSNR}[\mathbf{h}(f)]}{\operatorname{iSNR}(f)} =\frac{\left|\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)\right|^{2}}{\mathbf{h}^{H}(f) \mathbf{\Gamma}_{\mathbf{v}}(f) \mathbf{h}(f)} \end{aligned}</script><p>​        注意在Fixed Beamforming 中上述式子的分子为1。增益越大，说明麦克风对提升信噪比越有帮助。即理论        上是越大越好，同理下面的白噪声增益（White Noise Gain）和指向性因数（Directivity Index）。</p>
+<ul>
+<li>当考察的噪声是白噪声时，空间中不同的任意两点的相关系数为0，所以上述 $\Gamma_V$ 是主对角为1，其余全为0 的单位阵。上述Array Gain可以写成：</li>
+</ul>
+<script type="math/tex; mode=display">WNG = \frac{oSNR(f)}{iSNR(f)} = \frac{|h^{H}(f)d(f,\cos(\theta_d)|^2}{h^{H}(f) (f)h(f)}</script><p>  ​    可以证明WNG数值上可达到最大值为M，即阵列中麦克风的个数。实际计算时在取对数。</p>
+<ul>
+<li><p>指向性因Directivity Factor（DI），则是考虑阵列工作于扩散声场，因此可同理写为：</p>
+<script type="math/tex; mode=display">DI = \frac{oSNR(f)}{iSNR(f)} = \frac{|h^{H}(f)d(f,\cos(\theta_d)|^2}{h^{H}(f) \Gamma_{0,\pi}(f)h(f)}</script><p> 其中 $\Gamma_{0,\pi} =\frac {\sin(\omega\tau)}{\omega\tau}$翻看讲义一里面的声场统计模型，有关于此的讨论。</p>
+</li>
+</ul>
+<p>  ​    所以，关于任意beamforming性能指标的讨论，只要得到阵列的滤波器系数，其他（三指标）的自然都迎    刃而解了。而许多beamforming技术也都是在这三个指标上玩花样，比如说最大化WNG或者DF。</p>
+<h3 id="空间混叠"><a href="#空间混叠" class="headerlink" title="空间混叠"></a>空间混叠</h3><p>开篇已经提及了，这里面的采样混叠其实和数字信号采样混叠道理是一样一样的，这里作一下推导演绎。空间发生混叠，即阵列分不清信号来自哪个方向了，也就是存在两个不同的 $\theta_d$, 满足 :</p>
+<p><script type="math/tex">d(f,\cos(\theta_1)) = d(f,cos(\theta_2))</script> ,  </p>
+<p>观察steering vector，可以得到：</p>
+<p><script type="math/tex">\cos(\theta_1) = \frac{c}{fd} + \cos(\theta_2) = 
+\frac{\lambda}{d} + \cos(\theta_2)</script>  或者 <script type="math/tex">\frac{\lambda}{d} = \frac{1}{\cos(\theta_1)-\cos(\theta_2)}</script>，</p>
+<p>此时steering vector中的任一项是满足在两个角度下相等的，认为此时发生了混叠，即<strong>阵列已经分不清最大响应来自于哪个方向</strong>了。由基本三角函数定理，当：</p>
+<p><script type="math/tex">\frac{1}{|\cos(\theta_1)-\cos(\theta_2)|} >= \frac{1}{2}</script> ，</p>
+<p>所以 <script type="math/tex">\frac{d}{\lambda} = \frac{1}{\cos(\theta_1)-\cos(\theta_2)} < \frac{1}{2}</script>，空间混叠才不会发生。</p>
+<p>关于空间混叠，在后面一章讲述每种不同的波束形成技术的beampattern的时候，会通过Polar图画出来，这样理解起来会更深刻。</p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag"><i class="fa fa-tag"></i> 波束形成</a>
+              <a href="/tags/beamforming/" rel="tag"><i class="fa fa-tag"></i> beamforming</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/17/Cpp%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF-%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/" rel="next" title="Cpp小技巧用法积累--长期更新">
+                  <i class="fa fa-chevron-left"></i> Cpp小技巧用法积累--长期更新
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/" rel="prev" title="波束形成技术（一）：声场统计模型">
+                  波束形成技术（一）：声场统计模型 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题建模及求解"><span class="nav-number">1.</span> <span class="nav-text">问题建模及求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线阵模型"><span class="nav-number">2.</span> <span class="nav-text">线阵模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能指标"><span class="nav-number">3.</span> <span class="nav-text">性能指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空间混叠"><span class="nav-number">4.</span> <span class="nav-text">空间混叠</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">NBA数据分析可视化/音频算法</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://fansided.com/nba/nylon-calculus/#" title="https:&#x2F;&#x2F;fansided.com&#x2F;nba&#x2F;nylon-calculus&#x2F;#" rel="noopener" target="_blank">nylon-calculus</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://squared2020.com/" title="https:&#x2F;&#x2F;squared2020.com&#x2F;" rel="noopener" target="_blank">NBA数据分析师</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">18k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17 分钟</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
