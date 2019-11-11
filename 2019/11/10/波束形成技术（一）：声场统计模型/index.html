@@ -54,19 +54,19 @@
 <meta name="keywords" content="波束形成,beamforming">
 <meta property="og:type" content="article">
 <meta property="og:title" content="波束形成技术（一）：声场统计模型">
-<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;10&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
 <meta property="og:description" content="波束形成的一些基础知识，包括声场的统计模型、房间声学等。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;前端增强流程.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;波阵面.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;扩散声场.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;房间声学.png">
-<meta property="og:updated_time" content="2019-11-11T14:36:02.577Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;10&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;前端增强流程.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;10&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;波阵面.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;10&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;扩散声场.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;10&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;房间声学.png">
+<meta property="og:updated_time" content="2019-11-11T14:59:13.525Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;前端增强流程.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;10&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B&#x2F;前端增强流程.png">
 
-<link rel="canonical" href="https://huangzhenyu.github.io/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/">
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/11/10/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/">
 
 
 <script id="page-configurations">
@@ -195,12 +195,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/11/10/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="跳投哥">
-      <meta itemprop="description" content="NBA数据分析可视化/音频算法">
+      <meta itemprop="description" content="NBA数据分析可视化/音频算法/zhenyuhuang0501@gmail.com">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -217,10 +217,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-11-11 07:17:15 / 修改时间：22:36:02" itemprop="dateCreated datePublished" datetime="2019-11-11T07:17:15+08:00">2019-11-11</time>
+              <time title="创建时间：2019-11-10 07:17:15" itemprop="dateCreated datePublished" datetime="2019-11-10T07:17:15+08:00">2019-11-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-11 22:59:13" itemprop="dateModified" datetime="2019-11-11T22:59:13+08:00">2019-11-11</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -249,8 +255,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/" itemprop="commentCount"></span>
+    <a title="valine" href="/2019/11/10/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/10/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -280,14 +286,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>近年来，语音识别带起了前端信号处理的小高潮，经由前端处理之后馈送给识别引擎信号的质量（信噪比、语音保真度等）对识别率至关重要。远场、混响、噪声等不利于语音质量的因素等在前端信号处理之后，都会在某种程度上得到削弱，同时这也意味着语音信号会在某种程度上得到增强。</p><p><img src="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/前端增强流程.png" alt></p><p>语音增强，总体来说有三种方法，即在三个不同域上的操作，比如频域上的谱减法降噪，时域上的自适应滤波器做回声消除，以及本项目研究的空域上的波束形成（Beamforming）。波束形成可以看作是空间滤波器，其许多原理都可以类比经典数字信号处理中的滤波器（混叠、加窗）。这很好理解，毕竟都是采样，只不过一个是对空间，一个是对时间罢了。波束形成的形状，指向，旁瓣的大小都是可设计的。本文档即基于Python进行模拟仿真一些基础常见的波束形成技术，包括频域（Delay and Sum/ MaxDF等）及时域的波束形成技术。</p><a id="more"></a>
+        <p>近年来，语音识别带起了前端信号处理的小高潮，经由前端处理之后馈送给识别引擎信号的质量（信噪比、语音保真度等）对识别率至关重要。远场、混响、噪声等不利于语音质量的因素等在前端信号处理之后，都会在某种程度上得到削弱，同时这也意味着语音信号会在某种程度上得到增强。</p><p><img src="/2019/11/10/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/前端增强流程.png" alt></p><p>语音增强，总体来说有三种方法，即在三个不同域上的操作，比如频域上的谱减法降噪，时域上的自适应滤波器做回声消除，以及本项目研究的空域上的波束形成（Beamforming）。波束形成可以看作是空间滤波器，其许多原理都可以类比经典数字信号处理中的滤波器（混叠、加窗）。这很好理解，毕竟都是采样，只不过一个是对空间，一个是对时间罢了。波束形成的形状，指向，旁瓣的大小都是可设计的。本文档即基于Python进行模拟仿真一些基础常见的波束形成技术，包括频域（Delay and Sum/ MaxDF等）及时域的波束形成技术。</p><a id="more"></a>
 
 
 <p>Python环境为Python3.6，需要的包有numpy/scipy/matplotlib, 参考文献主要为:</p>
 <p>[1] J.Benesty, I.Cohen, and J.Chen, Fundamentals of Signal Enhancement and Array Signal Processing. Weily-IEEE Press 2017.</p>
 <p>[2] Nuance 内部培训材料</p>
 <h3 id="声传播模型"><a href="#声传播模型" class="headerlink" title="声传播模型"></a>声传播模型</h3><p>声传播的过程，即波动的过程，是一个涉及到空间、时间的物理过程。根据波阵面的不同，可以简单的分为球面波和平面波（还有线型声源扩散，波阵面为圆柱面）。石头落入水中荡起的涟漪好比是球面波的横截面，能量不停的往外扩散，其波阵面是球形。而平面波则更好理解了。两张图，下面左侧为球面波的截面，右侧为平面波的截面。</p>
-<p><img src="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/波阵面.png" alt>实际上我们身处的声学环境，大部分都可假设是球面波，即可认为发声源是一点源。从上面左图可以看到，当距离声源足够远时（左图两个黑点），圆弧近似看作为直线，此时认为左侧的场景同右侧一样，是为平面波。这就好比我们站在地球上，感觉不到地球是圆的一样，是同一个道理。以上就是平面波假设，是我们研究阵列及其他一些算法的重要前提假设。</p>
+<p><img src="/2019/11/10/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/波阵面.png" alt>实际上我们身处的声学环境，大部分都可假设是球面波，即可认为发声源是一点源。从上面左图可以看到，当距离声源足够远时（左图两个黑点），圆弧近似看作为直线，此时认为左侧的场景同右侧一样，是为平面波。这就好比我们站在地球上，感觉不到地球是圆的一样，是同一个道理。以上就是平面波假设，是我们研究阵列及其他一些算法的重要前提假设。</p>
 <h3 id="声场统计模型"><a href="#声场统计模型" class="headerlink" title="声场统计模型"></a>声场统计模型</h3><p>假设声场中任一点的信号是一个时空域的随机采样过程。描述声场中任意两点不同时刻信号之间的<strong>相关系数</strong>为两点信号相乘的期望，可以写作为：</p>
 <script type="math/tex; mode=display">r_{y_i,y_l}(r_i,r_l) = E[Y(r_i,t_0,\eta)Y(r_l,t_1,\eta)]</script><p>而在匀强声场中，上述则可改写为：</p>
 <script type="math/tex; mode=display">r_{y_i,y_l}(d, \tau) = E[Y(r_i,t_0,\eta)Y(r_i+d,t_1+\tau,\eta)]</script><p>注意上述是一个时空域的概念（要区别于下面的功率谱）。在研究声场时，更一般的假设则是：静态且各向同性的，因此上述距离d可以加个绝对值。声场的空间功率谱密度，借鉴随机信号的功率谱密度，由维纳钦金定理得到，信号的功率度密度等于信号自相关系数的傅立叶变换：</p>
@@ -298,14 +304,14 @@
 <p>一类比较特殊的声场——扩散场（能量分布均匀，各个方向作无规分布的声场），其MSC：</p>
 <script type="math/tex; mode=display">J_\Theta(\omega):= \frac{1}{4\pi}\int^{2\pi}_{0}\int_0^{2\pi}exp(-j\omega\tau\cos{\theta})\sin{\theta}d\theta d\phi  
                 = \frac{\sin(\omega\tau)}{\omega\tau}</script><p> 这在后面研究在不同声场下麦克风的表现都会用得到。</p>
-<p><img src="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/扩散声场.png" alt></p>
+<p><img src="/2019/11/10/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/扩散声场.png" alt></p>
 <p>上面是扩散声场中，不同距离之间的MSC变化图，可以看到</p>
 <p>1.低频时，MSC近似为1，可以认为是相干声场，高频时MSC接近于0，可以认为是不相干声场。</p>
 <p>2.两点之间的距离是MSC的重要决定参数，这个是肯定的，几乎所有于频率有关的参数，都要牵涉到距离。</p>
 <p>3.车内噪声场、后期混响场可以认为是典型的扩散场。</p>
 <p>其他的类型的声场（混合声场），都可以用上述模型进行不同系数等加权和逼近。</p>
 <h3 id="房间声学"><a href="#房间声学" class="headerlink" title="房间声学"></a>房间声学</h3><p>关于这部分，我其实算是科班出身，我研究生主攻建筑声学，其中一门重要的课程就是Kutruff的《Room Acoustics》，授课老师即是鄙人之导师，所以备课预习格外认真，且老师授课方式很新颖，教学内容印象深刻，受益匪浅。所以，下面也不仔细说了，流水账翻一翻吧。 </p>
-<p><img src="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/房间声学.png" alt></p>
+<p><img src="/2019/11/10/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/房间声学.png" alt></p>
 <p>上图，左侧小人是声源，可以认为是喇叭，右边的小人是听众，可以认为是麦克风，麦克风接受到的信号除了直达声，还有经过墙面一次反射延后到达的一次反射声，经过墙面二次反射延后到达的二次反射声。。</p>
 <p>墙面反射一次（或者传播途径远），可以认为声波能量产生了一定比列的损失（乘以损失系数），延后到达即认为产生一次时延，假设声源发出的信号为  $x(t)$  接收到的信号则为：</p>
 <script type="math/tex; mode=display">y(t) = x(t) + a_1x(t-t_0) + a_2x(t-t_1)+ a_3x(t-t_3)+.....</script><p>上式是不是和滤波器的差分方程很像（房间声学中很多概念都可以用数字信号的知识去解释，或者数字信号中很多知识都可以用房间声学中的物理现象去验证）！没错，这就是房间的脉冲响应（Impulse Response），是房间传递函数在时域上的表现形式。别小瞧这个式子，时域卷积运算的时候为什么反转序列移序相乘再相加，参透上式即可得彀中玄妙。</p>
@@ -348,14 +354,17 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/" rel="next" title="波束形成技术（二）：固定波束形成简介">
-                  <i class="fa fa-chevron-left"></i> 波束形成技术（二）：固定波束形成简介
+                <a href="/2019/10/17/Cpp%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF-%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/" rel="next" title="Cpp小技巧用法积累--长期更新">
+                  <i class="fa fa-chevron-left"></i> Cpp小技巧用法积累--长期更新
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/" rel="prev" title="波束形成技术（二）：固定波束形成简介">
+                  波束形成技术（二）：固定波束形成简介 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -404,7 +413,7 @@
   <img class="site-author-image" itemprop="image" alt="跳投哥"
     src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">跳投哥</p>
-  <div class="site-description" itemprop="description">NBA数据分析可视化/音频算法</div>
+  <div class="site-description" itemprop="description">NBA数据分析可视化/音频算法/zhenyuhuang0501@gmail.com</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
