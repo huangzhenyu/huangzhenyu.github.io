@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="基于递归的快速排序和归并排序，适合大规模的数据排序，都用到了分治思想，非常巧妙。">
+<meta name="keywords" content="C++,排序,算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序算法（二）：基于递归的归并和快速排序">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="基于递归的快速排序和归并排序，适合大规模的数据排序，都用到了分治思想，非常巧妙。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F&#x2F;归并图解1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F&#x2F;合并图解.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F&#x2F;快速排序图解.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F&#x2F;快排移动示意图.png">
+<meta property="og:updated_time" content="2019-11-14T23:45:42.076Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F&#x2F;归并图解1.png">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>排序算法（二）：基于递归的归并和快速排序 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="NBA数据分析挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          排序算法（二）：基于递归的归并和快速排序
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-11 07:17:15" itemprop="dateCreated datePublished" datetime="2019-11-11T07:17:15+08:00">2019-11-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-15 07:45:42" itemprop="dateModified" datetime="2019-11-15T07:45:42+08:00">2019-11-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+            <div class="post-description">基于递归的快速排序和归并排序，适合大规模的数据排序，都用到了分治思想，非常巧妙。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在排序算法（一）中提到的三种排序算法：冒泡、插入、选择排序都是时间复杂度为$O(n^2)$ 的算法，适合规模较小的数据，当数据规模变大了之后快速排序和归并排序会更加常用，这两个算法的时间复杂度都为$O(nlogn)$ 。</p><p>首先说一说递归，在前面的学习中也尝试编写了几个涉及到递归的算法，斐波那契数列，爬楼梯，数组全排列等等，递归通过设置边界条件后反复调用自身，很容易去解决能分解成和自身同样类型子问题的问题（有点拗口），当触发到边界条件后退出。使用递归容易陷入想把问题理清楚的死胡同走不出来，其实简单地找到递推公式，设立合理的边界条件后就不需要在胡同里徘徊了，大胆地让计算机去帮你执行重复的动作才是解决递归问题的合理方式。</p><a id="more"></a>
+
+<p>嗯，回归正题。首先呢，我先定义一个打印数组的函数，方便查看数组排序过程中的状态：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">print_array</span>(<span class="title">std</span>:</span>:<span class="built_in">vector</span>&lt;T&gt; v) &#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">auto</span> it : v)&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; it &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><p>归并排序的思想是分治。把数组拆分成一个个只包含单一元素的数组后，利用<strong>有序数组合并</strong>，再一步步地拼成和原数组同样大小的有序数组。分而治之，分出来的子问题又是一个可以分而治之的子问题，且问题类型是同样的，只不过是相比上一环节，数据规模变小了而已。所以这里就可以利用递归了。算法示意图如下：</p>
+<p><img src="/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/归并图解1.png" style="zoom:30%;"></p>
+<p>观察，也不难写出递推公式，对数组$A$的排序，可以分解成，对数组前半部分和后半部分分别排序之后再合并（上图绿线，就是分割，然后一直递归到数组只有一个元素），递推公式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//递推公式：</span></span><br><span class="line">merge_sort(A, p , q) = merge(merge_sort(A, p , (p+q)/<span class="number">2</span>),  merge_sort(A,  <span class="number">1</span> + (p+q)/<span class="number">2</span>, q))</span><br><span class="line"></span><br><span class="line"><span class="comment">//终止，边界条件为：</span></span><br><span class="line">p&gt;=q</span><br></pre></td></tr></table></figure>
+<p>上面可以看作是伪代码，翻译成C++</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 归并排序递归实现</span></span><br><span class="line"><span class="comment"> * @param a 待排序数组</span></span><br><span class="line"><span class="comment"> * @param p 开始下标, 如果对一个数组排列，一般为0</span></span><br><span class="line"><span class="comment"> * @param q 结束下标，如果对一个数组排列，一般为 length - 1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">merge_sort</span>(<span class="title">std</span>:</span>:<span class="built_in">vector</span>&lt;T&gt; &amp;a, <span class="keyword">int</span> p , <span class="keyword">int</span> q) &#123;</span><br><span class="line">  <span class="keyword">if</span>( p&gt;=q ) &#123; <span class="keyword">return</span>;&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//中间元素下标</span></span><br><span class="line">  <span class="keyword">int</span> r = (p + q) / <span class="number">2</span>;</span><br><span class="line">  merge_sort(a, p, r);</span><br><span class="line">  merge_sort(a, r+<span class="number">1</span>, q);</span><br><span class="line">  <span class="comment">//两个子有序数组，排列成一个有序数组</span></span><br><span class="line">  merge(a, p, r, q);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面merge_sort不断的调用自身，直到退出。现在还没实现的就是merge功能，我们先来看看merge功能是干嘛的。在一个数组中，前半部分是有序的，后半部分也是有序的，但总体而言不是有序的，merge就是把总体也搞成有序的。</p>
+<p><img src="/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/合并图解.png" style="zoom:30%;"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">merge</span>(<span class="title">std</span>:</span>:<span class="built_in">vector</span>&lt;T&gt; &amp;a, p, r, q) &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;T&gt; temp;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">int</span> i = p, j = r + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span>(i &lt;= r &amp;&amp; j &lt;= q) &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(a[i] &lt; a[j])&#123;</span><br><span class="line">      temp.push_back(a[i++]);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      temp.push_back(a[j++]);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">while</span>(i &lt;= r)&#123;</span><br><span class="line">    temp.push_back(a[i++]);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">while</span>(j &lt;= q )&#123;</span><br><span class="line">    temp.push_back(a[j++]);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//每次递归我都打印一下此次递归之后的子数组</span></span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"此次做递归之合并后的子数组："</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	print_array(temp);</span><br><span class="line">	</span><br><span class="line">  <span class="comment">//复制，注意temp下标是从0开始的。a下标是从i开始的</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = p; i &lt;= q; ++i) &#123;</span><br><span class="line">		a[i] = temp[i - p];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了以上就可以在主函数中小试牛刀了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">6</span>&#125;;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"排序前："</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	print_array(v);</span><br><span class="line">	merge_sort(v, <span class="number">0</span>, <span class="number">8</span>);</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"排序后："</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	print_array(v);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>数组{4,7,1,2,5,9,3,8,6}大家可以手动分解一下递归过程是什么样子。实际函数运行打印为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">排序前：</span><br><span class="line">4 7 1 2 5 9 3 8 6 </span><br><span class="line">此次做递归之合并后的子数组：</span><br><span class="line">4 7 </span><br><span class="line">此次做递归之合并后的子数组：</span><br><span class="line">1 4 7 </span><br><span class="line">此次做递归之合并后的子数组：</span><br><span class="line">2 5 </span><br><span class="line">此次做递归之合并后的子数组：</span><br><span class="line">1 2 4 5 7 </span><br><span class="line">此次做递归之合并后的子数组：</span><br><span class="line">3 9 </span><br><span class="line">此次做递归之合并后的子数组：</span><br><span class="line">6 8 </span><br><span class="line">此次做递归之合并后的子数组：</span><br><span class="line">3 6 8 9 </span><br><span class="line">此次做递归之合并后的子数组：</span><br><span class="line">1 2 3 4 5 6 7 8 9 </span><br><span class="line">排序后：</span><br><span class="line">1 2 3 4 5 6 7 8 9</span><br></pre></td></tr></table></figure>
+<p>上述过程可以看到，归并排序是从小到大的过程，从下到上的过程{4,7,1,2,5}作为一部分，{9,3,8,6}作为一部分，然后{4,7,1,2,5}中的{1,4,7}和{2,5}。。。依次类推，递归调用过程就很明了啦！</p>
+<p>那么归并排序的效率性能如何呢？</p>
+<p>首先看时间复杂度，通过递推实现的归并排序，其时间复杂度也可以写成是递推的形式。最后得到时间复杂度为$O(nlogn)$ ，且不论好坏，所有情况下的时间复杂度都是这个，可以说是非常优秀了。</p>
+<p>然后空间复杂度，因为每次都需要借助temp数组实现合并的过程，且每次递归过程都需要借助，看起来也是$O(nlog(n))$ ，但是因为是在函数中调用临时的空间，每次用完都会释放，在任意时刻都只有一个函数在运行，所以空间复杂度为$O(n)$ 。</p>
+<p>是不是稳定的呢？可以在往temp数组中写数据的时候控制重复元素的位置，因此归并排序也是稳定的排序算法。</p>
+<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><p>快排的思想也是分而治之。但具体过程实现又和归并排序不一样。快排是每次都找到某个元素的合适位置，然后在分别在这个合适位置的两侧在找到某个元素的合适位置。字不如图：</p>
+<p><img src="/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/快速排序图解.png" style="zoom:33%;"></p>
+<p>每次可以取数组最后一元素为pivot，接着把整个数组中小于pivot元素的放在左边，大于pivot的元素放在右边。这样pivot这个位置就不会再动了。接着pivot这个元素两侧仍然是未排序元素，再看成是同样的问题接着上述操作，于是递归就出来了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//递推公式, r看作是pivot的位置, +号不是绝对意义上的加号，只代表一个合成。</span><br><span class="line">qucik_sort(a, p, q) = quick_sort(a, p, r-1) + quick_sort(a, r+1, q)</span><br><span class="line"></span><br><span class="line">//终止条件:</span><br><span class="line">p&gt;=q</span><br></pre></td></tr></table></figure>
+<p>所以翻译成C++语言：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 归并排序递归实现</span></span><br><span class="line"><span class="comment"> * @param a 待排序数组</span></span><br><span class="line"><span class="comment"> * @param p 开始下标,可在排序中设为0</span></span><br><span class="line"><span class="comment"> * @param q 结束下标,可在排序中设为length - 1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">quick_sort</span>(<span class="title">std</span>:</span>:<span class="built_in">vector</span>&lt;T&gt; &amp;a, <span class="keyword">int</span> p, <span class="keyword">int</span> q) &#123;</span><br><span class="line">  <span class="keyword">if</span>( p &gt;= q)&#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//找到pivot元素合适的位置，并返回</span></span><br><span class="line">  pivot = partition(a, p, q);</span><br><span class="line">  quick_sort(a, p, pivot<span class="number">-1</span>);</span><br><span class="line">  qucik_sort(a, pivot+<span class="number">1</span>, q);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>递归过程写出来很简单，但是函数中还有个partition没有实现，它的功能是正确地安排某个元素的位置（一般都取最后一个位置，也可以随机取，本文按照取最后一个位置来）。如果借助两个临时数组，一个数组存放大于pivot的，一个数组存放小于pivot的，然后同pivot三者合并，这样就要消耗额外空间，不是原地排序算法了。这里可以利用插入排序的思想，通过不停地交换元素来实现。上个示意图：</p>
+<p><img src="/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%80%92%E5%BD%92%E7%9A%84%E5%BD%92%E5%B9%B6%E5%92%8C%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/快排移动示意图.png" style="zoom:33%;"></p>
+<p>可以看到两个下标一个$i$用来遍历整个数组（最后一个pivot除外），一个$index$用来控制第一个大于pivot的元素，一旦遍历的数组发现有元素比pivot小，就把该元素同$index$交换，同时$index$序号加一。这样最后用pivot同$index$的下标交换位置即可。思路也很巧妙啊。</p>
+<p>因为要用到数组不同下标元素的交换，所以写一个交换的小程序：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 交换数组两个下标</span></span><br><span class="line"><span class="comment"> * @param a 待交换下标的数组</span></span><br><span class="line"><span class="comment"> * @param p 下标</span></span><br><span class="line"><span class="comment"> * @param q 下标</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">swap_array</span>(<span class="title">std</span>:</span>:<span class="built_in">vector</span>&lt;T&gt; &amp;a, <span class="keyword">int</span> p, <span class="keyword">int</span> q)&#123;</span><br><span class="line">	T temp = a[p];</span><br><span class="line">	a[p] = a[q];</span><br><span class="line">	a[q] = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就是partition的实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 找到最后一个元素应该在数组中的位置，返回这个位置(pivot)</span></span><br><span class="line"><span class="comment"> * @parma a 要处理的数组</span></span><br><span class="line"><span class="comment"> * @param p 开始下标</span></span><br><span class="line"><span class="comment"> * @param q 结束下标</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">int</span> <span class="title">partition</span>(<span class="title">std</span>:</span>:<span class="built_in">vector</span>&lt;T&gt; &amp;a, <span class="keyword">int</span> p, <span class="keyword">int</span> q)&#123;</span><br><span class="line">  <span class="keyword">int</span> index = p;</span><br><span class="line">  <span class="keyword">int</span> pivot = p;</span><br><span class="line">  <span class="keyword">for</span>(i = p; i &lt; q; i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(a[i] &lt; a[pivot])&#123;</span><br><span class="line">      swap_array(a, i, index);</span><br><span class="line">      index++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  swap_array(a, index, pivot);</span><br><span class="line">  </span><br><span class="line">	<span class="comment">//我还是想看下每次递归时候干嘛了，在这个地方埋个点</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"此次做递归，移动pivot后的数组："</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	print_array(a);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>功能都实现了，那就可以在main函数中试一试啦：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">6</span>&#125;;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"排序前："</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	print_array(v);</span><br><span class="line">	quick_sort(v, <span class="number">0</span>, <span class="number">8</span>);</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"排序后："</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	print_array(v);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后输出打印为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">排序前：</span><br><span class="line">4 7 1 2 5 9 3 8 6 </span><br><span class="line">此次做递归，移动pivot后的数组：</span><br><span class="line">4 1 2 5 3 6 7 8 9 </span><br><span class="line">此次做递归，移动pivot后的数组：</span><br><span class="line">1 2 3 5 4 6 7 8 9 </span><br><span class="line">此次做递归，移动pivot后的数组：</span><br><span class="line">1 2 3 5 4 6 7 8 9 </span><br><span class="line">此次做递归，移动pivot后的数组：</span><br><span class="line">1 2 3 4 5 6 7 8 9 </span><br><span class="line">此次做递归，移动pivot后的数组：</span><br><span class="line">1 2 3 4 5 6 7 8 9 </span><br><span class="line">此次做递归，移动pivot后的数组：</span><br><span class="line">1 2 3 4 5 6 7 8 9 </span><br><span class="line">排序后：</span><br><span class="line">1 2 3 4 5 6 7 8 9</span><br></pre></td></tr></table></figure>
+<p>可以看到pivot每次调用递归的过程也很明了啊。第一次pivot是6，然后两边分别再继续搞起，一边是3，一边是9… 依次类推。</p>
+<p>性能如何咧？</p>
+<p>快速排序肯定是原地排序啦。但是在寻找pivot合适位置的过程中不断的交换元素，导致重复元素不再能保持之前的原有位置了，所以快速排序不是稳定的排序算法。</p>
+<p>时间复杂度呢？如果每次pivot都恰好是处于中间位置的话，那么和归并排序一样时间复杂度都是$O(nlogn)$，但是如果每次pivot最后都出现在最后位置了那么算法复杂度就要退化到$O(n^2)$了。这是两种极端的情况，一般而言大部分的快速排序时间复杂度都是$O(nlog(n))$，在后面的递归树里再进行详细阐述。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这两种算法都是利用分治的思想通过递归来实现。思路比较巧妙，且算法时间复杂度低。归并排序的处理过程是<strong>由下到上的</strong>，先处理子问题，然后再合并。而快排正好相反，它的处理过程是<strong>由上到下的</strong>，先分区，然后再处理子问题。归并排序虽然是稳定的、时间复杂度为$ O(nlogn)$ 的排序算法，但是它是非原地排序算法。归并之所以是非原地排序算法，主要原因是合并函数无法在原地执行。快速排序通过设计巧妙的原地分区函数，可以实现原地排序，解决了归并排序占用太多内存的问题，但是他又变成了非稳定排序算法。</p>
+<p>这世间的事情真奇妙啊！鱼与熊掌不可得兼，你得到了什么就必须失去一些什么。呵呵。</p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"><i class="fa fa-tag"></i> 排序</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/" rel="next" title="波束形成技术（二）：固定波束形成简介">
+                  <i class="fa fa-chevron-left"></i> 波束形成技术（二）：固定波束形成简介
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%86%92%E6%B3%A1%E3%80%81%E6%8F%92%E5%85%A5%E3%80%81%E9%80%89%E6%8B%A9/" rel="prev" title="排序算法（一）：冒泡、插入、选择排序的Cpp实现">
+                  排序算法（一）：冒泡、插入、选择排序的Cpp实现 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#归并排序"><span class="nav-number">1.</span> <span class="nav-text">归并排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速排序"><span class="nav-number">2.</span> <span class="nav-text">快速排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">NBA数据分析挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://fansided.com/nba/nylon-calculus/#" title="https:&#x2F;&#x2F;fansided.com&#x2F;nba&#x2F;nylon-calculus&#x2F;#" rel="noopener" target="_blank">nylon-calculus</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://squared2020.com/" title="https:&#x2F;&#x2F;squared2020.com&#x2F;" rel="noopener" target="_blank">NBA数据分析师</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">28k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25 分钟</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
