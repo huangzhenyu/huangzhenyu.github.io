@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="JUMPSHOT">
 <meta property="og:description" content="刚接触C++，对很多东西都非常陌生，也是跳过了C直接学习的C++。这里会长期更新一些C&#x2F;C++的小知识点和使用技巧。来源网络、C++ Prime(第五版)、Essential C++等。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-17T01:12:53.251Z">
+<meta property="og:updated_time" content="2019-11-17T02:57:41.338Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://huangzhenyu.github.io/2019/10/17/Cpp%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF-%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/">
@@ -220,7 +220,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-17 09:12:53" itemprop="dateModified" datetime="2019-11-17T09:12:53+08:00">2019-11-17</time>
+                <time title="修改时间：2019-11-17 10:57:41" itemprop="dateModified" datetime="2019-11-17T10:57:41+08:00">2019-11-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -261,14 +261,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.5k</span>
+              <span>3.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
             <div class="post-description">刚接触C++，对很多东西都非常陌生，也是跳过了C直接学习的C++。这里会长期更新一些C/C++的小知识点和使用技巧。来源网络、C++ Prime(第五版)、Essential C++等。</div>
 
@@ -333,13 +333,37 @@
 <li><p>当把string对象和字符串字面值或者字符字面值使用加法运算时，必须确保运算符两侧至少有一个string对象：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">string</span> sg;</span><br><span class="line">sg s1 = <span class="string">"hello"</span>, s2 = <span class="string">"world"</span>;</span><br><span class="line">sg s3 = s1 + <span class="string">", "</span>; <span class="comment">//正确</span></span><br><span class="line">sg s4 = <span class="string">"hello"</span> + <span class="string">", "</span>;<span class="comment">// 错误</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>范围for语句（rang for）</p>
+<li><p>范围for语句（rang for），<strong>普通数组也可以使用，不仅仅限于标准库定义的容器</strong>。注意要来处理多维数组的时候，除了最内层的循环，外层所有循环都要使用引用。如果需要改变对象的值，最内层也需要使用引用。</p>
 <p>这种语句对给定序列中的每个元素每个值进行操作，语法形式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for (declaration : expression)</span><br><span class="line">	 	statement</span><br></pre></td></tr></table></figure>
 <p>比如，打印字符串，后面紧跟一个换行符：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">str</span><span class="params">(<span class="string">"hello@"</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> c: str)</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; c &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
 <p>如想要改变元素的值，必须把循环变量答应成引用类型：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">str</span><span class="params">(<span class="string">"hello@"</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> &amp;c: str)</span><br><span class="line">		c = <span class="built_in">toupper</span>(c);</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; s &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>标准库中的迭代器</p>
+<p>很多标准库中都拥有名为begin和end的迭代器成员，begin指向第一个元素，end指向尾元素的下一个位置称为尾后迭代器。特殊情况，当容器为空时，begin和end返回的是同一个迭代器。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> b = v.<span class="built_in">begin</span>(); <span class="comment">//第一个元素</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> e = v.<span class="built_in">end</span>(); <span class="comment">//最后一个元素的下一个位置，不代表任何位置。</span></span><br></pre></td></tr></table></figure>
+<p>之前已经说过，只有string和vector等一些标准库有下标运算符，而并非全部如此。与之相似，所有标准库容器都定义了== 和 ！=，但大部分都没有定义&lt; 运算符，所以要养成习惯使用迭代器和!=的习惯。</p>
+<p>如果对象只需要读操作，不需要写操作的话，最好使用常量类型(const_iterator):</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> b = v.cbegin;<span class="comment">//常量迭代器</span></span><br><span class="line"><span class="keyword">auto</span> e = v.cend;<span class="comment">//常量迭代器，且不管容器是否是常量类型，此迭代器返回的都是常量迭代器</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>默认初始化，如果内置类型的变量未被显式初始化，它的值有定义的位置决定：</p>
+<ul>
+<li>定义于函数体外部的变量被初始化为0</li>
+<li>定义于函数体内部的内置<strong>变量将不被初始化。</strong></li>
+</ul>
+</li>
+<li><p>在使用数组下标的时候，通常将其定义为size_t类型。尽管能计算一个数组的尾后指针，但是这种用法容易出错，C++11引入了两个名为begin和end的函数，但数组不是类类型，因此这两个函数不是成员函数，使用时需要将数组作为他们的参数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> *beg = <span class="built_in">begin</span>(a);<span class="comment">//指向ia首元素的地址</span></span><br><span class="line"><span class="keyword">int</span> *last = <span class="built_in">end</span>(a);<span class="comment">//指向array尾元素的下一位置的指针</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果程序需要一个C风格的字符串，无法直接用string对象来代替它（末尾的结束符），为了完成该功能，string专门提供了一个名为c_str的函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(<span class="string">"hello world"</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> *str = s;<span class="comment">//错误。不能使用</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *str = s.c_str();<span class="comment">//可以使用</span></span><br></pre></td></tr></table></figure>
+<p>c_str返回的是一个指针，指向一个以空字符结束的字符数组，这个数组所存的数据恰好与那个string一样。结果指针的类型是const char * ， 确保不会改变字符数组的内容。</p>
+</li>
+<li><p>使用数组初始化vector对象</p>
+<p>在之前的排序实现的时候，我曾经定一个数组，用遍历数组然后push_back的方式给vector添加元素，当时就觉得这个方法有点傻逼，但是不知道咋写，今天看书遇到啦。写法如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec(<span class="built_in">std</span>::<span class="built_in">begin</span>(a), <span class="built_in">std</span>::<span class="built_in">end</span>(a));</span><br></pre></td></tr></table></figure>
 </li>
 <li></li>
 </ul>
@@ -543,13 +567,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">30k</span>
+    <span title="站点总字数">31k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">27 分钟</span>
+    <span title="站点阅读时长">28 分钟</span>
 </div>
 
 <!--
