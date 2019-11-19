@@ -50,34 +50,24 @@
   };
 </script>
 
-  <meta name="description" content="vscode中编译多文件的配置问题，折腾了好久，终于搞清楚是咋回事了。。其实还是最开始对编译过程不熟悉。另外，vscode用来写C&#x2F;C++可真是个麻烦活。。最近转用sublime了。">
-<meta name="keywords" content="C++,VScode">
+  <meta name="description" content="介绍几种固定波束形成技术，Delay and Sum、加Chebywin窗、MaximumDF、Superdirective、Robust Superdirective、Null Steering、Subspace">
+<meta name="keywords" content="beamforming,波束形成,音频算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vscode中Cpp编译多文件问题总结">
-<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;index.html">
+<meta property="og:title" content="波束形成技术（三）：几种固定波形形成举例">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
-<meta property="og:description" content="vscode中编译多文件的配置问题，折腾了好久，终于搞清楚是咋回事了。。其实还是最开始对编译过程不熟悉。另外，vscode用来写C&#x2F;C++可真是个麻烦活。。最近转用sublime了。">
+<meta property="og:description" content="介绍几种固定波束形成技术，Delay and Sum、加Chebywin窗、MaximumDF、Superdirective、Robust Superdirective、Null Steering、Subspace">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;1.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;2.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;3.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;4.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;5.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;6.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;7.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;8.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;9.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;10.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;11.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;12.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;13.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;14.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;15.png">
-<meta property="og:updated_time" content="2019-11-11T13:48:06.730Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B&#x2F;Figure_1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B&#x2F;DelayAndSum_directivity_d_1_Azimuth_0.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B&#x2F;DelayAndSum_directivity_d_1_Azimuth_90.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B&#x2F;DelayAndSum_directivity_d_3_Azimuth_0.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B&#x2F;DelayAndSum_directivity_d_3_Azimuth_90.png">
+<meta property="og:updated_time" content="2019-11-19T03:14:51.820Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;09&#x2F;20&#x2F;VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93&#x2F;1.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B&#x2F;Figure_1.png">
 
-<link rel="canonical" href="https://huangzhenyu.github.io/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B/">
 
 
 <script id="page-configurations">
@@ -91,7 +81,7 @@
   };
 </script>
 
-  <title>vscode中Cpp编译多文件问题总结 | JUMPSHOT</title>
+  <title>波束形成技术（三）：几种固定波形形成举例 | JUMPSHOT</title>
   
 
 
@@ -206,7 +196,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -219,7 +209,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          vscode中Cpp编译多文件问题总结
+          波束形成技术（三）：几种固定波形形成举例
         </h1>
 
         <div class="post-meta">
@@ -229,14 +219,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-09-20 07:17:15" itemprop="dateCreated datePublished" datetime="2019-09-20T07:17:15+08:00">2019-09-20</time>
+              <time title="创建时间：2019-11-20 06:37:15" itemprop="dateCreated datePublished" datetime="2019-11-20T06:37:15+08:00">2019-11-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-11 21:48:06" itemprop="dateModified" datetime="2019-11-11T21:48:06+08:00">2019-11-11</time>
+                <time title="修改时间：2019-11-19 11:14:51" itemprop="dateModified" datetime="2019-11-19T11:14:51+08:00">2019-11-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -244,8 +234,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
+                  <a href="/categories/%E8%AF%AD%E9%9F%B3%E5%A2%9E%E5%BC%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">语音增强</span>
                   </a>
                 </span>
             </span>
@@ -266,8 +256,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" itemprop="commentCount"></span>
+    <a title="valine" href="/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -277,16 +267,16 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.8k</span>
+              <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>2 分钟</span>
             </span>
-            <div class="post-description">vscode中编译多文件的配置问题，折腾了好久，终于搞清楚是咋回事了。。其实还是最开始对编译过程不熟悉。另外，vscode用来写C/C++可真是个麻烦活。。最近转用sublime了。</div>
+            <div class="post-description">介绍几种固定波束形成技术，Delay and Sum、加Chebywin窗、MaximumDF、Superdirective、Robust Superdirective、Null Steering、Subspace</div>
 
         </div>
       </header>
@@ -297,60 +287,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>初学C++，在参照B站<a href="https://www.bilibili.com/video/av41559729?from=search&amp;seid=9852409698812774082" target="_blank" rel="noopener">https://www.bilibili.com/video/av41559729?from=search&amp;seid=9852409698812774082</a>       </p><p>课程学习C++时，有一节课程创建了两个类：圆和点，并赋予了两个类不同的属性，最终实现的功能是判断点和圆之间的关系。最开始的时候，Cpp程序写在同一个cpp的文件下，文件可以完美执行！但是课程中拆分了圆类和点类到不同的*.cpp和.h文件下，并在包含了主程序main的cpp调用执行，原本期望得到完美的结果我傻了眼，在windows和mac上都得到了一个懵逼的结果。</p><a id="more"></a>
+        <p>介绍完固定波束形成和衡量它性能表现的指标之后，自然就过渡到几种常见的固定波束形成技术了。固定波束形成技术指的是阵列的加权系数不随空间声场变化而变化的阵列技术。但是我们可以控制不同的系数，以满足我们不同的性能要求（在开始设计阶段设计系数，一旦确定之后就钻石恒久远了）。比如，想要白噪声增益最大，或者想要指向性因数最大等等，但有个前提就是信号经过这些加权系数求和后不失真，总结概括起来就是：<strong>在约束条件下（信号不失真），最优化某个性能指标（$WNG 和  DF$）</strong>。所以波束形成问题就是优化问题。这个许多机器学习技术一样，在xxx条件下，优化xxx。所以在某种程度上，阵列问题就是机器学习问题。</p><a id="more"></a>
+<p>后面，会以等间隔的线阵举例一些固定波束形成技术。在开始设计之前，聊一聊程序的设计模式。</p>
+<h2 id="程序结构设计"><a href="#程序结构设计" class="headerlink" title="程序结构设计"></a>程序结构设计</h2><p>1.直线阵基类（Base类）。成员属性：阵列麦克风个数、间距、要设计的阵列指向、类名（也就是固定波束形成的类型）。</p>
+<p>成员函数：计算单位时延、滤波器系数（抽象、后面具体的类重载）、导向矢量、扩散噪声场的协方差矩阵（名字待修正）、波束模式（单频、画图）、波束模式（几个典型频率、画图）、波束模式热力图等。</p>
+<p>2.固定波束形成类（FixedBeamforming），继承上述的直线阵基类，成员函数有白噪声增益函数的计算及画图（随频率变化）、指向性因数的计算及画图。</p>
+<p>3.具体的Fixedbeamforming。所有的类继承2中的固定波束形成类，<strong>只需要重载1中的滤波器系数的成员函数即可实现固定波束形成技术上述的所有功能。</strong></p>
+<p>4.一些基本的常量参数，考虑到可能的变更，在外层parameters中单独设计一个类控制，一些基本的矩阵操作，定义在外层的util中。以方便以后的维护及扩展。</p>
+<h2 id="Delay-and-Sum"><a href="#Delay-and-Sum" class="headerlink" title="Delay and Sum"></a>Delay and Sum</h2><p>最简单最出名的阵列。</p>
+<p>其实是最大化$WNG$的阵列：</p>
+<script type="math/tex; mode=display">
+\min _{\mathbf{h}(f)} \mathbf{h}^{H}(f) \mathbf{h}(f) \quad \text { subject to } \quad \mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)=1</script><p>可以推导，最优化系数，也就是阵列的加权系数：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathbf{h}_{\mathrm{DS}}\left(f, \cos \theta_{\mathrm{d}}\right) &=\frac{\mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}{\mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right) \mathrm{d}\left(f, \cos \theta_{\mathrm{d}}\right)} \\ &=\frac{\mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}{M} \end{aligned}</script><p>相应的$WNG$ 和 $DF$ :</p>
+<script type="math/tex; mode=display">
+\left.\mathcal{W}\left[\mathbf{h}_{\mathrm{DS}}\left(f, \cos \theta_{\mathrm{d}}\right)\right] f M\right)=\mathcal{W}_{\max }</script><script type="math/tex; mode=display">
+\mathcal{D}\left[\mathbf{h}_{\mathrm{DS}}\left(f, \cos \theta_{\mathrm{d}}\right)\right]=\frac{M^{2}}{\mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right) \mathbf{\Gamma}_{0, \pi}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}</script><p><strong>白噪声增益达到了理论上的最大值的同时</strong>，$\mathcal{D}\left[\mathbf{h}_{\mathrm{DS}}\left(f, \cos \theta_{\mathrm{d}}\right)\right]&gt;=1$ 的取值范围也使得<strong>阵列不会放大扩散噪声</strong>。</p>
+<h3 id="1-白噪声增益表现"><a href="#1-白噪声增益表现" class="headerlink" title="1.白噪声增益表现"></a>1.白噪声增益表现</h3><p><img src="/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B/Figure_1.png" style="zoom:36%;"></p>
+<p>只与麦克风个数有关的，随着麦克风个数增大，白噪声增益也变大。</p>
+<h3 id="2-指向性因数"><a href="#2-指向性因数" class="headerlink" title="2.指向性因数"></a>2.指向性因数</h3><figure class="fourth">
+  <img src="/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B/DelayAndSum_directivity_d_1_Azimuth_0.png" style="zoom:40%;">
+  <img src="/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B/DelayAndSum_directivity_d_1_Azimuth_90.png" style="zoom:40%;">
+  <img src="/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B/DelayAndSum_directivity_d_3_Azimuth_0.png" style="zoom:40%;">
+  <img src="/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%87%A0%E7%A7%8D%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E4%B8%BE%E4%BE%8B/DelayAndSum_directivity_d_3_Azimuth_90.png" style="zoom:40%;">
+</figure>
 
-<p>mac上：</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/1.png" alt="image-20190920080145997"></p>
-<p>windows上也是类似的：</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/2.png" alt="image-20190920104746788"></p>
-<p>经过了一下午加晚上的折腾，还是没能找到错误，开始我以为环境配置有问题，按照<a href="https://code.visualstudio.com/docs/cpp/config-clang-mac" target="_blank" rel="noopener">https://code.visualstudio.com/docs/cpp/config-clang-mac</a>  上的教程又重新配置了一遍结果还是不行。在经历了一下午加一晚上的折腾后我心灰意冷，向大神发起求助。</p>
-<h2 id="插件code-run的运行"><a href="#插件code-run的运行" class="headerlink" title="插件code-run的运行"></a><strong>插件code-run的运行</strong></h2><p>上述mac是我安装的code-run执行的结果。默认用的是g++</p>
-<p>大神看到mac上的显示一眼就看出问题所在。g++ main.cpp -o main 中我只编译了main.cpp，并没有编译其他我自己定义的cpp文件，因此会抱这个错误，正确的做法是 g++ 所有的.cpp -o main完成编译，然后./加输出的文件名执行打印结果即可。在terminal中是如下结果：</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/3.png" alt="image-20190920080926153"></p>
-<p>但是code-run插件的默认编译当然是不带circle.cpp这个文件的所以出错了。于是我尝试要修改code-run执行编译task时候的json文件，手动把这些多余的cpp文件加载进去，但是截止现在。还没能成功。。。。。</p>
-<p><strong>所以要注意的是：当有多个cpp文件要参与编译的时候，或者引用第三方库的时候需要协同这些文件一些参与编译（第三方库有可能需要打包成so文件进行链接）</strong></p>
-<h2 id="vscode官方教程的编译"><a href="#vscode官方教程的编译" class="headerlink" title="vscode官方教程的编译"></a><strong>vscode官方教程的编译</strong></h2><p>头铁的我按照官网，也即上面的链接重新配置了环境，还是上述代码，重新shift+command+B进行编译，可想而知，还是差不多类似的错误。</p>
-<blockquote>
-<p>ld: symbol(s) not found for architecture x86_64<br>clang: error: linker command failed with exit code 1 (use -v to see invocation)<br>The terminal process terminated with exit code: 1</p>
-</blockquote>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/4.png" alt="image-20190920081703589"></p>
-<p>这一次用的是clang++ ，但编译的时候仍然只有main.cpp这个文件，所以还是错错错！</p>
-<p>但是我们可以在前面官方配置的task.json中找到配置, 并添加这cpp</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/5.png" alt="image-20190920081931145"></p>
-<p>再次编译，当然是没有任何错误啦！</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/6.png" alt="image-20190920082054041"></p>
-<p>当然，<strong>为了应对这些涉及到多文件编译的问题，最好是能在设置中配置json文件能关联到所有的cpp文件，我尝试了几种不同的配置，但都失败了。但我想一定是可以的。。。</strong></p>
-<p>以上的MAC系统下的，windows呢？运行结果如下，也是在main.cpp后又添加了其他的cpp文件，所以成功执行了结果，需要注意的是windows的vscode中我设置的又是clang++</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/7.png" alt="image-20190920104917065"></p>
-<h2 id="多文件编译问题"><a href="#多文件编译问题" class="headerlink" title="多文件编译问题"></a><strong>多文件编译问题</strong></h2><p>其实上面遇到的问题就是多文件编译的问题，在编辑器里面没有设置好时，自然会弹出这些错误。知乎上有个大神在 <a href="https://www.zhihu.com/question/30315894" target="_blank" rel="noopener">https://www.zhihu.com/question/30315894</a> 也谈及了多文件编译问题：</p>
-<blockquote>
-<p>如果你想进行少量的多文件编译，C语言直接用<code>gcc 源文件1.c 源文件2.c 头文件1.h</code>这样就好，C++用g++。默认生成a.exe，加-o可指定输出文件名，其余选项百度gcc使用教程。如果需要多次编译可以写一个批处理。 </p>
-<p>如果你想进行大量的多文件编译，请学习如何写makefile或使用cmake。然后把tasks的命令改成调用make等。</p>
-<p>如果你想使用别人的库，比如ffmpeg，可能需要在命令中指定<code>-I</code>、<code>-l</code>（小写的L）、<code>-L</code>。具体参数阅读那个库的文档。还可能需要把路径添加到c_cpp_properties.json和compile_flags.txt里来配置Intellisense。</p>
-<p>这些情况下可以考虑单独建一个工作区，不要和单文件编译的共用。其实不新建工程(Project)、只是单文件就能调试，是不利于以后使用和理解大型IDE的。不过初学也不用掌握那么多，不要觉得建工程很麻烦、不建工程就能编译很强就是了。</p>
-<p>总之这些和VSC无关，用其它IDE或是手动编译也会遇到差不多的问题，也有点复杂。本文就不多讨论这些了，自行解决。</p>
-</blockquote>
-<p>但是我想这样也太麻烦了吧。在工程目录下，简单的跑一些程序这么麻烦的话，很容易让人放弃，于是继续：</p>
-<h2 id="MAC系统下上述问题的修改"><a href="#MAC系统下上述问题的修改" class="headerlink" title="MAC系统下上述问题的修改"></a><strong>MAC系统下上述问题的修改</strong></h2><p>可以看到我在mac下所用的编译器很混乱，一会clang++ 一会g++，其中g++是vscode的插件code-runner默认的配置，我直接runcode肯定会执行g++，一个是我按照vscode官网配置的clang++，我编译时肯定又调用了clang++。为了统一二者，我继续探索。。不负苦心，我终于找到了配置其环境的setting.json（）， cpp的默认的编译器即是g++，这和上面是对应的，于是我把他改成vscode官方教程的clang++。</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/8.png" alt="image-20190920111228119"></p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/9.png" alt="image-20190920111457684"></p>
-<p>大家也看到了文件名的地方，我换成了*.cpp，调用coder-run果然可以直接跑起来啦！</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/10.png" alt="image-20190920111949718"></p>
-<p>同样的我在vscode官方配置的task.json中修改args参数</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/11.png" alt="image-20190920112122871"></p>
-<p>然后编译执行，哇哦。。终于搞定啦！</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/12.png" alt="image-20190920112339971"></p>
-<h2 id="windows下解决"><a href="#windows下解决" class="headerlink" title="windows下解决"></a><strong>windows下解决</strong></h2><p>同样的方法在windows下照搬却还是没有得到改正。这让我有点郁闷。。没事继续搞起来！</p>
-<p>问题主要有两个1.code-runner中的设置再怎么修改，执行时也不会执行里面的命令。2.crtl+shift+B编译没反应。</p>
-<p>第2个问题她妈的是搜狗输入法快捷键和vscode的快捷键冲突了，我删除搜狗之后就可以了。这个时候我在task中修改参数args，并改成*.cpp，于是这一部分解决了。哈哈哈哈！</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/13.png" alt="image-20190920121147731"></p>
-<p>第1个问题，我捣鼓了半天，无意中发现workspace中setting.json中也有个code-runner.excutorMap，而且我执行的命令跑的是workspace中的。于是我修改了workspace中的cpp的命令。于是直接coder-run也可以啦！</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/14.png" alt="image-20190920121405146"></p>
-<p>然后我回到code-runner的setting发现以下。。。于是我把user里面的也全部改过来了。。真的是，全部都是坑！！！啊</p>
-<p><img src="/2019/09/20/VScode%E7%BC%96%E8%AF%91%E5%A4%9A%E6%96%87%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/15.png" alt="image-20190920121515671"></p>
-<p>多文件编译只适应于自己写的cpp文件，如果涉及到其他格式文件肯定就不行啦，不过肯定也可以在各种json文件中配置的。</p>
-<p>至此，已全豁然开朗矣！！！哈哈哈哈哈。编译是一个复杂的过程，这里面还没涉及到第三方库的使用，在后面想使用C++/C的第三方库矩阵运算的Armadillo包的时候，更叫一个崩溃。。</p>
-
+<p>指向性因数与麦克风个数、间距、阵列设计指向的角度都有关。麦克风个数越多，$DF$就越大。也可以看的到在低频的时候$DF$ 与 $WNG$ 相差较大，但高频的时候二者就很接近了。这是音频高频时候的扩散声场“近似”于一个白噪声场。</p>
+<h3 id="3-波束模式"><a href="#3-波束模式" class="headerlink" title="3.波束模式"></a>3.波束模式</h3>
     </div>
 
     
@@ -381,25 +344,23 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
-              <a href="/tags/VScode/" rel="tag"><i class="fa fa-tag"></i> VScode</a>
+              <a href="/tags/beamforming/" rel="tag"><i class="fa fa-tag"></i> beamforming</a>
+              <a href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag"><i class="fa fa-tag"></i> 波束形成</a>
+              <a href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 音频算法</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/" rel="next" title="Python小技巧用法积累--长期更新">
-                  <i class="fa fa-chevron-left"></i> Python小技巧用法积累--长期更新
+                <a href="/2019/11/19/Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8B%EF%BC%89/" rel="next" title="读取音频WAV格式文件的C++方法（二）">
+                  <i class="fa fa-chevron-left"></i> 读取音频WAV格式文件的C++方法（二）
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/09/29/%E5%88%9D%E5%AD%A6C-%E5%AF%B9%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B0%8F%E7%BB%93/" rel="prev" title="C/C++中指针使用小探">
-                  C/C++中指针使用小探 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -439,7 +400,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#插件code-run的运行"><span class="nav-number">1.</span> <span class="nav-text">插件code-run的运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vscode官方教程的编译"><span class="nav-number">2.</span> <span class="nav-text">vscode官方教程的编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多文件编译问题"><span class="nav-number">3.</span> <span class="nav-text">多文件编译问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MAC系统下上述问题的修改"><span class="nav-number">4.</span> <span class="nav-text">MAC系统下上述问题的修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows下解决"><span class="nav-number">5.</span> <span class="nav-text">windows下解决</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#程序结构设计"><span class="nav-number">1.</span> <span class="nav-text">程序结构设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delay-and-Sum"><span class="nav-number">2.</span> <span class="nav-text">Delay and Sum</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-白噪声增益表现"><span class="nav-number">2.1.</span> <span class="nav-text">1.白噪声增益表现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-指向性因数"><span class="nav-number">2.2.</span> <span class="nav-text">2.指向性因数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-波束模式"><span class="nav-number">2.3.</span> <span class="nav-text">3.波束模式</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -635,6 +596,54 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 
