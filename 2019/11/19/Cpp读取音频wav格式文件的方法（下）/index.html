@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="JUMPSHOT">
 <meta property="og:description" content="学习Github上一个读写音频WAV文件的C++项目AudioFile">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-18T15:29:47.386Z">
+<meta property="og:updated_time" content="2019-11-19T03:06:03.384Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://huangzhenyu.github.io/2019/11/19/Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%88%E4%B8%8B%EF%BC%89/">
@@ -212,16 +212,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-19 01:07:15" itemprop="dateCreated datePublished" datetime="2019-11-19T01:07:15+08:00">2019-11-19</time>
+              <time title="创建时间：2019-11-19 01:07:15 / 修改时间：11:06:03" itemprop="dateCreated datePublished" datetime="2019-11-19T01:07:15+08:00">2019-11-19</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-18 23:29:47" itemprop="dateModified" datetime="2019-11-18T23:29:47+08:00">2019-11-18</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -281,7 +275,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在<a href="[https://jumpshot.me/2019/11/17/Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95/](https://jumpshot.me/2019/11/17/Cpp读取音频wav格式文件的方法/">读取音频WAV格式文件的C++方法 一</a>)中，构建了一个结构体用来存储音频的头文件，获取一些必要的信息后，利用fread函数读取实际的音频数据。方法很简单，但功能还稍显单一，也不能很深层次的去理解wave格式文件，本文通过学习大神Adam Stark在Github上的项目<a href="https://github.com/adamstark/AudioFile/blob/master/AudioFile.h" target="_blank" rel="noopener">AudioFile</a>，以期更深层次地理解Wave与C++编程之美。<em>注：篇幅较长，均是流水账。。没有学习价值，嫌烦的可以直接看上述链接中的代码。</em></p><a id="more"></a>
+        <p>在读取音频WAV格式文件的C++方法 （一）中，构建了一个结构体用来存储音频的头文件，获取一些必要的信息后，利用fread函数读取实际的音频数据。方法很简单，但功能还稍显单一，也不能很深层次的去理解wave格式文件，本文通过学习大神Adam Stark在Github上的项目<a href="https://github.com/adamstark/AudioFile/blob/master/AudioFile.h" target="_blank" rel="noopener">AudioFile</a>，以期更深层次地理解Wave与C++编程之美。<em>注：篇幅较长，均是流水账。。没有学习价值，嫌烦的可以直接看上述链接中的代码。</em></p><a id="more"></a>
 <h2 id="类构造"><a href="#类构造" class="headerlink" title="类构造"></a>类构造</h2><p>AudioFile不仅可以完成读操作，还可以完成写操作，不仅支持Wave格式文件还支持Aiff格式文件（Aiff格式原项目中包含，但我这里主要研究wav格式，就把主要部分删除了，但后面判断等还会出现aiff格式，不影响）。首先上来就是通过一个枚举类型的宏定义了四种可能的音频“格式”：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="class"><span class="keyword">class</span> <span class="title">AudioFileFormat</span> &#123;</span></span><br><span class="line">  Error,</span><br><span class="line">  NotLoaded,</span><br><span class="line">  Wave,</span><br><span class="line">  Aiff <span class="comment">//这部分我直接跳过了，后面不会讲述这中音频格式</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后是写了一个类。来，我来手抄，顺便翻译下每个函数的功能：</p>
