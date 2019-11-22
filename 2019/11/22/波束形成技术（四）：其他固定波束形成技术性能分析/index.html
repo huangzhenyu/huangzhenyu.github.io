@@ -50,20 +50,27 @@
   };
 </script>
 
-  <meta name="description" content="固定波束形成技术问题建模及评价指标（白噪声增益、指向性因数、波束模式等）">
-<meta name="keywords" content="波束形成,beamforming">
+  <meta name="description" content="加窗的DS、MaximumDF、Superdirective、Robust Superdirective、Null Steering、Subspace">
+<meta name="keywords" content="波束形成,音频算法,Beamforming">
 <meta property="og:type" content="article">
-<meta property="og:title" content="波束形成技术（二）：固定波束形成简介">
-<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B&#x2F;index.html">
+<meta property="og:title" content="波束形成技术（四）：其他固定波束形成技术性能分析">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
-<meta property="og:description" content="固定波束形成技术问题建模及评价指标（白噪声增益、指向性因数、波束模式等）">
+<meta property="og:description" content="加窗的DS、MaximumDF、Superdirective、Robust Superdirective、Null Steering、Subspace">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B&#x2F;阵列模型.png">
-<meta property="og:updated_time" content="2019-11-11T14:53:49.623Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;DSChbwin.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;ds_dschebywin_beampattern.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;chebywin_heatmap.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;df_chebywin.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;wng_chebwin.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;MaximumDF_d_3_M_8_phi_90.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;MaximumDF_DF.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;MaximumDF_WNG.png">
+<meta property="og:updated_time" content="2019-11-22T00:44:03.047Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B&#x2F;阵列模型.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90&#x2F;DSChbwin.png">
 
-<link rel="canonical" href="https://huangzhenyu.github.io/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/">
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">
 
 
 <script id="page-configurations">
@@ -77,7 +84,7 @@
   };
 </script>
 
-  <title>波束形成技术（二）：固定波束形成简介 | JUMPSHOT</title>
+  <title>波束形成技术（四）：其他固定波束形成技术性能分析 | JUMPSHOT</title>
   
 
 
@@ -192,7 +199,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -205,7 +212,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          波束形成技术（二）：固定波束形成简介
+          波束形成技术（四）：其他固定波束形成技术性能分析
         </h1>
 
         <div class="post-meta">
@@ -216,7 +223,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-11-11 07:17:15 / 修改时间：22:53:49" itemprop="dateCreated datePublished" datetime="2019-11-11T07:17:15+08:00">2019-11-11</time>
+              <time title="创建时间：2019-11-22 06:53:15 / 修改时间：08:44:03" itemprop="dateCreated datePublished" datetime="2019-11-22T06:53:15+08:00">2019-11-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -246,8 +253,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/" itemprop="commentCount"></span>
+    <a title="valine" href="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -257,16 +264,16 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.3k</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>1 分钟</span>
             </span>
-            <div class="post-description">固定波束形成技术问题建模及评价指标（白噪声增益、指向性因数、波束模式等）</div>
+            <div class="post-description">加窗的DS、MaximumDF、Superdirective、Robust Superdirective、Null Steering、Subspace</div>
 
         </div>
       </header>
@@ -277,45 +284,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>其实波束形成的玩法本质上就是操作阵列不同麦克风上的信号加权系数，对于一类固定滤波器系数的阵列来说，无论输入信号或者噪声信号是啥样的（统计特征），其滤波器系数雷打不动，此类波束形成叫Fixed Beamforming，这好比传统数字信号处理里面的经典滤波器；可以联想到，现代数字信号里面有一类自适应滤波器，对应的，阵列里就有相应的Adaptive Beamforming，其滤波器的系数是跟随着噪声场的变化而变化的。</p><a id="more"></a>
-<p>此外，阵列根据形状不同还分为线阵、环针、中心阵等，为了便于理解，我们先从一维的Fixed Beamforming开始着手研究uniform linear arrays，由此情况推导其他以及引申到普适情况也不会是什么难事。</p>
-<h3 id="问题建模及求解"><a href="#问题建模及求解" class="headerlink" title="问题建模及求解"></a>问题建模及求解</h3><p><img src="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/阵列模型.png" style="zoom:50%;"></p>
-<p>远场假设，一声源与共有M个麦克风线阵的轴线夹角呈$\theta_d$入射，麦克风间距为 $\delta$, 则每两个麦克风之间的单位时延为 $\tau_0 = cos(\theta_d)*\delta/c$ ，其中c为声速，则以最右侧，也即离声源最近的麦克风为参考可以定义一个导向矢量(Steering Vector)：</p>
-<script type="math/tex; mode=display">d(f, \cos(\theta)) = [1  \ \  e^{-j2\pi f\tau_{0}\cos(\theta)}\ ... \ e^{-j(M-1)2\pi f\tau_{0}\cos(\theta)}]^T</script><p>根据傅立叶变换的性质，时域左移或者右移动等于频域在相位上的改变。根据下式可以看出导向矢量是对频域相移的补偿。比如第一个元素是1，那么不需要任何补偿，第二个元素，波阵面延后到达，收到的信号应该应该是乘以一个 $e$ 指数为正的相移因子，导向矢量补偿因子之后使得麦克风2收到的信号与麦克风1收到的信号相位上是对齐的，便于后面进一步的加权操作。如果现在没有对麦克风信号进行任何的系数加权，则收到的裸信号为：</p>
-<script type="math/tex; mode=display">y(f) = [Y_{1}(f) \ Y_{2}(f) \ ... \ Y_{M}(f)]^T =x(f)+v(f)
-=d(f, \cos(\theta_d))X(f) + v(f)</script><p>其中 $v(f)$为噪声信号，上述前半部分是我们的desired signal，进而接受信号的功率谱密度:</p>
-<script type="math/tex; mode=display">\Phi_{y}(f)= E[y(f)y_{H}(f)]
-= \phi_{X}(f)d(f,\cos(\theta_d))d^{H}(f,\cos(\theta_d)) + \Phi_{V}(f)</script><p>其中 $\phi_{X}(f)$ 为信号的方差，$\Phi_{V}(f)$ 为噪声的相关系数矩阵。</p>
-<p>Fixed Beamforming过程中我们最终求解都是为了降低其他方向的噪声而尽可能不失真地提取到目标信号，操作核心思想是对接受信号 $y(f)$进行系数加权求和。</p>
-<h3 id="线阵模型"><a href="#线阵模型" class="headerlink" title="线阵模型"></a>线阵模型</h3><p>上一部分最后提到加权求和，这就有点滤波器的意思了，时域上的滤波器就对过去的输入或者输出进行加权求和。而麦克风阵列呢，就是对声场中不同的空间点信号进行加权求和。如下：</p>
-<script type="math/tex; mode=display">Z(f) = \sum_{m=1}^{M}H_m^{*}(f)Y_{m}(f) = h^{H}(f)y(f) = X_{fd}(f) + V_{rn}(f)</script><p>$Z(f)$ 是最终输出信号，$h(f) = [H_{1}(f),  H_{2}(f), …  H_{M}(f)]^T$ 是M个麦克风的加权系数，每个麦克风对应一个。$X_{fd}(f) = X(f)h^{H}(f)d(f,\cos(\theta_d))$ 是我们的desired 信号，<strong>要求做到不失真满足 $h^{H}(f)d(f,\cos(\theta_d))=1$ 即可。记住这个式子，对后面求解的简化非常重要。 </strong>  $V_{rn}(f) = h^{H}(f)v(f)$ 则是剩余的残留信号。</p>
-<h3 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h3><p>评价麦克风阵列的性能指标无非是考察麦克风在不同声场下的表现，直接可以想到的有信噪比提升和指向性因数等。</p>
-<ul>
-<li>波束模式（beam pattern），理解为阵列在不同方位空间上的响应，其平方的形式power pattern常常通过Polar画出。公式为:</li>
-</ul>
-<script type="math/tex; mode=display">\begin{aligned} \mathcal{B}[\mathbf{h}(f), \cos \theta] &=\mathbf{d}^{H}(f, \cos \theta) \mathbf{h}(f) =\sum_{m=1}^{M} H_{m}(f) e^{\jmath(m-1) 2 \pi f \tau_{0} \cos \theta} \end{aligned}</script><ul>
-<li>阵列增益，<strong>阵列的输出信噪比比阵列的输入信噪比</strong>，推导过程不上了，公式为：</li>
-</ul>
-<script type="math/tex; mode=display">\begin{aligned} \mathcal{G}[\mathbf{h}(f)] &=\frac{\operatorname{oSNR}[\mathbf{h}(f)]}{\operatorname{iSNR}(f)} =\frac{\left|\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)\right|^{2}}{\mathbf{h}^{H}(f) \mathbf{\Gamma}_{\mathbf{v}}(f) \mathbf{h}(f)} \end{aligned}</script><p>​        注意在Fixed Beamforming 中上述式子的分子为1。增益越大，说明麦克风对提升信噪比越有帮助。即理论        上是越大越好，同理下面的白噪声增益（White Noise Gain）和指向性因数（Directivity Index）。</p>
-<ul>
-<li>当考察的噪声是白噪声时，空间中不同的任意两点的相关系数为0，所以上述 $\Gamma_V$ 是主对角为1，其余全为0 的单位阵。上述Array Gain可以写成：</li>
-</ul>
-<script type="math/tex; mode=display">WNG = \frac{oSNR(f)}{iSNR(f)} = \frac{|h^{H}(f)d(f,\cos(\theta_d)|^2}{h^{H}(f) (f)h(f)}</script><p>  ​    可以证明WNG数值上可达到最大值为M，即阵列中麦克风的个数。实际计算时在取对数。</p>
-<ul>
-<li><p>指向性因Directivity Factor（DI），则是考虑阵列工作于扩散声场，因此可同理写为：</p>
-<script type="math/tex; mode=display">DI = \frac{oSNR(f)}{iSNR(f)} = \frac{|h^{H}(f)d(f,\cos(\theta_d)|^2}{h^{H}(f) \Gamma_{0,\pi}(f)h(f)}</script><p> 其中 $\Gamma_{0,\pi} =\frac {\sin(\omega\tau)}{\omega\tau}$翻看讲义一里面的声场统计模型，有关于此的讨论。</p>
-</li>
-</ul>
-<p>  ​    所以，关于任意beamforming性能指标的讨论，只要得到阵列的滤波器系数，其他（三指标）的自然都迎    刃而解了。而许多beamforming技术也都是在这三个指标上玩花样，比如说最大化WNG或者DF。</p>
-<h3 id="空间混叠"><a href="#空间混叠" class="headerlink" title="空间混叠"></a>空间混叠</h3><p>开篇已经提及了，这里面的采样混叠其实和数字信号采样混叠道理是一样一样的，这里作一下推导演绎。空间发生混叠，即阵列分不清信号来自哪个方向了，也就是存在两个不同的 $\theta_d$, 满足 :</p>
-<p><script type="math/tex">d(f,\cos(\theta_1)) = d(f,cos(\theta_2))</script> ,  </p>
-<p>观察steering vector，可以得到：</p>
-<p><script type="math/tex">\cos(\theta_1) = \frac{c}{fd} + \cos(\theta_2) = 
-\frac{\lambda}{d} + \cos(\theta_2)</script>  或者 <script type="math/tex">\frac{\lambda}{d} = \frac{1}{\cos(\theta_1)-\cos(\theta_2)}</script>，</p>
-<p>此时steering vector中的任一项是满足在两个角度下相等的，认为此时发生了混叠，即<strong>阵列已经分不清最大响应来自于哪个方向</strong>了。由基本三角函数定理，当：</p>
-<p><script type="math/tex">\frac{1}{|\cos(\theta_1)-\cos(\theta_2)|} >= \frac{1}{2}</script> ，</p>
-<p>所以 <script type="math/tex">\frac{d}{\lambda} = \frac{1}{\cos(\theta_1)-\cos(\theta_2)} < \frac{1}{2}</script>，空间混叠才不会发生。</p>
-<p>关于空间混叠，在后面一章讲述每种不同的波束形成技术的beampattern的时候，会通过Polar图画出来，这样理解起来会更深刻。</p>
+        <p>字不如表，表不如图。对不同的Beamforming进行评价对比的最好形式是做图对比分析，快速直观明了。调用不同的beamforming类做图可以很容易对单个beamforming进行性能分析，但是很难做到同时对多个进行对比分析。于是写了一个抽象类，定义了一个append_beamforming的方法，可以通过此方法不断地添加待分析的波束形成类实例。然后在分析做图的时候，就可以把已加入的所有的beamforming同时做对比分析评价了。程序设计的思路还是来源于公司的DNN_TRAINING_TOOL。</p><a id="more"></a>
+<p>回归正题。</p>
+<h2 id="加切比雪夫窗的DS（Delay-and-Sum）"><a href="#加切比雪夫窗的DS（Delay-and-Sum）" class="headerlink" title="加切比雪夫窗的DS（Delay and Sum）"></a>加切比雪夫窗的DS（Delay and Sum）</h2><p>之前说过波束形成每个麦克风的加权系数 同时域中经典滤波器的系数非常相似，系数在物理意义上都可以认为是信号时延之后进行加和的系数。时域上可以进行加窗控制滤波器性能的方法同样也可借鉴到波束形成中。以加切比雪夫窗举例，过程示意如下：</p>
+<p><img src="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/DSChbwin.png" style="zoom:50%;"></p>
+<p>首先对比一下beampattern。</p>
+<p><img src="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/ds_dschebywin_beampattern.png" alt></p>
+<p>很神奇，波束主瓣变宽了，旁瓣被压制的及其厉害，在heatmap中观察更明显。此种效果是由所加窗的类型决定的，也可以尝试其他窗看看效果如何。</p>
+<p><img src="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/chebywin_heatmap.png" alt></p>
+<p>既如此，会不会牺牲降噪的性能呢？看看WNG和DF，很难得，两种噪声场下的表现均有所提高。</p>
+<p><img src="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/df_chebywin.png" style="zoom:33%;"></p>
+<p><img src="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/wng_chebwin.png" style="zoom:33%;"></p>
+<p>总结一下：</p>
+<p>1.原理简单粗暴。</p>
+<p>2.加窗之后主瓣变宽，旁瓣被压。WNG和DF都有提升。在DS中我们讨论过DS已经使得WNG最大化了，这是在不给系数做其他系数加权的情况下，如果可以加，WNG可以更大。</p>
+<p>3.缺点<strong>是可能需要依赖较多的麦克风吧</strong>，毕竟对两三个麦克风来说，加窗都加不起来。。</p>
+<h2 id="Maximum-DF"><a href="#Maximum-DF" class="headerlink" title="Maximum DF"></a>Maximum DF</h2><p>和名字一样，最大化DF。</p>
+<script type="math/tex; mode=display">
+\min _{\mathbf{h}(f)} \mathbf{h}^{H}(f) \mathbf{\Gamma}_{0, \pi}(f) \mathbf{h}(f) \quad \text { subject to } \quad \mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)=1</script><p>滤波器系数：</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_{\mathrm{mDF}}\left(f, \cos \theta_{\mathrm{d}}\right)=\frac{\mathbf{\Gamma}_{0, \pi}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}{\mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right) \mathbf{\Gamma}_{0, \pi}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}</script><p>其beampattern做出来是这个样子，可以看到低频时候波束模式相差不大。</p>
+<p><img src="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/MaximumDF_d_3_M_8_phi_90.png" alt></p>
+<p>既然是最大化DF，来看下DF的表现。对比了DS，同样配置下，低频时候的DF确实很强劲。</p>
+<p><img src="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/MaximumDF_DF.png" style="zoom:50%;"></p>
+<p>但是最大化DF的同时牺牲了WNG（宝宝心里苦），低频时候WNG表现极不稳定，甚至出现了很大的负数的情况，这意<strong>味着低频时候，此阵列会放大白噪声。。</strong></p>
+<p><img src="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/MaximumDF_WNG.png" style="zoom:50%;"></p>
 
     </div>
 
@@ -348,24 +341,22 @@
           
           <div class="post-tags">
               <a href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag"><i class="fa fa-tag"></i> 波束形成</a>
-              <a href="/tags/beamforming/" rel="tag"><i class="fa fa-tag"></i> beamforming</a>
+              <a href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 音频算法</a>
+              <a href="/tags/Beamforming/" rel="tag"><i class="fa fa-tag"></i> Beamforming</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/11/10/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%A3%B0%E5%9C%BA%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B/" rel="next" title="波束形成技术（一）：声场统计模型">
-                  <i class="fa fa-chevron-left"></i> 波束形成技术（一）：声场统计模型
+                <a href="/2019/11/20/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%8F%8ADelay%20and%20Sum/" rel="next" title="波束形成技术（三）：固定波束形成程序设计及Delay and Sum">
+                  <i class="fa fa-chevron-left"></i> 波束形成技术（三）：固定波束形成程序设计及Delay and Sum
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%86%92%E6%B3%A1%E3%80%81%E6%8F%92%E5%85%A5%E3%80%81%E9%80%89%E6%8B%A9/" rel="prev" title="排序算法（一）：冒泡、插入、选择排序的Cpp实现">
-                  排序算法（一）：冒泡、插入、选择排序的Cpp实现 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -405,7 +396,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题建模及求解"><span class="nav-number">1.</span> <span class="nav-text">问题建模及求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线阵模型"><span class="nav-number">2.</span> <span class="nav-text">线阵模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能指标"><span class="nav-number">3.</span> <span class="nav-text">性能指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空间混叠"><span class="nav-number">4.</span> <span class="nav-text">空间混叠</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#加切比雪夫窗的DS（Delay-and-Sum）"><span class="nav-number">1.</span> <span class="nav-text">加切比雪夫窗的DS（Delay and Sum）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maximum-DF"><span class="nav-number">2.</span> <span class="nav-text">Maximum DF</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -601,54 +592,6 @@
   
 
   
-      
-<script type="text/x-mathjax-config">
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') {
-          next = next.nextSibling;
-        }
-        if (next && next.nodeName.toLowerCase() === 'br') {
-          next.parentNode.removeChild(next);
-        }
-      }
-    });
-  });
-
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
-      if (element.nodeName.toLowerCase() == 'li') {
-        element = element.parentNode;
-      }
-      element.classList.add('has-jax');
-    }
-  });
-</script>
-<script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
-    MathJax.Hub.Typeset();
-  }, window.MathJax);
-</script>
-
-    
 
   
 
