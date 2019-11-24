@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="之前作可视化，没有形成统一的风格与思维，一会面向对象，一会面向过程，总之是很乱。Google到了一篇很赞的文章，搬运收藏一下。">
+<meta name="keywords" content="python,matplotlib,编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="matplotlib作图的面向对象思维">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="之前作可视化，没有形成统一的风格与思维，一会面向对象，一会面向过程，总之是很乱。Google到了一篇很赞的文章，搬运收藏一下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;4.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;5.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;8.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;9.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;10.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;11.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;12.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;13.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;14.png">
+<meta property="og:updated_time" content="2019-11-24T11:00:58.215Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4&#x2F;1.png">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>matplotlib作图的面向对象思维 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="NBA数据分析挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          matplotlib作图的面向对象思维
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-24 18:23:15 / 修改时间：19:00:58" itemprop="dateCreated datePublished" datetime="2019-11-24T18:23:15+08:00">2019-11-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8F%AF%E8%A7%86%E5%8C%96/" itemprop="url" rel="index">
+                    <span itemprop="name">可视化</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>22k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>20 分钟</span>
+            </span>
+            <div class="post-description">之前作可视化，没有形成统一的风格与思维，一会面向对象，一会面向过程，总之是很乱。Google到了一篇很赞的文章，搬运收藏一下。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>原文链接：</p><p><a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo" target="_blank" rel="noopener">“Artist” in Matplotlib - something I wanted to know before spending tremendous hours on googling how-tos.</a></p><p>正文：</p><p>It’s true that matplotlib is a fantastic visualizing tool in Python. But it’s also true that tweaking details in matplotlib is a real pain. You may easily lose hours to find out how to change a small part of your plot. Sometimes you even don’t know the name of the part, which makes googling it harder. Even if you find a hint on Stack Overflow, you may spend another couple of hours to make it fit your case. These non-rewarding tasks can be avoided by knowing what a figure in matplotlib consists of and what you can do with them. Like most of you, I think, I have overcome my plotting problems by reading lots of answers by matplotlib gurus on Stack Overflow. Recently, I noticed that <a href="https://matplotlib.org/tutorials/index.html" target="_blank" rel="noopener">an official tutorial about <code>Artist</code> objects</a> is very informative and helpful to understand what is going on when we plot with matplotlib and to reduce a large amount of time spent for tweaking<a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fn1" target="_blank" rel="noopener">1</a>. In this post, I would like to share some basic knowledge about <code>Artist</code> objects in matplotlib which would prevent you from spending hours for tweaking.</p><a id="more"></a>
+
+
+
+<h1 id="Purpose-of-this-post"><a href="#Purpose-of-this-post" class="headerlink" title="Purpose of this post"></a>Purpose of this post</h1><p>I’m not going to write about how-tos like “do like this when you want to do this”, but a basic concept of <code>Artist</code> in matplotlib which helps you choose suitable search queries and arrange a solution for a similar problem as yours. After reading this, you’ll probably understand those huge amount of recipes on the Internet more clearly. This also applies to those who use seaborn and plotting features of pandas which are wrappers of matplotlib.</p>
+<h1 id="Contents"><a href="#Contents" class="headerlink" title="Contents"></a>Contents</h1><p>This post is basically an English version of <a href="https://qiita.com/skotaro/items/08dc0b8c5704c94eafb9" target="_blank" rel="noopener">the original article I wrote in Japanese</a>, and is mostly based on <a href="https://matplotlib.org/tutorials/intermediate/artists.html" target="_blank" rel="noopener">Artist tutorial</a> and <a href="https://matplotlib.org/tutorials/introductory/usage.html" target="_blank" rel="noopener">Usage Guide</a> (2.1.1 at the time of publication of the original one)</p>
+<h1 id="Who-is-this-for"><a href="#Who-is-this-for" class="headerlink" title="Who is this for?"></a>Who is this for?</h1><p>Matplotlib users who</p>
+<ul>
+<li>are able to make plots if needed, but often struggle to make them appropriate for publication or presentation (and are irritated by “the last one mile” to what you really want).</li>
+<li>have successfully found an exact solution on Stack Overflow but are still hazy about how it works and cannot apply it to other problems.</li>
+<li>found multiple hints for a problem but are not sure which to follow.</li>
+</ul>
+<h1 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h1><ul>
+<li>Python 3.6</li>
+<li>matplotlib 2.2</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
+<p><code>plt.show()</code> is omitted in this article because I use Jupyter notebook’s inline plot.</p>
+<h1 id="Two-plotting-styles-you-should-be-aware-of"><a href="#Two-plotting-styles-you-should-be-aware-of" class="headerlink" title="Two plotting styles you should be aware of"></a>Two plotting styles you should be aware of</h1><p>Before looking into <code>Artist</code> objects, I would like to mention the difference between <code>plt.plot</code> and <code>ax.plot</code>, or Pyplot and object-oriented API. While object-oriented API style is officially recommended, there are still lots of examples and code snippets using Pyplot style, including official docs. Some are even mixing both styles meaninglessly, which causes unnecessary confusion for beginners. Since official doc has good notes about them such as <a href="https://matplotlib.org/tutorials/introductory/lifecycle.html#a-note-on-the-object-oriented-api-vs-pyplot" target="_blank" rel="noopener">A note on the Object-Oriented API vs Pyplot</a> and <a href="https://matplotlib.org/tutorials/introductory/usage.html#coding-styles" target="_blank" rel="noopener">Coding Styles</a>, here I only make some comments on them. If you look for introduction for them, I recommend official tutorials.</p>
+<ul>
+<li><a href="https://matplotlib.org/tutorials/introductory/lifecycle.html" target="_blank" rel="noopener">Tutorials &gt; Introductory &gt; The Lifecycle of a plot</a></li>
+<li><a href="https://matplotlib.org/tutorials/introductory/pyplot.html" target="_blank" rel="noopener">Tutorials &gt; Introductory &gt; Pyplot tutorial</a></li>
+</ul>
+<h2 id="Object-oriented-API-interface"><a href="#Object-oriented-API-interface" class="headerlink" title="Object-oriented API interface"></a>Object-oriented API interface</h2><p>This is the recommended style which often starts with <code>fig, ax = plt.subplots()</code> or other equivalents followed by <code>ax.plot</code>, <code>ax.imshow</code> etc. <code>fig</code> and <code>ax</code> are, in fact, <code>Artist</code>s. Here are some simplest examples.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fig, ax = plt.subplots()</span><br><span class="line">ax.plot(x,y)</span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">ax.plot(x, y)</span><br></pre></td></tr></table></figure>
+<p>Some tutorials use <code>fig = plt.gcf()</code> and <code>ax = plt.gca()</code>. These should be used when you switch from Pyplot interface to OO interface, but some Pyplot-based codes include, for example, pointless <code>ax = plt.gca()</code> which is apparently copied from OO-based code without understanding. Using <code>plt.gcf()</code> or <code>plt.gca()</code> isn’t a bad thing at all if one switch the interface intentionally. Considering implicit switching can be a cause of confusion for beginners, using <code>plt.subplots</code> or <code>fig.add_subplot</code> from the beginning would be the best practice for most of the cases if they are publicly available.</p>
+<h2 id="Pyplot-interface"><a href="#Pyplot-interface" class="headerlink" title="Pyplot interface"></a>Pyplot interface</h2><p>This is a MATLAB-user-friendly style in which everything is done with <code>plt.***</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># https://matplotlib.org/tutorials/introductory/pyplot.html</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(t)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> np.exp(-t) * np.cos(<span class="number">2</span>*np.pi*t)</span><br><span class="line"></span><br><span class="line">t1 = np.arange(<span class="number">0.0</span>, <span class="number">5.0</span>, <span class="number">0.1</span>)</span><br><span class="line">t2 = np.arange(<span class="number">0.0</span>, <span class="number">5.0</span>, <span class="number">0.02</span>)</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">1</span>)</span><br><span class="line">plt.subplot(<span class="number">211</span>)</span><br><span class="line">plt.plot(t1, f(t1), <span class="string">'bo'</span>, t2, f(t2), <span class="string">'k'</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">212</span>)</span><br><span class="line">plt.plot(t2, np.cos(<span class="number">2</span>*np.pi*t2), <span class="string">'r--'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/1.png" alt></p>
+<p>At first, it seems very simple because there is no need to think about which objects you are handling. You only need to know which “state” you are in, which is why this style is also called “stateful interface”. Here, a “state” means which figure and subplot you are currently in. As you see in <a href="https://matplotlib.org/tutorials/introductory/pyplot.html" target="_blank" rel="noopener">Pyplot tutorial</a>, it gives a nice figure if your plot is not so complicated. Although Pyplot interface offers lots of functions to change plot settings, you may reach its limit within a couple of hours, days, months (or never if you are lucky enough) depending on what you want to do. At this stage, you need to switch to OO interface. That is why I recommend to use OO interface from the beginning. But Pyplot is still useful for quick checks or any occasions where you need rough plots.</p>
+<h1 id="The-hierarchy-in-matplotlib"><a href="#The-hierarchy-in-matplotlib" class="headerlink" title="The hierarchy in matplotlib"></a>The hierarchy in matplotlib</h1><p>After googling several times, you will notice that matplotlib has a hierarchical structure consisting of something often called <code>fig</code> and <code>ax</code>. <a href="https://matplotlib.org/1.5.1/faq/usage_faq.html#parts-of-a-figure" target="_blank" rel="noopener">Old doc for matplotlib 1.5</a> has a nice image explaining this.</p>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/2.png" alt></p>
+<p>Actually, these three components are special <code>Artist</code>s called “containers” (and there is the fourth container <code>Tick</code>) which we will see later. This hierarchy makes simple examples above even clearer.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fig, ax = plt.subplots() <span class="comment"># make Figure and Axes which belongs to 'fig'</span></span><br><span class="line">fig = plt.figure() <span class="comment"># make Figure</span></span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>) <span class="comment"># make Axes belonging to fig</span></span><br></pre></td></tr></table></figure>
+<p>Taking a further look at attributes of <code>fig</code> and <code>ax</code> helps you understand the hierarchy more.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>) <span class="comment"># make a blank plotting area</span></span><br><span class="line">print(<span class="string">'fig.axes:'</span>, fig.axes)</span><br><span class="line">print(<span class="string">'ax.figure:'</span>, ax.figure)</span><br><span class="line">print(<span class="string">'ax.xaxis:'</span>, ax.xaxis)</span><br><span class="line">print(<span class="string">'ax.yaxis:'</span>, ax.yaxis)</span><br><span class="line">print(<span class="string">'ax.xaxis.axes:'</span>, ax.xaxis.axes)</span><br><span class="line">print(<span class="string">'ax.yaxis.axes:'</span>, ax.yaxis.axes)</span><br><span class="line">print(<span class="string">'ax.xaxis.figure:'</span>, ax.xaxis.figure)</span><br><span class="line">print(<span class="string">'ax.yaxis.figure:'</span>, ax.yaxis.figure)</span><br><span class="line">print(<span class="string">'fig.xaxis:'</span>, fig.xaxis)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">fig.axes: [&lt;matplotlib.axes._subplots.AxesSubplot object at 0x1167b0630&gt;]</span><br><span class="line">ax.figure: Figure(432x288)</span><br><span class="line">ax.xaxis: XAxis(54.000000,36.000000)</span><br><span class="line">ax.yaxis: YAxis(54.000000,36.000000)</span><br><span class="line">ax.xaxis.axes: AxesSubplot(0.125,0.125;0.775x0.755)</span><br><span class="line">ax.yaxis.axes: AxesSubplot(0.125,0.125;0.775x0.755)</span><br><span class="line">ax.xaxis.figure: Figure(432x288)</span><br><span class="line">ax.yaxis.figure: Figure(432x288)</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">AttributeError                            Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input-21-b9f2d5d9fe09&gt; in &lt;module&gt;()</span><br><span class="line">      9 print(&apos;ax.xaxis.figure:&apos;, ax.xaxis.figure)</span><br><span class="line">     10 print(&apos;ax.yaxis.figure:&apos;, ax.yaxis.figure)</span><br><span class="line">---&gt; 11 print(&apos;fig.xaxis:&apos;, fig.xaxis)</span><br><span class="line"></span><br><span class="line">AttributeError: &apos;Figure&apos; object has no attribute &apos;xaxis&apos;</span><br></pre></td></tr></table></figure>
+<p>From these results, we can expect following rules about the hierarchy of <code>Figure</code>, <code>Axes</code>, and <code>Axis</code>.</p>
+<ul>
+<li><code>Figure</code> knows <code>Axes</code> but not <code>Axis</code>.</li>
+<li><code>Axes</code> knows <code>Figure</code> and <code>Axis</code> both.</li>
+<li><code>Axis</code> knows <code>Axes</code> and <code>Figure</code> both.3</li>
+<li><code>Figure</code> can contain multiple <code>Axes</code> because <code>fig.axes</code> is a list of <code>Axes</code>.</li>
+<li><code>Axes</code> can belong to only single <code>Figure</code> because <code>ax.figure</code> is not a list.</li>
+<li><code>Axes</code> can have one <code>XAxis</code> and <code>YAxis</code> respectively for similar reason.</li>
+<li><code>XAxis</code> and <code>YAxis</code> can belong to single <code>Axes</code> and, accordingly, single <code>Figure</code>.</li>
+</ul>
+<h1 id="Everything-in-your-plot-is-an-Artist"><a href="#Everything-in-your-plot-is-an-Artist" class="headerlink" title="Everything in your plot is an Artist"></a>Everything in your plot is an <code>Artist</code></h1><p>Instead of a figure explaining the hierarchical structure, <a href="https://matplotlib.org/tutorials/introductory/usage.html" target="_blank" rel="noopener">Usage Guide</a> in the current doc has “Anatomy of a figure”<a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fn2" target="_blank" rel="noopener">2</a> explaining all components in a figure which is also informative<a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fn3" target="_blank" rel="noopener">3</a>.</p>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/3.png" alt></p>
+<p>From lines and points which represent data to minor ticks and text labels for them on X axis, every single component in a figure is an <code>Artist</code> object<a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fn4" target="_blank" rel="noopener">4</a>. There are two types of <code>Artist</code>, containers and primitives. As I wrote in the previous section, three components in matplotlib’s hierarchy, <code>Figure</code>, <code>Axes</code>, and <code>Axis</code> are containers which can contain lower containers and multiple primitives such as <code>Line2D</code> made by <code>ax.plot</code>, <code>PathCollection</code> by <code>ax.scatter</code>, or <code>Text</code> by <code>ax.annotate</code>. Even tick lines and labels are in fact <code>Line2D</code> and <code>Text</code> which belong to the fourth container <code>Tick</code>.</p>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/4.png" alt></p>
+<p>Containers have many “boxes” (Python lists, technicaly) for each type of primitives. For example, an <code>Axes</code> object, <code>ax</code>, just after instantation has an empty list <code>ax.lines</code>. Frequently-used command <code>ax.plot</code> adds a <code>Line2D</code> object in the list and does other accompanying settings silently.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">x = np.linspace(<span class="number">0</span>, <span class="number">2</span>*np.pi, <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">print(<span class="string">'ax.lines before plot:\n'</span>, ax.lines) <span class="comment"># empty</span></span><br><span class="line">line1, = ax.plot(x, np.sin(x), label=<span class="string">'1st plot'</span>) <span class="comment"># add Line2D in ax.lines</span></span><br><span class="line">print(<span class="string">'ax.lines after 1st plot:\n'</span>, ax.lines)</span><br><span class="line">line2, = ax.plot(x, np.sin(x+np.pi/<span class="number">8</span>), label=<span class="string">'2nd plot'</span>) <span class="comment"># add another Line2D</span></span><br><span class="line">print(<span class="string">'ax.lines after 2nd plot:\n'</span>, ax.lines)</span><br><span class="line">ax.legend()</span><br><span class="line">print(<span class="string">'line1:'</span>, line1)</span><br><span class="line">print(<span class="string">'line2:'</span>, line2)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ax.lines before plot:</span><br><span class="line"> []</span><br><span class="line">ax.lines after 1st plot:</span><br><span class="line"> [&lt;matplotlib.lines.Line2D object at 0x1171ca748&gt;]</span><br><span class="line">ax.lines after 2nd plot:</span><br><span class="line"> [&lt;matplotlib.lines.Line2D object at 0x1171ca748&gt;, &lt;matplotlib.lines.Line2D object at 0x117430550&gt;]</span><br><span class="line">line1: Line2D(1st plot)</span><br><span class="line">line2: Line2D(2nd plot)</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/5.png" alt></p>
+<p>Following sections summarize four containers. Tables are copied from <a href="https://matplotlib.org/tutorials/intermediate/artists.html" target="_blank" rel="noopener">Artist tutorial</a>.</p>
+<h2 id="Figure"><a href="#Figure" class="headerlink" title="Figure"></a><code>Figure</code></h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><code>Figure</code> attributes</th>
+<th style="text-align:left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>fig.axes</code></td>
+<td style="text-align:left">A list of <code>Axes</code> instances (includes <code>Subplot</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fig.patch</code></td>
+<td style="text-align:left">The <code>Rectangle</code> background</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fig.images</code></td>
+<td style="text-align:left">A list of <code>FigureImages</code> patches - useful for raw pixel display</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fig.legends</code></td>
+<td style="text-align:left">A list of <code>Figure</code> <code>Legend</code> instances (different from <code>Axes.legends</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fig.lines</code></td>
+<td style="text-align:left">A list of <code>Figure</code> <code>Line2D</code> instances (rarely used, see <code>Axes.lines</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fig.patches</code></td>
+<td style="text-align:left">A list of <code>Figure</code> patches (rarely used, see <code>Axes.patches</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fig.texts</code></td>
+<td style="text-align:left">A list <code>Figure</code> <code>Text</code> instances</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Attributes with a plural name are lists and those with a singular name represent a single object. It is worth noting that <code>Artist</code>s belonging to <code>Figure</code> use <code>Figure</code> coordinate by default. This can be converted to <code>Axes</code> or data coordinates <a href="https://matplotlib.org/users/transforms_tutorial.html" target="_blank" rel="noopener">by using <code>Transforms</code></a>, which is outside the scope of this post.</p>
+<h3 id="fig-legend-and-ax-legend"><a href="#fig-legend-and-ax-legend" class="headerlink" title="fig.legend and ax.legend"></a><code>fig.legend</code> and <code>ax.legend</code></h3><p><code>fig.legends</code> is a “box” for legends added by <a href="https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure.legend" target="_blank" rel="noopener"><code>fig.lenged</code> method</a>. You may think “What’s that for? We have <code>ax.legend</code>.” The difference is a scope of each method. While <code>ax.legend</code> only collects labels from <code>Artist</code>s belonging to <code>ax</code>, <code>fig.legend</code> gathers labels from all <code>Axes</code> under <code>fig</code>. This is useful, for instance, when you make a plot using <code>ax.twinx</code>. Simply using <code>ax.legend</code> twice makes two legends, which is not desirable in general.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">x = np.linspace(<span class="number">0</span>, <span class="number">2</span>*np.pi, <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line">ax.plot(x, np.sin(x), label=<span class="string">'sin(x)'</span>)</span><br><span class="line">ax1 = ax.twinx()</span><br><span class="line">ax1.plot(x, <span class="number">2</span>*np.cos(x), c=<span class="string">'C1'</span>, label=<span class="string">'2*cos(x)'</span>) </span><br><span class="line"><span class="comment"># cf. 'CN' notation</span></span><br><span class="line"><span class="comment"># https://matplotlib.org/tutorials/colors/colors.html#cn-color-selection</span></span><br><span class="line"></span><br><span class="line">ax.legend()</span><br><span class="line">ax1.legend()</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/6.png" alt></p>
+<p>A famous recipe to put them together is to combine legend handlers and labels of both <code>Axes</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Executing this part in a different notebook cell shows an updated figure.</span></span><br><span class="line">handler, label = ax.get_legend_handles_labels()</span><br><span class="line">handler1, label1 = ax1.get_legend_handles_labels()</span><br><span class="line">ax.legend(handler+handler1, label+label1, loc=<span class="string">'upper center'</span>, title=<span class="string">'ax.legend'</span>)</span><br><span class="line"><span class="comment"># Legend made by ax1.legend remains</span></span><br><span class="line">fig</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/7.png" alt></p>
+<p>This can be easily done by <code>fig.legend</code> without arguments which was introduced in <a href="https://matplotlib.org/users/whats_new.html#figure-legend-can-be-called-without-arguments" target="_blank" rel="noopener">ver 2.1</a><a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fn5" target="_blank" rel="noopener">5</a>. By default, the position is specified with <code>Figure</code> coordinate which is not useful when you want to put it in a plotting frame. You can change it to <code>Axes</code> coordinate with <code>bbox_transform</code> keyword.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fig.legend(loc=<span class="string">'upper right'</span>, bbox_to_anchor=(<span class="number">1</span>,<span class="number">1</span>), bbox_transform=ax.transAxes, title=<span class="string">'fig.legend\nax.transAxes'</span>)</span><br><span class="line">fig</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/8.png" alt></p>
+<h2 id="Axes"><a href="#Axes" class="headerlink" title="Axes"></a><code>Axes</code></h2><blockquote>
+<p>The matplotlib.axes.Axes is the center of the matplotlib universe</p>
+</blockquote>
+<p>This is a quote from <a href="https://matplotlib.org/tutorials/intermediate/artists.html#axes-container" target="_blank" rel="noopener">Artist tutorial</a>. This is very true because important parts of data visualization in matplotlib all come from <code>Axes</code> methods.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><code>Axes</code> attributes</th>
+<th style="text-align:left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>ax.artists</code></td>
+<td style="text-align:left">A list of <code>Artist</code> instances</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.patch</code></td>
+<td style="text-align:left"><code>Rectangle</code> instance for <code>Axes</code> background</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.collections</code></td>
+<td style="text-align:left">A list of <code>Collection</code> instances</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.images</code></td>
+<td style="text-align:left">A list of <code>AxesImage</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.legends</code></td>
+<td style="text-align:left">A list of <code>Legend</code> instances</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.lines</code></td>
+<td style="text-align:left">A list of <code>Line2D</code> instances</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.patches</code></td>
+<td style="text-align:left">A list of <code>Patch</code> instances</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.texts</code></td>
+<td style="text-align:left">A list of <code>Text</code> instances</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.xaxis</code></td>
+<td style="text-align:left"><code>matplotlib.axis.XAxis</code> instance</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.yaxis</code></td>
+<td style="text-align:left"><code>matplotlib.axis.YAxis</code> instance</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Frequently-used commands such as <code>ax.plot</code> and <code>ax.scatter</code> are called “helper methods” which add corresponding <code>Artist</code>s in appropriate containers and do other miscellaneous jobs.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Helper methods</th>
+<th style="text-align:left"><code>Artist</code></th>
+<th style="text-align:left">Container</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>ax.annotate</code></td>
+<td style="text-align:left"><code>Annotate</code></td>
+<td style="text-align:left"><code>ax.texts</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.bar</code></td>
+<td style="text-align:left"><code>Rectangle</code></td>
+<td style="text-align:left"><code>ax.patches</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.errorbar</code></td>
+<td style="text-align:left"><code>Line2D</code> &amp; <code>Rectangle</code></td>
+<td style="text-align:left"><code>ax.lines</code> &amp; <code>ax.patches</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.fill</code></td>
+<td style="text-align:left"><code>Polygon</code></td>
+<td style="text-align:left"><code>ax.patches</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.hist</code></td>
+<td style="text-align:left"><code>Rectangle</code></td>
+<td style="text-align:left"><code>ax.patches</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.imshow</code></td>
+<td style="text-align:left"><code>AxesImage</code></td>
+<td style="text-align:left"><code>ax.images</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.legend</code></td>
+<td style="text-align:left"><code>Legend</code></td>
+<td style="text-align:left"><code>ax.legends</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.plot</code></td>
+<td style="text-align:left"><code>Line2D</code></td>
+<td style="text-align:left"><code>ax.lines</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.scatter</code></td>
+<td style="text-align:left"><code>PathCollection</code></td>
+<td style="text-align:left"><code>ax.collections</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ax.text</code></td>
+<td style="text-align:left"><code>Text</code></td>
+<td style="text-align:left"><code>ax.texts</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This example shows <code>ax.plot</code> and <code>ax.scatter</code> add <code>Line2D</code> and <code>PathCollection</code> objects in corresponding lists.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">x = np.linspace(<span class="number">0</span>, <span class="number">2</span>*np.pi, <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">print(<span class="string">'ax.lines before plot:\n'</span>, ax.lines) <span class="comment"># empty Axes.lines</span></span><br><span class="line">line1, = ax.plot(x, np.sin(x), label=<span class="string">'1st plot'</span>) <span class="comment"># add Line2D in Axes.lines</span></span><br><span class="line">print(<span class="string">'ax.lines after 1st plot:\n'</span>, ax.lines)</span><br><span class="line">line2, = ax.plot(x, np.sin(x+np.pi/<span class="number">8</span>), label=<span class="string">'2nd plot'</span>) <span class="comment"># add another Line2D </span></span><br><span class="line">print(<span class="string">'ax.lines after 2nd plot:\n'</span>, ax.lines)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'ax.collections before scatter:\n'</span>, ax.collections)</span><br><span class="line">scat = ax.scatter(x, np.random.rand(len(x)), label=<span class="string">'scatter'</span>) <span class="comment"># add PathCollection in Axes.collections</span></span><br><span class="line">print(<span class="string">'ax.collections after scatter:\n'</span>, ax.collections)</span><br><span class="line">ax.legend()</span><br><span class="line">print(<span class="string">'line1:'</span>, line1)</span><br><span class="line">print(<span class="string">'line2:'</span>, line2)</span><br><span class="line">print(<span class="string">'scat:'</span>, scat)</span><br><span class="line">ax.set_xlabel(<span class="string">'x value'</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">'y value'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ax.lines before plot:</span><br><span class="line"> []</span><br><span class="line">ax.lines after 1st plot:</span><br><span class="line"> [&lt;matplotlib.lines.Line2D object at 0x1181d16d8&gt;]</span><br><span class="line">ax.lines after 2nd plot:</span><br><span class="line"> [&lt;matplotlib.lines.Line2D object at 0x1181d16d8&gt;, &lt;matplotlib.lines.Line2D object at 0x1181d1e10&gt;]</span><br><span class="line">ax.collections before scatter:</span><br><span class="line"> []</span><br><span class="line">ax.collections after scatter:</span><br><span class="line"> [&lt;matplotlib.collections.PathCollection object at 0x1181d74a8&gt;]</span><br><span class="line">line1: Line2D(1st plot)</span><br><span class="line">line2: Line2D(2nd plot)</span><br><span class="line">scat: &lt;matplotlib.collections.PathCollection object at 0x1181d74a8&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/9.png" alt></p>
+<h3 id="Reusing-a-plotted-object-is-not-recommended"><a href="#Reusing-a-plotted-object-is-not-recommended" class="headerlink" title="Reusing a plotted object is not recommended"></a>Reusing a plotted object is not recommended</h3><p>After knowing that plotted objects are contained in lists, you probably come up with an idea to reuse those objects in an <code>Axes.lines</code> by appending it to another <code>Axes.lines</code> list for faster plotting. <a href="https://matplotlib.org/tutorials/intermediate/artists.html#axes-container" target="_blank" rel="noopener">Artist tutorial</a> clearly states this is not recommended because helper methods do many things other than creating an <code>Artist</code>. A quick test tells this is not a good idea.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">x = np.linspace(<span class="number">0</span>, <span class="number">2</span>*np.pi, <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax1 = fig.add_subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>) <span class="comment"># upper subplot</span></span><br><span class="line">line, = ax1.plot(x, np.sin(x), label=<span class="string">'ax1 line'</span>) <span class="comment"># create a Line2D object</span></span><br><span class="line">ax1.legend()</span><br><span class="line"></span><br><span class="line">ax2 = fig.add_subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>) <span class="comment"># lower subplot</span></span><br><span class="line">ax2.lines.append(line) <span class="comment"># try to reuse same `Line2D` object in another `Axes`</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/10.png" alt></p>
+<p>Even <code>add_line</code> method doesn’t work.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ax2.add_line(line)</span><br><span class="line"></span><br><span class="line">ValueError: Can <span class="keyword">not</span> reset the axes.  You are probably trying to re-use an artist <span class="keyword">in</span> more than one Axes which <span class="keyword">is</span> <span class="keyword">not</span> supported</span><br></pre></td></tr></table></figure>
+<p>This error message indicates that an <code>Artist</code>, container or primitive, cannot be contained in multiple containers, which is consistent with the fact that each <code>Artist</code> holds the parent container as a bare object, not in a list.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'fig:'</span>, id(fig)) </span><br><span class="line">print(<span class="string">'ax1:'</span>, id(ax1))</span><br><span class="line">print(<span class="string">'line.fig:'</span>, id(line.figure))</span><br><span class="line">print(<span class="string">'line.axes:'</span>, id(line.axes))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">fig: 4707121584</span><br><span class="line">ax1: 4707121136</span><br><span class="line">line.fig: 4707121584</span><br><span class="line">line.axes: 4707121136</span><br></pre></td></tr></table></figure>
+<p>It might be possible if you do all the necessary stuff in a proper way, but this is far from the first idea to just append an object to a list and is enough reason not to do it.</p>
+<h2 id="Axis"><a href="#Axis" class="headerlink" title="Axis"></a><code>Axis</code></h2><p>While <code>Axis</code>, appeared as <code>XAxis</code> or <code>YAxis</code>, only contains <code>Artist</code>s related to ticks and labels, it often requires some googling for minor tweaking, occasionally for an hour. I hope this section helps you get the job done quick.</p>
+<p>As <a href="https://matplotlib.org/tutorials/intermediate/artists.html#axis-containers" target="_blank" rel="noopener">Artist tutorial</a> doesn’t have a table like other containers, I made a similar table.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><code>Axis</code> attributes</th>
+<th style="text-align:left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>Axis.label</code></td>
+<td style="text-align:left">A <code>Text</code> instance for axis label</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Axis.majorTicks</code></td>
+<td style="text-align:left">A list of <code>Tick</code> instances for major ticks.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Axis.minorTicks</code></td>
+<td style="text-align:left">A list of <code>Tick</code> instances for minor ticks.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We used <code>ax.set_xlabel</code> and <code>ax.set_ylabel</code> in the example for <code>Axes</code> container. You might think these methods change X and Y label of <code>Axes</code> instance (<code>ax</code>), but in fact they change <code>label</code> attributes of <code>XAxis</code> and <code>YAxis</code>, <code>ax.xaxis.label</code> and <code>ax.yaxis.label</code>, respectively.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xax = ax.xaxis</span><br><span class="line">print(<span class="string">'xax.label:'</span>, xax.label)</span><br><span class="line">print(<span class="string">'xax.majorTicks:\n'</span>, xax.majorTicks) <span class="comment"># seven major ticks (from 0 to 6) and two invisible ticks locating outside of the figure</span></span><br><span class="line">print(<span class="string">'xax.minorTicks:\n'</span>, xax.minorTicks) <span class="comment"># two ticks outside the figure</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xax.label: Text(0.5,17.2,&apos;x value&apos;)</span><br><span class="line">xax.majorTicks:</span><br><span class="line"> [&lt;matplotlib.axis.XTick object at 0x117ae4400&gt;, &lt;matplotlib.axis.XTick object at 0x117941128&gt;, &lt;matplotlib.axis.XTick object at 0x11732c940&gt;, &lt;matplotlib.axis.XTick object at 0x1177d0470&gt;, &lt;matplotlib.axis.XTick object at 0x1177d0390&gt;, &lt;matplotlib.axis.XTick object at 0x1175058d0&gt;, &lt;matplotlib.axis.XTick object at 0x1175050b8&gt;, &lt;matplotlib.axis.XTick object at 0x117bf65c0&gt;, &lt;matplotlib.axis.XTick object at 0x117bf6b00&gt;]</span><br><span class="line">xax.minorTicks:</span><br><span class="line"> [&lt;matplotlib.axis.XTick object at 0x117ab5940&gt;, &lt;matplotlib.axis.XTick object at 0x117b540f0&gt;]</span><br></pre></td></tr></table></figure>
+<h3 id="ax-set-methods-are-ad-hoc"><a href="#ax-set-methods-are-ad-hoc" class="headerlink" title="ax.set_*` methods are ad hoc"></a>ax.set_<em>*</em>` methods are ad hoc</h3><p><code>Axes</code> has many “set_<strong><em>“ helper methods to modify attributes and values of <code>Axis</code> and <code>Tick</code> instances. They are so handy that a large portion of problems matplotlib beginners encounter can be solved with some of them. It’s worth noting that these “set_</em></strong>“ methods are static. Changes made with them are not updated when something changed. For example, if you change X ticks with <code>ax.set_xticks</code> to make them look nice with the first plot and the second plot exceeds the X range of the first plot, the result doesn’t look like what it should be.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x = np.linspace(<span class="number">0</span>, <span class="number">2</span>*np.pi, <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">line1, = ax.plot(x, np.sin(x), label=<span class="string">''</span>) <span class="comment"># X range: 0 to 2pi</span></span><br><span class="line">ax.set_xticks([<span class="number">0</span>, <span class="number">0.5</span>*np.pi, np.pi, <span class="number">1.5</span>*np.pi, <span class="number">2</span>*np.pi])</span><br><span class="line">line2, = ax.plot(<span class="number">1.5</span>*x, np.sin(x), label=<span class="string">''</span>) <span class="comment"># X range: 0 to 3pi</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/11.png" alt></p>
+<h3 id="Ticker-does-it-for-you"><a href="#Ticker-does-it-for-you" class="headerlink" title="Ticker does it for you"></a><code>Ticker</code> does it for you</h3><p>If you don’t change tick-related settings with “set_<em>*</em>“ methods, ticks and tick labels are automatically updated for each new plot accordingly. This is done by <code>Ticker</code>, more specifically, formatter and locator. Although they are quite essential for tick-related settings, you might know little about them if you have solved your problems by copying and pasting Stack Overflow answers<a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fn6" target="_blank" rel="noopener">6</a>. Let’s see what’s going on in the previous example.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">xax = ax.xaxis</span><br><span class="line">yax = ax.yaxis</span><br><span class="line">print(<span class="string">'xax.get_major_formatter()'</span>, xax.get_major_formatter())</span><br><span class="line">print(<span class="string">'yax.get_major_formatter()'</span>, yax.get_major_formatter())</span><br><span class="line">print(<span class="string">'xax.get_major_locator():'</span>,  xax.get_major_locator())</span><br><span class="line">print(<span class="string">'yax.get_major_locator():'</span>,  yax.get_major_locator())</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xax.get_major_formatter() &lt;matplotlib.ticker.ScalarFormatter object at 0x118af4d68&gt;</span><br><span class="line">yax.get_major_formatter() &lt;matplotlib.ticker.ScalarFormatter object at 0x118862be0&gt;</span><br><span class="line">xax.get_major_locator(): &lt;matplotlib.ticker.FixedLocator object at 0x1188d5908&gt;</span><br><span class="line">yax.get_major_locator(): &lt;matplotlib.ticker.AutoLocator object at 0x118aed1d0&gt;</span><br></pre></td></tr></table></figure>
+<p><code>ScalarFormatter</code> is set for both X and Y axes, because it is a default formatter and we didn’t change it. On the other hand, while default <code>AutoLocator</code> is set for Y axis, <code>FixedLocator</code> is set for X axis which we changed tick positions by using <code>ax.set_xticks</code> method. As you can imagine from its name, <code>FixedLocator</code> fixes tick positions and does not update them even if the plotting range is changed.</p>
+<p>Let’s change <code>Ticker</code> in the previous example instead of <code>ax.set_xticks</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.ticker <span class="keyword">as</span> ticker <span class="comment"># this is required to used `Ticker`</span></span><br><span class="line">ax.xaxis.set_major_locator(ticker.MultipleLocator(<span class="number">0.5</span>*np.pi)) <span class="comment"># locate ticks at every 0.5*pi</span></span><br><span class="line">fig <span class="comment"># display the figure again with new locator.</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/12.png" alt></p>
+<p>How about formatter?</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ticker.FuncFormatter # FuncFormatter can be used as a decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">major_formatter_radian</span><span class="params">(x, pos)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'&#123;&#125;$\pi$'</span>.format(x/np.pi) <span class="comment"># probably not the best way to show radian tick labels</span></span><br><span class="line"></span><br><span class="line">ax.xaxis.set_major_formatter(major_formatter_radian)</span><br><span class="line">fig</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/13.png" alt></p>
+<p>Well, there might still be something you would like to tweak, but I guess it’s clear enough.</p>
+<p>You can learn more in matplotlib gallery.<br><a href="https://matplotlib.org/gallery/ticks_and_spines/tick-formatters.html" target="_blank" rel="noopener">Gallery &gt; Tick formatters</a><br><a href="https://matplotlib.org/gallery/ticks_and_spines/tick-locators.html" target="_blank" rel="noopener">Gallery &gt; Tick locators</a></p>
+<h3 id="xunits-keyword-for-ax-plot"><a href="#xunits-keyword-for-ax-plot" class="headerlink" title="xunits keyword for ax.plot"></a><code>xunits</code> keyword for <code>ax.plot</code></h3><p>For your information, <code>ax.plot</code> has <code>xunits</code> keyword which is <a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" target="_blank" rel="noopener">not described in the doc</a> for the moment. I have never tried to use this option, but you can see an example in <a href="https://matplotlib.org/gallery/units/radian_demo.html" target="_blank" rel="noopener">Gallery &gt; Radian ticks</a> and learn more about <code>matplotlib.units.ConversionInterface</code> <a href="https://matplotlib.org/api/units_api.html" target="_blank" rel="noopener">here</a>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> basic_units <span class="keyword">import</span> radians, degrees, cos</span><br><span class="line"><span class="keyword">from</span> matplotlib.pyplot <span class="keyword">import</span> figure, show</span><br><span class="line"></span><br><span class="line">x = [val*radians <span class="keyword">for</span> val <span class="keyword">in</span> np.arange(<span class="number">0</span>, <span class="number">15</span>, <span class="number">0.01</span>)]</span><br><span class="line"></span><br><span class="line">fig = figure()</span><br><span class="line">fig.subplots_adjust(hspace=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line">ax = fig.add_subplot(<span class="number">211</span>)</span><br><span class="line">line1, = ax.plot(x, cos(x), xunits=radians)</span><br><span class="line"></span><br><span class="line">ax = fig.add_subplot(<span class="number">212</span>)</span><br><span class="line">line2, = ax.plot(x, cos(x), xunits=degrees)</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/14.png" alt></p>
+<h2 id="Tick"><a href="#Tick" class="headerlink" title="Tick"></a><code>Tick</code></h2><p>Finally, we reached at the bottom of the matplotlib hierarchy. <code>Tick</code> is a small container mainly for a short line for a tick itself and a text for a tick label.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><code>Tick</code> attributes</th>
+<th style="text-align:left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>Tick.tick1line</code></td>
+<td style="text-align:left"><code>Line2D</code> instance</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Tick.tick2line</code></td>
+<td style="text-align:left"><code>Line2D</code> instance</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Tick.gridline</code></td>
+<td style="text-align:left"><code>Line2D</code> instance for grid</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Tick.label1</code></td>
+<td style="text-align:left"><code>Text</code> instance</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Tick.label2</code></td>
+<td style="text-align:left"><code>Text</code> instance</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Tick.gridOn</code></td>
+<td style="text-align:left">boolean which determines whether to draw the gridline</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Tick.tick1On</code></td>
+<td style="text-align:left">boolean which determines whether to draw the 1st tickline</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Tick.tick2On</code></td>
+<td style="text-align:left">boolean which determines whether to draw the 2nd tickline</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Tick.label1On</code></td>
+<td style="text-align:left">boolean which determines whether to draw the 1st tick label</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Tick.label2On</code></td>
+<td style="text-align:left">boolean which determines whether to draw the 2nd tick label</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>As we see in <code>Axis</code>, <code>Tick</code> also appears as <code>XTick</code> or <code>YTick</code>. 1st and 2nd indicate ticks at lower and upper sides for <code>XTick</code>, and those at left and right sides for <code>YTick</code>. The latter ticks are not visible by default.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">xmajortick = ax.xaxis.get_major_ticks()[<span class="number">2</span>] <span class="comment"># tick at 0.5 pi in the previous figure</span></span><br><span class="line">print(<span class="string">'xmajortick'</span>, xmajortick)</span><br><span class="line">print(<span class="string">'xmajortick.tick1line'</span>, xmajortick.tick1line)</span><br><span class="line">print(<span class="string">'xmajortick.tick2line'</span>, xmajortick.tick2line)</span><br><span class="line">print(<span class="string">'xmajortick.gridline'</span>, xmajortick.gridline)</span><br><span class="line">print(<span class="string">'xmajortick.label1'</span>, xmajortick.label1)</span><br><span class="line">print(<span class="string">'xmajortick.label2'</span>, xmajortick.label2)</span><br><span class="line">print(<span class="string">'xmajortick.gridOn'</span>, xmajortick.gridOn)</span><br><span class="line">print(<span class="string">'xmajortick.tick1On'</span>, xmajortick.tick1On)</span><br><span class="line">print(<span class="string">'xmajortick.tick2On'</span>, xmajortick.tick2On)</span><br><span class="line">print(<span class="string">'xmajortick.label1On'</span>, xmajortick.label1On)</span><br><span class="line">print(<span class="string">'xmajortick.label2On'</span>, xmajortick.label2On)</span><br><span class="line">xmajortick &lt;matplotlib.axis.XTick object at <span class="number">0x11eec0710</span>&gt;</span><br><span class="line">xmajortick.tick1line Line2D((<span class="number">1.5708</span>,<span class="number">0</span>))</span><br><span class="line">xmajortick.tick2line Line2D()</span><br><span class="line">xmajortick.gridline Line2D((<span class="number">0</span>,<span class="number">0</span>),(<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">xmajortick.label1 Text(<span class="number">1.5708</span>,<span class="number">0</span>,<span class="string">'0.5$\\pi$'</span>)</span><br><span class="line">xmajortick.label2 Text(<span class="number">0</span>,<span class="number">1</span>,<span class="string">'0.5$\\pi$'</span>)</span><br><span class="line">xmajortick.gridOn <span class="literal">False</span></span><br><span class="line">xmajortick.tick1On <span class="literal">True</span></span><br><span class="line">xmajortick.tick2On <span class="literal">False</span></span><br><span class="line">xmajortick.label1On <span class="literal">True</span></span><br><span class="line">xmajortick.label2On <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<p>We hardly need to handle <code>Tick</code> directly thanks to many helper methods, <code>Ticker</code>, and <a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tick_params.html" target="_blank" rel="noopener"><code>Axes.tick_params</code></a>.</p>
+<h1 id="It’s-time-to-custom-your-default-style"><a href="#It’s-time-to-custom-your-default-style" class="headerlink" title="It’s time to custom your default style"></a>It’s time to custom your default style</h1><p>Take a look at a list of parameters for the default style.<br><a href="https://matplotlib.org/tutorials/introductory/customizing.html#a-sample-matplotlibrc-file" target="_blank" rel="noopener">Tutorials &gt; Customizing matplotlib &gt; A sample matplotlibrc file</a><br>I guess now you can figure out not only what a parameter is for, but also on which <code>Artist</code> a parameter have an effect actually, which lets you save time for googling<a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fn7" target="_blank" rel="noopener">7</a>. You can also customize the default style without making matplotlibrc file by just typing like this at the beginning of the code.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plt.rcParams[&apos;lines.linewidth&apos;] = 2</span><br></pre></td></tr></table></figure>
+<h1 id="Go-and-see-docs-again"><a href="#Go-and-see-docs-again" class="headerlink" title="Go and see docs (again)"></a>Go and see docs (again)</h1><p>Some of you might have negative impression on matplotlib’s doc. I agree that it was hard to find an appropriate example for your problem from a long list. But it has been improved significantly since version 2.1.0<a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fn8" target="_blank" rel="noopener">8</a>. This is obvious if you compare corresponding pages before and after the improvement.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">2.1.0 (Oct 2017)</th>
+<th style="text-align:left">2.0.2 (May 2017)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://matplotlib.org/2.1.0/gallery/index.html" target="_blank" rel="noopener">Gallery</a>, <a href="https://matplotlib.org/2.1.0/tutorials/index.html" target="_blank" rel="noopener">Tutorials</a></td>
+<td style="text-align:left"><a href="https://matplotlib.org/2.0.2/examples/index.html" target="_blank" rel="noopener">Matplotlib Examples</a>, <a href="https://matplotlib.org/2.0.2/gallery.html" target="_blank" rel="noopener">Thumbnail gallery</a></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://matplotlib.org/2.1.0/contents.html" target="_blank" rel="noopener">Overview</a></td>
+<td style="text-align:left"><a href="https://matplotlib.org/2.0.2/contents.html" target="_blank" rel="noopener">Overview</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>I recommend to take a look at <a href="https://matplotlib.org/gallery/index.html" target="_blank" rel="noopener">the latest gallery</a> and <a href="https://matplotlib.org/tutorials/index.html#" target="_blank" rel="noopener">the tutorial</a> which are now pretty neat.</p>
+<hr>
+<ol>
+<li>Yes, tutorials are always informative and helpful if you are not lazy enough to read them before using. Actually, I might have tried to read a doc about Artist once when I started to plot with matplotlib a few years ago, but I’m pretty sure that I thought “OK, this is not for me” at that time. (Maybe it was not the current tutorial.) <a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fnref1" target="_blank" rel="noopener">↩</a></li>
+<li>Here is a sample code for this figure <a href="https://matplotlib.org/gallery/showcase/anatomy.html" target="_blank" rel="noopener">https://matplotlib.org/gallery/showcase/anatomy.html</a> <a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fnref2" target="_blank" rel="noopener">↩</a></li>
+<li>Of course there are other <code>Artist</code>s. <a href="https://matplotlib.org/api/artist_api.html" target="_blank" rel="noopener">This page</a> is a good entry for those who want a big picture. You can click <code>Artist</code> names for further explanation. <a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fnref3" target="_blank" rel="noopener">↩</a></li>
+<li>Technically speaking, <code>Artist</code>s draw your beautiful data on a canvas in matplotlib. What a lovely rhetoric. <a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fnref4" target="_blank" rel="noopener">↩</a></li>
+<li><code>fig.legend</code> had been not as useful as the current version because it required legend handles and labels according to the doc for <a href="https://matplotlib.org/2.0.2/api/figure_api.html?highlight=figure legend#matplotlib.figure.Figure.legend" target="_blank" rel="noopener">ver. 2.0.2</a> <a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fnref5" target="_blank" rel="noopener">↩</a></li>
+<li>You’ll often come across recipes using them when you google tick-related settings one step further from “set_<em>*</em>“ methods and give up arranging them for your own problem. (Yes, that’s me several months ago.) <a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fnref6" target="_blank" rel="noopener">↩</a></li>
+<li>Or you can dig deeper using the saved time, like I do. <a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fnref7" target="_blank" rel="noopener">↩</a></li>
+<li>Here is a good read to know how difficult to improve the document. <a href="https://www.numfocus.org/blog/matplotlib-lead-developer-explains-why-he-cant-fix-the-docs-but-you-can/" target="_blank" rel="noopener">Matplotlib Lead Dev on Why He Can’t Fix the Docs | NumFOCUS</a> <a href="https://dev.to/skotaro/artist-in-matplotlib---something-i-wanted-to-know-before-spending-tremendous-hours-on-googling-how-tos--31oo#fnref8" target="_blank" rel="noopener">↩</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+              <a href="/tags/matplotlib/" rel="tag"><i class="fa fa-tag"></i> matplotlib</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 编程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/22/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%85%B6%E4%BB%96%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" rel="next" title="波束形成技术（四）：其他固定波束形成技术性能分析">
+                  <i class="fa fa-chevron-left"></i> 波束形成技术（四）：其他固定波束形成技术性能分析
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Purpose-of-this-post"><span class="nav-number">1.</span> <span class="nav-text">Purpose of this post</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contents"><span class="nav-number">2.</span> <span class="nav-text">Contents</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Who-is-this-for"><span class="nav-number">3.</span> <span class="nav-text">Who is this for?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Environment"><span class="nav-number">4.</span> <span class="nav-text">Environment</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Two-plotting-styles-you-should-be-aware-of"><span class="nav-number">5.</span> <span class="nav-text">Two plotting styles you should be aware of</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-oriented-API-interface"><span class="nav-number">5.1.</span> <span class="nav-text">Object-oriented API interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pyplot-interface"><span class="nav-number">5.2.</span> <span class="nav-text">Pyplot interface</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-hierarchy-in-matplotlib"><span class="nav-number">6.</span> <span class="nav-text">The hierarchy in matplotlib</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Everything-in-your-plot-is-an-Artist"><span class="nav-number">7.</span> <span class="nav-text">Everything in your plot is an Artist</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Figure"><span class="nav-number">7.1.</span> <span class="nav-text">Figure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fig-legend-and-ax-legend"><span class="nav-number">7.1.1.</span> <span class="nav-text">fig.legend and ax.legend</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Axes"><span class="nav-number">7.2.</span> <span class="nav-text">Axes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reusing-a-plotted-object-is-not-recommended"><span class="nav-number">7.2.1.</span> <span class="nav-text">Reusing a plotted object is not recommended</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Axis"><span class="nav-number">7.3.</span> <span class="nav-text">Axis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ax-set-methods-are-ad-hoc"><span class="nav-number">7.3.1.</span> <span class="nav-text">ax.set_*` methods are ad hoc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ticker-does-it-for-you"><span class="nav-number">7.3.2.</span> <span class="nav-text">Ticker does it for you</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xunits-keyword-for-ax-plot"><span class="nav-number">7.3.3.</span> <span class="nav-text">xunits keyword for ax.plot</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tick"><span class="nav-number">7.4.</span> <span class="nav-text">Tick</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#It’s-time-to-custom-your-default-style"><span class="nav-number">8.</span> <span class="nav-text">It’s time to custom your default style</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Go-and-see-docs-again"><span class="nav-number">9.</span> <span class="nav-text">Go and see docs (again)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">NBA数据分析挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://fansided.com/nba/nylon-calculus/#" title="https:&#x2F;&#x2F;fansided.com&#x2F;nba&#x2F;nylon-calculus&#x2F;#" rel="noopener" target="_blank">nylon-calculus</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://squared2020.com/" title="https:&#x2F;&#x2F;squared2020.com&#x2F;" rel="noopener" target="_blank">NBA数据分析师</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Beamforming/" rel="tag">Beamforming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">88k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:20</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
