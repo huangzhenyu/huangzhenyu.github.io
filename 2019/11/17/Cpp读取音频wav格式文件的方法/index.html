@@ -63,7 +63,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;17&#x2F;Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95&#x2F;结构体.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;17&#x2F;Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95&#x2F;wavform.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;17&#x2F;Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95&#x2F;结构体实验1.png">
-<meta property="og:updated_time" content="2019-11-18T00:27:16.306Z">
+<meta property="og:updated_time" content="2019-12-01T02:46:32.594Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;17&#x2F;Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95&#x2F;soundfomat.png">
 
@@ -201,7 +201,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="跳投哥">
-      <meta itemprop="description" content="NBA数据分析挖掘/音频算法/zhenyuhuang0501@gmail.com">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -226,7 +226,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-18 08:27:16" itemprop="dateModified" datetime="2019-11-18T08:27:16+08:00">2019-11-18</time>
+                <time title="修改时间：2019-12-01 10:46:32" itemprop="dateModified" datetime="2019-12-01T10:46:32+08:00">2019-12-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -287,14 +287,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>从九月份开始学习C++到现在两个月了，结合B站视频和C++ Prime这本书双管齐下，能写一些简单的C++程序了，但火候还差的太远。对许多用法及数据结构的认知和使用还停留在印象阶段，既不能很好地理解其存储原理，也不能构建较理想的使用场景。煞是焦虑。。。</p><p>思索我在学习python的时候，上手最快成长理解最迅速的阶段就是读取各种文件然后可视化之，借鉴这个思路，我开始了尝试探索读取WAV文件以及可视化之的道路。搞了一段时间，C++还真不是python那么简单的，开始漫长的爬坑之旅。以下可能有理解错误的地方，但没有办法。目前水平还很有限。。</p><a id="more"></a>
+        <p>从九月份开始学习C++到现在两个月了，结合B站视频和C++ Prime这本书双管齐下，能写一些简单的C++程序，但火候还差的太远。对许多用法及数据结构的认知和使用还停留在印象阶段，既不能很好地理解背后原理，也不能构建较理想的使用场景。煞是焦虑。。。</p><p>思索我在学python的时候，上手最快、最迅速的阶段就是读取各种文件然后可视化之，复刻这个思路，我开始尝试探索读取WAV文件以及作出其波形图。搞了一段时间发现C++还真不是python那么简单的，漫长的爬坑之旅刚刚开始。</p><a id="more"></a>
 
+<p>以下可能有理解错误的地方，但没有办法，目前水平还很有限。</p>
 <h2 id="WAVE-PCM-FILE"><a href="#WAVE-PCM-FILE" class="headerlink" title="WAVE PCM FILE"></a>WAVE PCM FILE</h2><p><a href="http://soundfile.sapp.org/doc/WaveFormat/" target="_blank" rel="noopener">http://soundfile.sapp.org/doc/WaveFormat/</a></p>
-<p>链接说的很清楚，WAVE是微软开发的一种音频文件格式，它符合RIFF文件格式标准，可以看作是RIFF文件的一个实例。CHUNK是RIFF文件的基本单元结构，包含块标志、块大小和块数据等信息。一个WAV文件通常包含三个CHUNK以及一个可选CHUNK，其在文件中排列的方式依次是：RIFF chunk、Format chunk、Fact chunk、Data chunk，被称为是“Canonical form”。引用上述网站的结构图如下：</p>
+<p>上述链接中说的很清楚，WAVE是微软开发的一种音频文件格式，它符合RIFF文件格式标准，可以看作是RIFF文件的一个实例。CHUNK是RIFF文件的基本单元结构，包含块标志、块大小和块数据等信息。一个WAV文件通常包含三个CHUNK以及一个可选CHUNK，其在文件中排列的方式依次是：RIFF chunk、Format chunk、Fact chunk、Data chunk，被称为是“Canonical form”。引用上述网站的结构图如下：</p>
 <p><img src="/2019/11/17/Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95/soundfomat.png" alt></p>
-<p>上述详细列出了存储WAV数据内存每一块内存的偏移量(offset bytes)、大小端(endian)、数据名称(field name)、数据大小(field size)。根据Field Name我们也可get到这一块数据的物理意义，比如通道数、采样率、比特率等。这里就不展开详述了。并且给了一个例子，以加深理解：</p>
+<p>上述详细列出了存储WAV数据内存每一块内存的偏移量(offset bytes)、大小端(endian)、数据名称(field name)、存储空间大小(field size)。根据Field Name我们也可get到这一块数据的物理意义，比如通道数、采样率、比特率等。这里就不展开详述了。文章开始的链接给了一个例子：</p>
 <p><img src="/2019/11/17/Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95/wav example.png" alt></p>
-<h2 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h2><p>可以想得到，也很容易想得到，用结构体来构建WAV格式的头文件信息，但是结构体的内存分配机制，需要尤其注意结构体成员中的成员顺序，百科中对结构体存储的三点要求：</p>
+<h2 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h2><p>可以想得到，也很容易想得到，用结构体来构建WAV格式的头文件信息，但是结构体的内存分配机制，需要尤其注意结构体中成员的顺序，结构体成员存储空间需满足以下三点要求：</p>
 <p><strong>1) 结构体变量的首地址能够被其最宽基本类型成员的大小所整除；</strong>　　</p>
 <p><strong>2) 结构体每个成员相对于结构体首地址的偏移量都是成员大小的整数倍，如有需要编译器会  在成员之间加上填充字节；</strong></p>
 <p><strong>3) 结构体的总大小为结构体最宽基本类型成员大小的整数倍，如有需要编译器会在最末一个成员之后加上填充字节</strong></p>
@@ -307,22 +308,22 @@
 <p>所以有时候在为了减少因对齐带来的空间损失时，有必要牺牲因把相关结构成员存储在一起带来的可维护性和可读性。</p>
 <h2 id="音频头文件的结构体实现"><a href="#音频头文件的结构体实现" class="headerlink" title="音频头文件的结构体实现"></a>音频头文件的结构体实现</h2><p>在构建音频头文件结构体的时候，必须要考虑结构体的内存分配。好在：</p>
 <p>1.音频二进制文件中存储的数据在内存中是连续、紧凑的。</p>
-<p>2.每个字节的类型是无符号型，可以通过控制具体的无符号类型定义结构体成员实现上述的紧凑。实现如下：</p>
+<p>2.每个字节的类型是无符号型，可以通过控制具体的无符号类型（或者数组大小）来定义结构体成员，实现上述的紧凑。示例如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">WAV_HEADER</span> &#123;</span></span><br><span class="line">  <span class="keyword">uint8_t</span> RIFF[<span class="number">4</span>];        <span class="comment">// RIFF Header Magic header</span></span><br><span class="line">  <span class="keyword">uint32_t</span> chunkSize;     <span class="comment">// RIFF Chunk Size</span></span><br><span class="line">  <span class="keyword">uint8_t</span> WAVE[<span class="number">4</span>];        <span class="comment">// WAVE Header</span></span><br><span class="line">  <span class="keyword">uint8_t</span> fmt[<span class="number">4</span>];         <span class="comment">// FMT header</span></span><br><span class="line">  <span class="keyword">uint32_t</span> subchunk1Size; <span class="comment">// Size of the fmt chunk</span></span><br><span class="line">  <span class="keyword">uint16_t</span> audioFormat;   <span class="comment">// Audio format</span></span><br><span class="line">  <span class="keyword">uint16_t</span> numOfChan;     <span class="comment">// Number of channels</span></span><br><span class="line">  <span class="keyword">uint32_t</span> samplesPerSec; <span class="comment">// Sampling Frequency in Hz</span></span><br><span class="line">  <span class="keyword">uint32_t</span> bytesPerSec;   <span class="comment">// bytes per second</span></span><br><span class="line">  <span class="keyword">uint16_t</span> blockAlign;    <span class="comment">// 2=16-bit mono, 4=16-bit stereo</span></span><br><span class="line">  <span class="keyword">uint16_t</span> bitsPerSample; <span class="comment">// Number of bits per sample</span></span><br><span class="line">  <span class="keyword">uint8_t</span> subchunk2ID[<span class="number">4</span>]; <span class="comment">// "data"  string</span></span><br><span class="line">  <span class="keyword">uint32_t</span> subchunk2Size; <span class="comment">// Sampled data length</span></span><br><span class="line">&#125; wav_header;</span><br></pre></td></tr></table></figure>
-<p>注意定义的几个数组，可以说是非常巧妙了。这部分摘自参考[2]。可以算一下，wav_header占用字节数是44，用sizeof验证也是没错的。接着可以构建一个类用来读取WAV文件，调用了上述的结构体。</p>
+<p>注意定义的几个数组，可以说是非常巧妙了。这部分摘自参考[2]。可以算一下，wav_header占用字节数是44，用sizeof验证也是没错的。接着可以调用了上述的结构体，构建一个类用来读取WAV文件。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;armadillo&gt; //矩阵操作库</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wav</span>&#123;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">const</span> <span class="keyword">char</span>* filePath;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    Wav(filePath file)&#123;</span><br><span class="line">      wavFile = fopen(file, <span class="string">"r"</span>);</span><br><span class="line">      fread(&amp;wavHeader, <span class="number">1</span>, <span class="keyword">sizeof</span>(wav_header), wavFile);<span class="comment">//注意写法</span></span><br><span class="line">      <span class="comment">//std::cout &lt;&lt; "Wav 头的大小:" &lt;&lt; sizeof(wav_header) &lt;&lt; std::endl;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~Wav()&#123;</span><br><span class="line">      fclose(wavFile);</span><br><span class="line">    &#125;</span><br><span class="line">		</span><br><span class="line">  	<span class="comment">//通道数</span></span><br><span class="line">    <span class="keyword">uint16_t</span> get_channel_nums() <span class="keyword">const</span>&#123; <span class="keyword">return</span> wavHeader.numOfChan;&#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//采样率</span></span><br><span class="line">    <span class="keyword">uint32_t</span> get_sampling_rate() <span class="keyword">const</span>&#123; <span class="keyword">return</span> wavHeader.samplesPerSec;&#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//采样总点数</span></span><br><span class="line">    <span class="keyword">uint32_t</span> get_samples_total() <span class="keyword">const</span>&#123; <span class="keyword">return</span> (wavHeader.chunkSize - <span class="number">36</span>) / 													get_bits_per_sample();&#125; <span class="comment">//Ns</span></span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//每个通道的采样点</span></span><br><span class="line">    <span class="keyword">uint32_t</span> get_samples_per_channel() <span class="keyword">const</span>&#123; <span class="keyword">return</span> get_samples_total() / 															get_channel_nums();&#125;</span><br><span class="line"></span><br><span class="line">    arma::Mat&lt;<span class="keyword">int16_t</span>&gt; get_wav_data()  <span class="keyword">const</span>&#123;</span><br><span class="line">      <span class="keyword">uint16_t</span> Nb = get_bits_per_sample();     <span class="comment">// Number of bytes per sample</span></span><br><span class="line">      <span class="keyword">uint16_t</span> Ns = get_samples_total();</span><br><span class="line">      arma::Mat&lt;<span class="keyword">int16_t</span>&gt; x(get_channel_nums(), get_samples_per_channel());</span><br><span class="line">      </span><br><span class="line">      <span class="comment">//流指针偏移了sizeof(wav_header)个字节了，继续往下读</span></span><br><span class="line">      fread(x.memptr(), Nb, Ns, wavFile);</span><br><span class="line">      <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line"></span><br><span class="line">    wav_header wavHeader;</span><br><span class="line">    FILE*      wavFile;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">uint16_t</span> get_bits_per_sample() <span class="keyword">const</span> &#123; <span class="keyword">return</span> wavHeader.bitsPerSample / <span class="number">8</span>;&#125; <span class="comment">//Nb</span></span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>然后调用gnuplot（以后会更新这部分）读取WAV并做个图试试：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;armadillo&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"wav.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"gplot.h"</span> <span class="comment">//自己写的，后面博客会讲如何使用</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> sp;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function">Wav  <span class="title">wave</span><span class="params">(<span class="string">"cut.wav"</span>)</span></span>;</span><br><span class="line">  arma::Mat&lt;<span class="keyword">int16_t</span>&gt;  x = wave.get_wav_data();</span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; wave.get_sampling_rate() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">  arma::Col&lt;<span class="keyword">int16_t</span>&gt; x_left = x.row(<span class="number">0</span>).t();</span><br><span class="line"></span><br><span class="line">  gplot gp0;</span><br><span class="line">  gp0.window(<span class="string">"Wav Form"</span>, <span class="number">100</span>, <span class="number">100</span>, <span class="number">1200</span>, <span class="number">400</span>);</span><br><span class="line">  gp0.fast_plot(x_left);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后调用gnuplot类（有关于这部分的内容，后面会整理更新），读取WAV并做出波形：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;armadillo&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"wav.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"gplot.h"</span> <span class="comment">//后面博客会讲如何使用</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> sp;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function">Wav  <span class="title">wave</span><span class="params">(<span class="string">"cut.wav"</span>)</span></span>;</span><br><span class="line">  arma::Mat&lt;<span class="keyword">int16_t</span>&gt;  x = wave.get_wav_data();</span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; wave.get_sampling_rate() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">  arma::Col&lt;<span class="keyword">int16_t</span>&gt; x_left = x.row(<span class="number">0</span>).t();</span><br><span class="line"></span><br><span class="line">  gplot gp0;</span><br><span class="line">  gp0.window(<span class="string">"Wav Form"</span>, <span class="number">100</span>, <span class="number">100</span>, <span class="number">1200</span>, <span class="number">400</span>);</span><br><span class="line">  gp0.fast_plot(x_left);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>结果如下：</p>
 <p><img src="/2019/11/17/Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95/wavform.png" alt></p>
-<p>现在的疑问：</p>
-<p>1.音频field name中的数据有的是大端、有的是小端。虽然大端的数据基本上都用不到，但是小端的数据可以直接读取得到而没有进行转换。计算机或者本地程序读取数据会默认采用的小端模式吗？</p>
+<h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><p>1.音频field name中的数据有的是大端、有的是小端。虽然大端的数据基本上都用不到，但是小端的数据可以直接读取得到而没有进行转换。计算机或者本地程序读取数据会默认采用的小端模式吗？</p>
 <p>一个比较合理的猜测与解释。在构造结构体的时候对于大端的数据域(RIFF/WAV/FMT/DATA)构建的都是最小单位为unit8的字符型数组，而对于一个数组的依次打印，只涉及到一个字节，不会有大小端的概念<strong>，只不过是看着打印出来的“WAVE”给人一种自动转成大端的读取方法了，实际并没有，他只是一个数组而已</strong>。。</p>
 <p>而对于其他的存储数据，比如通道数、采样率等非常多的相对而言比较重要的数据而言，文件都是以小端的形式存储的，而定义的结构体也是整段拿下来，并没有进行类似上述数组的操作，而C/C++数据的读取<strong>又是默认的小端读取方法</strong>。。嗯算是比较合理的猜测吧。。</p>
 <p>我做了这么个实验，我把RIFF原本的定义uint8_t RIFF[4] 改为为uint32_t RIFF</p>
 <p><img src="/2019/11/17/Cpp%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91wav%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95/结构体实验1.png" alt></p>
 <p>读取一段音频打印出RIFF，得到这么一串数字：1179011410。</p>
-<p>在查看本来RIFF内存中存储的 52 49 46 46，这个数字按照大端的十进制是1380533830，而按照小端的十进制则是1179011410，和上面打印得到的对应。如此，上面的一切都解释通了。最后当然，不能忘了把uint32_t 改回去啊。</p>
+<p>在查看本来RIFF内存中存储的 52 49 46 46，这个数字按照大端的十进制是1380533830，而按照小端的十进制则是1179011410，和上面打印得到的对应。</p>
+<p>如此，上面的一切都解释通了。</p>
 <p>2.还不能进行写音频的操作。</p>
 <p>这个问题在下一篇文章中在探索吧。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>[1]<a href="http://soundfile.sapp.org/doc/WaveFormat/" target="_blank" rel="noopener">http://soundfile.sapp.org/doc/WaveFormat/</a></p>
@@ -419,7 +420,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WAVE-PCM-FILE"><span class="nav-number">1.</span> <span class="nav-text">WAVE PCM FILE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构体"><span class="nav-number">2.</span> <span class="nav-text">结构体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#音频头文件的结构体实现"><span class="nav-number">3.</span> <span class="nav-text">音频头文件的结构体实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WAVE-PCM-FILE"><span class="nav-number">1.</span> <span class="nav-text">WAVE PCM FILE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构体"><span class="nav-number">2.</span> <span class="nav-text">结构体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#音频头文件的结构体实现"><span class="nav-number">3.</span> <span class="nav-text">音频头文件的结构体实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#疑问"><span class="nav-number">4.</span> <span class="nav-text">疑问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -428,27 +429,27 @@
   <img class="site-author-image" itemprop="image" alt="跳投哥"
     src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">跳投哥</p>
-  <div class="site-description" itemprop="description">NBA数据分析挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+  <div class="site-description" itemprop="description">数据挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -473,12 +474,6 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="https://fansided.com/nba/nylon-calculus/#" title="https:&#x2F;&#x2F;fansided.com&#x2F;nba&#x2F;nylon-calculus&#x2F;#" rel="noopener" target="_blank">nylon-calculus</a>
-        </li>
-        <li class="links-of-blogroll-item">
-          <a href="https://squared2020.com/" title="https:&#x2F;&#x2F;squared2020.com&#x2F;" rel="noopener" target="_blank">NBA数据分析师</a>
-        </li>
-        <li class="links-of-blogroll-item">
           <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
         </li>
         <li class="links-of-blogroll-item">
@@ -499,7 +494,7 @@
           <h3 class="widget-title">云 标签</h3>
           <div id="myCanvasContainer" class="widget tagcloud">
               <canvas width="250" height="250" id="resCanvas" style="width=100%">
-                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
               </canvas>
           </div>
         </div>
@@ -531,13 +526,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">96k</span>
+    <span title="站点总字数">102k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:27</span>
+    <span title="站点阅读时长">1:33</span>
 </div>
 
 <!--

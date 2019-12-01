@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="协方差矩阵在降维&#x2F;子空间降噪&#x2F;DOA波达方向估计等算法中都出场了，理解协方差矩阵对探究这些算法背后的原理非常有帮助，今天就来梳理一下。">
+<meta name="keywords" content="协方差矩阵">
+<meta property="og:type" content="article">
+<meta property="og:title" content="协方差矩阵的理解与应用">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;01&#x2F;%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="协方差矩阵在降维&#x2F;子空间降噪&#x2F;DOA波达方向估计等算法中都出场了，理解协方差矩阵对探究这些算法背后的原理非常有帮助，今天就来梳理一下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-01T09:04:08.664Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/12/01/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>协方差矩阵的理解与应用 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/12/01/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          协方差矩阵的理解与应用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 15:42:15 / 修改时间：17:04:08" itemprop="dateCreated datePublished" datetime="2019-12-01T15:42:15+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E5%AD%A6/" itemprop="url" rel="index">
+                    <span itemprop="name">数学</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/01/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/01/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%BA%94%E7%94%A8/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+            <div class="post-description">协方差矩阵在降维/子空间降噪/DOA波达方向估计等算法中都出场了，理解协方差矩阵对探究这些算法背后的原理非常有帮助，今天就来梳理一下。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="统计学的基本概念"><a href="#统计学的基本概念" class="headerlink" title="统计学的基本概念"></a>统计学的基本概念</h3><p>均值：</p><script type="math/tex; mode=display">
+\mu = \bar{X}=\frac{\sum_{i=1}^{n} X_{i}}{n}</script><p>标准差：</p><script type="math/tex; mode=display">
+    \sigma=\sqrt{\frac{\sum_{i=1}^{n}\left(X_{i}-\bar{X}\right)^{2}}{n-1}}</script><p>方差：</p><script type="math/tex; mode=display">
+\sigma^{2}=\frac{\sum_{i=1}^{n}\left(X_{i}-\bar{X}\right)^{2}}{n-1}</script><a id="more"></a>
+
+
+<p>很显然，均值描述的是样本集合的中间点，它告诉我们的信息是很有限的，而标准差给我们描述的则是样本集合的各个样本点到均值的距离之平均。以这两个集合为例，[0，8，12，20]和[8，9，11，12]，两个集合的均值都是10，但显然两个集合差别是很大的，计算两者的标准差，前者是8.3，后者是1.8，显然后者较为集中，故其标准差小一些，标准差描述的就是这种“散布度”。之所以除以n-1而不是除以n，是因为这样能使我们以较小的样本集更好的逼近总体的标准差，即统计上所谓的“无偏估计”。而方差则仅仅是标准差的平方。</p>
+<p><strong>在信号处理理论中，当信号的均值为零时，方差反映的就是信号的能量。</strong></p>
+<p>在数据挖掘与机器学习中，拿到数据时，大部分情况下，我们做的第一件事情就是对数据进行标准化，只有如此，才能让每维特征具有可比性：</p>
+<script type="math/tex; mode=display">
+X^{\prime}=\frac{X-\mu}{\sigma}</script><h3 id="协方差矩阵"><a href="#协方差矩阵" class="headerlink" title="协方差矩阵"></a>协方差矩阵</h3><p>上面几个统计量看似已经描述的差不多了，但我们应该注意到，标准差和方差一般是用来描述一维数据的，但现实生活我们常常遇到含有多维数据的数据集，最简单的大家上学时免不了要统计多个学科的考试成绩。面对这样的数据集，我们当然可以按照每一维独立的计算其方差，但是通常我们还想了解更多，比如，一个男孩子的猥琐程度跟他受女孩子欢迎程度是否存在一些联系啊，嘿嘿~协方差就是这样一种用来度量两个随机变量关系的统计量，我们可以仿照方差的定义协方差来度量各个维度偏离其均值的程度，可以定义：</p>
+<script type="math/tex; mode=display">
+\operatorname{cov}(x, y)=\frac{\sum_{k=1}^{m}\left(x_{k}-\bar{x}\right)\left(y_{k}-\bar{y}\right)}{m-1}</script><p>协方差的结果有什么意义呢？如果结果为正值，则说明两者是正相关的(从协方差可以引出“相关系数”的定义)，也就是说一个人越猥琐就越受女孩子欢迎，嘿嘿，那必须的~结果为负值就说明负相关的，越猥琐女孩子越讨厌，可能吗？如果为0，也是就是统计上说的“相互独立”。</p>
+<p>从协方差的定义上我们也可以看出一些显而易见的性质，如：</p>
+<script type="math/tex; mode=display">1. cov(X,X)=var(X)</script><p> <script type="math/tex">2. cov(X,Y)=cov(Y,X)</script></p>
+<p>协方差只能处理二维问题，那维数多了自然就需要计算多个协方差，比如n维的数据集就需要计算个$\frac{n!}{(n-2)!*2}$协方差，那自然而然的我们会想到使用矩阵来组织这些数据。给出协方差矩阵的定义：</p>
+<script type="math/tex; mode=display">C_{n\times n}=(c_{i,j},c_{i,j}=cov(Dim_{i},Dim_{j}))</script><p>写的不那么抽象一点：</p>
+<script type="math/tex; mode=display">
+C O V=\left[\begin{array}{ccccc}{\operatorname{cov}\left(X_{1}, X_{1}\right)} & {\operatorname{cov}\left(X_{1}, X_{2}\right)} & {\cdots} & {\operatorname{cov}\left(X_{1}, X_{n-1}\right)} & {\operatorname{cov}\left(X_{1}, X_{n}\right)} \\ {\operatorname{cov}\left(X_{2}, X_{1}\right)} & {\operatorname{cov}\left(X_{2}, X_{2}\right)} & {\cdots} & {\operatorname{cov}\left(X_{2}, X_{n-1}\right)} & {\operatorname{cov}\left(X_{2}, X_{n}\right)} \\ {\cdots} & {\cdots} & {\cdots} & {\cdots} & {\cdots} \\ {\operatorname{cov}\left(X_{n}, X_{1}\right)} & {\operatorname{cov}\left(X_{n}, X_{2}\right)} & {\cdots} & {\operatorname{cov}\left(X_{n}, X_{n-1}\right)} & {\operatorname{cov}\left(X_{n}, X_{n}\right)}\end{array}\right]</script><p>可见，协方差矩阵是一个对称的矩阵，对角线是各个维度上的方差，其他元素则对应不同维度间的协方差。</p>
+<h3 id="矩阵的几何意义"><a href="#矩阵的几何意义" class="headerlink" title="矩阵的几何意义"></a>矩阵的几何意义</h3><p>线性代数是用虚拟数字世界表示真实的物理世界的工具。线性代数的核心意义在于提供了⼀种看待世界的抽象视角：万事万物都可以被抽象成某些特征的组合，并在由预置规则定义的框架之下以静态和动态的方式加以观察。</p>
+<p>在计算机存储中，标量占据的是零维数组；向量占据的是一维数组，例如语音信号；矩阵占据的是二维数组，例如灰度图像；张量占据的是三维乃至更高维度的数组，例如 RGB 图像和视频。</p>
+<p>如果有一个集合（线性代数中最基本的概念），它的元素都是具有相同维数的向量（可以是有限个或无限个）， 并且定义了加法和数乘等结构化的运算，这样的集合就被称为线性空间（linear space），定义了内积运算的线性空间则被称为内积空间（inner product space）。<strong>在线性空间中，任意一个向量代表的都是 n 维空间中的一个点；反过来， 空间中的任意点也都可以唯一地用一个向量表示。两者相互等效。</strong></p>
+<p>在线性空间上点和向量的相互映射中，一个关键问题是参考系的选取。在现实生活中，只要给定经度、纬度和海拔高度，就可以唯一地确定地球上的任何一个位置，因而经度值、纬度值、高度值构成的三维向量 (x, y, h) 就对应了三维物理空间中的⼀个点。可是在直觉无法感受的高维空间中，坐标系的定义可就没有这么直观了。要知道，人工神经网络要处理的通常是数以万计的特征，对应着维度同样数以万计的复杂空间，这时就需要正交基的概念了。在内积空间中，一组两两正交的向量构成这个空间的正交基（orthogonal basis），假若正交基中基向量的 L2 范数都是单位长度 1，这组正交基就是标准正交基（orthonormal basis）。正交基的作用就是给内积空间定义出经纬度。⼀旦描述内积空间的正交基确定了，向量和点之间的对应关系也就随之确定。值得注意的是，描述内积空间的正交基并不唯一。对二维空间来说，平面直角坐标系和极坐标系就对应了两组不同的正交基，也代表了两种实用的描述方式。</p>
+<p>线性空间的一个重要特征是能够承载变化。当作为参考系的标准正交基确定后，空间中的点就可以用向量表示。当这个点从一个位置移动到另一个位置时，描述它的向量也会发生改变。<strong>点的变化对应着向量的线性变换（linear transformation），而描述对象变化抑或向量变换的数学语言，正是矩阵</strong>。</p>
+<p>在线性空间中，变化的实现有两种方式：一是点本身的变化，二是参考系的变化。在第一种方式中，使某个点发生变化的方法是用代表变化的矩阵乘以代表对象的向量。可是反过来，如果保持点不变，而是换一种观察的角度，得到的也将是不同的结果，正所谓“横看成岭侧成峰，远近高低各不同”。在这种情况下，矩阵的作用就是对正交基进行变换。因此，对于矩阵和向量的相乘，就存在不同的解读方式：</p>
+<script type="math/tex; mode=display">
+\mathbf{A x}=\mathbf{y}</script><p>表达式既可以理解为向量 x 经过矩阵 A 所描述的变换，变成了向量 y；也可以理解为一个对象在坐标系 A 的度量下得到的结果为向量 x，在标准坐标系 I（单位矩阵：主对角线元素为 1，其余元素为 0）的度量下得到的结果为向量 y。这表示矩阵不仅能够描述变化，也可以描述参考系本身。引用网络上一个精当的类比：表达式 Ax 就相当于对向量 x 做了一个环境声明，用于度量它的参考系是 A。如果想用其他的参考系做度量的话，就要重新声明。<strong>而对坐标系施加变换的方法，就是让表示原始坐标系的矩阵与表示变换的矩阵相乘</strong>。描述矩阵的⼀对重要参数是特征值（eigenvalue）和特征向量（eigenvector）。对于给定的矩阵 A，假设其特征值为λ，特征向量为 x，则它们之间的关系如下：</p>
+<script type="math/tex; mode=display">
+\mathbf{A x}=\lambda \mathbf{x}</script><p>正如前文所述，矩阵代表了向量的变换，其效果通常是对原始向量同时施加方向变化和尺度变化。可对于有些特殊的向量，矩阵的作用只有尺度变化而没有方向变化，也就是只有伸缩的效果而没有旋转的效果。对于给定的矩阵来说，这类特殊的向量就是矩阵的特征向量，特征向量的尺度变化系数就是特征值。</p>
+<p><strong>矩阵特征值和特征向量的动态意义在于表示了变化的速度和方向</strong>。如果把矩阵所代表的变化看作奔跑的人，那么矩阵的特征值就代表了他奔跑的速度，特征向量代表了他奔跑的方向。但矩阵可不是普通人，它是三头六臂的哪吒，他的不同分身以不同速度（特征值）在不同方向（特征向量）上奔跑，所有分身的运动叠加在⼀起才是矩阵的效果。</p>
+<h3 id="降维与降噪"><a href="#降维与降噪" class="headerlink" title="降维与降噪"></a>降维与降噪</h3><p>“降噪”的目的就是使保留下来的维度间的相关性尽可能小，而“去冗余”的目的就是使保留下来的维度含有的“能量”即方差尽可能大。那首先的首先，我们得需要知道各维度间的相关性以及个维度上的方差啊！那有什么数据结构能同时表现不同维度间的相关性以及各个维度上的方差呢？自然是非<strong>协方差矩阵</strong>莫属。就如前面说讲述的，协方差矩阵<strong>主对角线上的元素是各维度上的方差，也就体现了信息量（能量）</strong>，而其他元素是两两维度间的协方差<strong>，也就体现了相关性</strong>。</p>
+<p>我们要的东西协方差矩阵都有了，就可以依次打天下了。先来看“降噪”，让保留下的不同维度间的相关性尽可能小，也就是说让协方差矩阵中非对角线元素都基本为零。达到这个目的的方式自然不用说，线代中讲的很明确——<strong>矩阵对角化</strong>。而对角化后得到的矩阵，其对角线上是协方差矩阵的特征值，它还有两个身份：首先，它还是各个维度上的新方差；其次，它是各个维度本身应该拥有的能量(能量的概念伴随特征值而来)。这也就是我们为何在前面称“方差”为“能量”的原因。也许第二点可能存在疑问，但我们应该注意到这个事实，通过对角化后，剩余维度间的相关性已经减到最弱，已经不会再受“噪声”的影响了，故此时拥有的能量应该比先前大了。看完了“降噪”，我们的“去冗余”还没完呢。对角化后的协方差矩阵，对角线上较小的新方差对应的就是那些该去掉的维度。所以我们只取那些含有较大能量(特征值)的维度，其余的就舍掉即可。PCA的本质其实就是对角化协方差矩阵。</p>
+<p>第二个角度是特征值和特征向量的几何意义。在向量空间中，对某个向量左乘一个矩阵，实际上是对这个向量进行了一次变换。在这个变换的过程中，被左乘的向量主要发生旋转和伸缩这两种变化。如果左乘矩阵对某一个向量或某些向量只发生伸缩变换，不对这些向量产生旋转的效果，那么这些向量就称为这个矩阵的特征向量，而伸缩的比例就是特征值。换句话来说，某个矩阵的特征向量表示了这个矩阵在空间中的变换方向，这些方向都是趋于正交的，而特征值表示每个方向上伸缩的比例。如果一个特征值很大，那么说明在对应的特征向量所表示的方向上，伸缩幅度很大。<strong>这也是为什么，我们需要使用原始的数据去左乘这个特征向量，来获取降维后的新数据。因为这样做可以帮助我们找到一个方向，让它最大程度地包含原有的信息。需要注意的是，这个新的方向，往往不代表原始的特征，而是多个原始特征的组合和缩放。</strong></p>
+<p>综合起来，降噪或者降维的步骤：</p>
+<p>1.形成样本矩阵，样本中心化，计算样本矩阵的协方差矩阵。<br>2.对协方差矩阵进行特征值分解，选取最大的p个特征值对应的特征向量(或者选取能量占比前95%、90%之类的)组成投影矩阵。<br>3.对原始样本矩阵进行投影，得到降维后的新样本矩阵。</p>
+<h3 id="对角化的一些方法（不定期补充）"><a href="#对角化的一些方法（不定期补充）" class="headerlink" title="对角化的一些方法（不定期补充）"></a>对角化的一些方法（不定期补充）</h3><h4 id="协方差矩阵的cholesky分解"><a href="#协方差矩阵的cholesky分解" class="headerlink" title="协方差矩阵的cholesky分解"></a>协方差矩阵的cholesky分解</h4><p>样本的协方差矩阵是的n阶正定矩阵（所有特征值大于0），赫尔米特矩阵$A=A^H$，则存在一个对角元为正数的下三角矩阵$L$，$A=L L^{H}$ 成立。</p>
+<p>与一般的矩阵分解求解方程的方法比较，Cholesky分解效率很高。比如我们打算计算样本中两特征向量的马氏距离时（会用到协方差矩阵），直接对举例求解复杂度极高。我们可以对协方差矩阵进行cholesky分解达到简化运算的目的。</p>
+<p>另外，<strong>利用乔尔斯基分解得到的下三角阵乘以不相关的随机变量可以得到相关的随机变量，其协方差即为被分解的矩阵。</strong></p>
+<h4 id="矩阵的schur分解"><a href="#矩阵的schur分解" class="headerlink" title="矩阵的schur分解"></a>矩阵的schur分解</h4><p>Schur分解是说任意方阵A都酋相似于一个上三角矩阵，即 $A=U T U^{H}$<br> ，其中U是酋矩阵（$U  U^{H} =I$，幺正矩阵），T是上三角矩阵。Schur分解是为EVD分解和SVD分解做理论铺垫的，一般来说，并不会直接去求矩阵的schur分解。</p>
+<p>设n阶方阵A的Schur分解为 $A=U T U^{H}$，则λ是A的特征值的充要条件为λ在T的主对角线上，且A的每一个特征值的代数重数等于其在T的主对角线上出现的次数</p>
+<p>证：注意到A与T相似（酋相似是相似的一种特殊情况），故A的特征值都是T的特征值，T的特征值也都是A的特征值，且A和T的同一个特征值的代数重数相等。又因为T是上三角矩阵，故取T的全部主对角元就得到了A的全部特征值，且A的任意特征值的代数重数就等于该特征值在T的主对角线上出现的次数。</p>
+<h4 id="Hermitan矩阵的联合对角化"><a href="#Hermitan矩阵的联合对角化" class="headerlink" title="Hermitan矩阵的联合对角化"></a>Hermitan矩阵的联合对角化</h4><p>假设有两个矩阵满足，</p>
+<p>$X^{H} B X=I, X^{H} A X=\Lambda$</p>
+<p>$B=L L^{H}$</p>
+<p>$L^{-1} B\left(L^{-1}\right)^{H}=I$</p>
+<p>令$P=L^{-1} A\left(L^{-1}\right)^{H}$<br>schur分解 $Q^{H} P Q=\Lambda$，且有  $Q^{H} Q=I$<br>满足  $Q^{H} L^{-1} B\left(L^{-1}\right)^{H} Q=I$<br>可得 $X=\left(L^{-1}\right)^{H} Q$</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+<li><a href="http://www.singleye.net/2017/09/%E6%95%B0%E5%AD%A6%E6%9C%9F%E6%9C%9B%E6%96%B9%E5%B7%AE%E6%A0%87%E5%87%86%E5%B7%AE%E5%8D%8F%E6%96%B9%E5%B7%AE/" target="_blank" rel="noopener">数学期望、方差、标准差、协方差</a></li>
+<li><a href="http://pinkyjie.com/2011/02/24/covariance-pca/" target="_blank" rel="noopener">再谈协方差矩阵之主成分分析</a></li>
+<li><a href="https://time.geekbang.org/column/article/1340" target="_blank" rel="noopener">王天一博士，数学基础|九层之台，起于垒土：线性代数</a></li>
+<li><a href="https://time.geekbang.org/column/article/87337" target="_blank" rel="noopener">程序员的数学基础课</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag"><i class="fa fa-tag"></i> 协方差矩阵</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/25/Matplotlib%E4%B8%ADsubplot%E5%85%B1%E7%94%A8colorbar%E7%9A%84%E8%AE%BE%E7%BD%AE/" rel="next" title="Matplotlib中subplot共用colorbar的设置方法。">
+                  <i class="fa fa-chevron-left"></i> Matplotlib中subplot共用colorbar的设置方法。
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#统计学的基本概念"><span class="nav-number">1.</span> <span class="nav-text">统计学的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协方差矩阵"><span class="nav-number">2.</span> <span class="nav-text">协方差矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#矩阵的几何意义"><span class="nav-number">3.</span> <span class="nav-text">矩阵的几何意义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#降维与降噪"><span class="nav-number">4.</span> <span class="nav-text">降维与降噪</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对角化的一些方法（不定期补充）"><span class="nav-number">5.</span> <span class="nav-text">对角化的一些方法（不定期补充）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#协方差矩阵的cholesky分解"><span class="nav-number">5.1.</span> <span class="nav-text">协方差矩阵的cholesky分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#矩阵的schur分解"><span class="nav-number">5.2.</span> <span class="nav-text">矩阵的schur分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hermitan矩阵的联合对角化"><span class="nav-number">5.3.</span> <span class="nav-text">Hermitan矩阵的联合对角化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">数据挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">102k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:33</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

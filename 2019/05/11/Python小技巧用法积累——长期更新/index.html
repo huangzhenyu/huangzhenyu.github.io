@@ -50,16 +50,16 @@
   };
 </script>
 
-  <meta name="description" content="如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到类似情况可以使用时又怎么都回想不起来，怎么办咧？记下来，自己慢慢琢磨使用呗。">
+  <meta name="description" content="如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到可以使用的类似情况时又怎么都回想不起来，怎么办咧？好记性不如烂笔头，记下来，自己慢慢琢磨使用呗。">
 <meta name="keywords" content="小知识点,Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python小技巧用法积累--长期更新">
 <meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
-<meta property="og:description" content="如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到类似情况可以使用时又怎么都回想不起来，怎么办咧？记下来，自己慢慢琢磨使用呗。">
+<meta property="og:description" content="如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到可以使用的类似情况时又怎么都回想不起来，怎么办咧？好记性不如烂笔头，记下来，自己慢慢琢磨使用呗。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;glob的使用.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;分割文件路径.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;字符串格式化输出.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;文件状态.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;文件状态2.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;分割文件路径.png">
@@ -71,7 +71,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;抽象类的定义.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;numpy矩阵的链接.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;windows启动tensorboard.png">
-<meta property="og:updated_time" content="2019-11-11T13:14:39.716Z">
+<meta property="og:updated_time" content="2019-12-01T02:32:03.547Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;glob的使用.png">
 
@@ -209,7 +209,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="跳投哥">
-      <meta itemprop="description" content="NBA数据分析挖掘/音频算法/zhenyuhuang0501@gmail.com">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -234,7 +234,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-11 21:14:39" itemprop="dateModified" datetime="2019-11-11T21:14:39+08:00">2019-11-11</time>
+                <time title="修改时间：2019-12-01 10:32:03" itemprop="dateModified" datetime="2019-12-01T10:32:03+08:00">2019-12-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -284,7 +284,7 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>2 分钟</span>
             </span>
-            <div class="post-description">如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到类似情况可以使用时又怎么都回想不起来，怎么办咧？记下来，自己慢慢琢磨使用呗。</div>
+            <div class="post-description">如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到可以使用的类似情况时又怎么都回想不起来，怎么办咧？好记性不如烂笔头，记下来，自己慢慢琢磨使用呗。</div>
 
         </div>
       </header>
@@ -296,31 +296,35 @@
 
       
         <ul>
-<li><p>glob 模块中的glob函数，用以寻找匹配字符串，可以用来寻找目录下特定的文件格式。<br>比如，在找dirName这个目录下的所有音频文件可以用法如下：</p>
+<li><p>glob 模块中的glob函数，寻找匹配字符串，可以用来寻找目录下特定格式的文件。<br>比如，在找dirName这个目录下的所有音频文件可以用法如下：</p>
 <p><img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/glob的使用.png" alt></p>
 <p>定义了一个可能的所有音频格式的元组，用循环遍历了所有的音频格式，并按照文件名称做了一个排序。</p>
 </li>
 </ul><ul>
-<li>python的格式化输出用print函数，可以以format后接各种数据类型来表达。<br>下图则分别输出 整型、整型与字符串。</li>
+<li><p>python的格式化输出字符串，可在字符串后接format函数来表达。<br>比如：</p>
+<p><img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/字符串格式化输出.png" alt></p>
+</li>
 </ul><a id="more"></a>
 
-<p>​    <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/分割文件路径.png" alt></p>
 <p>​    </p>
 <ul>
-<li>os.stat(file).st_size 看指定文件的大小，stat函数还可以查询指定文件的诸多信息，包括。用法例子如下，判断wav文件是否包含有效的数据长度，如果长度为0，则跳过此次循环。</li>
+<li>os.stat(file).st_size 看指定文件的大小，stat函数还可以查询指定文件的诸多信息，包括：</li>
 </ul>
 <p>  <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/文件状态.png" alt>    </p>
+<p>  ​    用法例子如下，判断wav文件是否包含有效的数据长度，如果长度为0，则跳过此次循环。</p>
 <p>​                                <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/文件状态2.png" alt></p>
 <ul>
-<li>python 内嵌的isinstance(x, int)<br>判断x实例是不是已知的int类型，int也可以选择类型列表，如isinstance(a,(int,str,list))等</li>
+<li>python 的isinstance函数，比如instance(x, int)<br>判断x实例是不是已知的int类型，int也可以选择类型列表，如isinstance(a,(int,str,list))等</li>
 </ul>
 <ul>
-<li>返回目录名称，并判断最后一位是否为分隔符，并使用字符串的split函数分割，获取文件名称中的最后一个单词，这个单词往往是分类。</li>
+<li>返回目录名称，并判断最后一位是否为分隔符，并使用split函数分割，获取文件路径中的最后一个单词短语：</li>
 </ul>
 <p>​                            <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/分割文件路径.png" alt></p>
 <p>​        </p>
 <ul>
-<li>数据预处理<br>去均值：它做的事情就是，对待训练的每一张图片的特征，都减去全部训练集图片的特征均值，这么做的直观意义就是，我们把输入数据各个维度的数据都中心化到0了。这么做的目的是减小计算量，把数据从原先的标准坐标系下的一个个向量组成的矩阵，变成以这些向量的均值为原点建立的坐标系，使用python的numpy工具包，这一步可以用X -= np.mean(X, axis = 0)轻松实现。<br>归一化：归一化的直观理解含义是，我们做一些工作去保证所有的维度上数据都在一个变化幅度上。通常我们有两种方法来实现归一化。一个是在数据都去均值之后，每个维度上的数据都除以这个维度上数据的标准差(X /= np.std(X, axis = 0))。 另外一种方式是我们除以数据绝对值最大值，以保证所有的数据归一化后都在-1到1之间。多说一句，其实在任何你觉得各维度幅度变化非常大的数据集上，你都 可以考虑归一化处理。</li>
+<li><p>数据预处理<br>去均值：它做的事情就是，对待训练的每一张图片的特征，都减去全部训练集图片的特征均值，这么做的直观意义就是，我们把输入数据各个维度的数据都中心化到0了。这么做的目的是减小计算量，把数据从原先的标准坐标系下的一个个向量组成的矩阵，变成以这些向量的均值为原点建立的坐标系，使用python的numpy工具包，这一步可以用X -= np.mean(X, axis = 0)轻松实现。 </p>
+<p>归一化：归一化的直观理解含义是，我们做一些工作去保证所有的维度上数据都在一个变化幅度上。通常我们有两种方法来实现归一化。一个是在数据都去均值之后，每个维度上的数据都除以这个维度上数据的标准差(X /= np.std(X, axis = 0))。 另外一种方式是我们除以数据绝对值最大值，以保证所有的数据归一化后都在-1到1之间。多说一句，其实在任何你觉得各维度幅度变化非常大的数据集上，你都 可以考虑归一化处理。</p>
+</li>
 </ul>
 <p>​        <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/数据的标准化.png" alt></p>
 <ul>
@@ -343,7 +347,7 @@
 </ul>
 <p>  ​        <img src="/2019/05/11/Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0/plotly2.png" alt></p>
 <ul>
-<li>Python intersection 常用语list 或者 set对象，求交集。</li>
+<li>Python intersection 常用于list 或者 set对象，求交集。</li>
 </ul>
 <ul>
 <li><p>继承父类的属性，super函数的用法：<br>super() 函数是用于调用父类(超类)的一个方法。super 是用来解决多重继承问题的，直接用类名调用父类方法在使用单继承的时候没问题，但是如果使用多继承，会涉及到查找顺序（MRO）、重复调用（钻石继承）等种种问题。</p>
@@ -464,27 +468,27 @@
   <img class="site-author-image" itemprop="image" alt="跳投哥"
     src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">跳投哥</p>
-  <div class="site-description" itemprop="description">NBA数据分析挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+  <div class="site-description" itemprop="description">数据挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -509,12 +513,6 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="https://fansided.com/nba/nylon-calculus/#" title="https:&#x2F;&#x2F;fansided.com&#x2F;nba&#x2F;nylon-calculus&#x2F;#" rel="noopener" target="_blank">nylon-calculus</a>
-        </li>
-        <li class="links-of-blogroll-item">
-          <a href="https://squared2020.com/" title="https:&#x2F;&#x2F;squared2020.com&#x2F;" rel="noopener" target="_blank">NBA数据分析师</a>
-        </li>
-        <li class="links-of-blogroll-item">
           <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
         </li>
         <li class="links-of-blogroll-item">
@@ -535,7 +533,7 @@
           <h3 class="widget-title">云 标签</h3>
           <div id="myCanvasContainer" class="widget tagcloud">
               <canvas width="250" height="250" id="resCanvas" style="width=100%">
-                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
               </canvas>
           </div>
         </div>
@@ -567,13 +565,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">96k</span>
+    <span title="站点总字数">102k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:27</span>
+    <span title="站点阅读时长">1:33</span>
 </div>
 
 <!--
