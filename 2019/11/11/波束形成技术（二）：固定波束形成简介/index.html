@@ -51,7 +51,7 @@
 </script>
 
   <meta name="description" content="固定波束形成技术问题建模及评价指标（白噪声增益、指向性因数、波束模式等）">
-<meta name="keywords" content="波束形成,beamforming">
+<meta name="keywords" content="beamforming,波束形成">
 <meta property="og:type" content="article">
 <meta property="og:title" content="波束形成技术（二）：固定波束形成简介">
 <meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B&#x2F;index.html">
@@ -59,7 +59,7 @@
 <meta property="og:description" content="固定波束形成技术问题建模及评价指标（白噪声增益、指向性因数、波束模式等）">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B&#x2F;阵列模型.png">
-<meta property="og:updated_time" content="2019-12-01T07:31:01.574Z">
+<meta property="og:updated_time" content="2019-12-04T02:48:58.541Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B&#x2F;阵列模型.png">
 
@@ -222,7 +222,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-01 15:31:01" itemprop="dateModified" datetime="2019-12-01T15:31:01+08:00">2019-12-01</time>
+                <time title="修改时间：2019-12-04 10:48:58" itemprop="dateModified" datetime="2019-12-04T10:48:58+08:00">2019-12-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,14 +263,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.6k</span>
+              <span>4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>4 分钟</span>
             </span>
             <div class="post-description">固定波束形成技术问题建模及评价指标（白噪声增益、指向性因数、波束模式等）</div>
 
@@ -283,10 +283,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>波束形成的本质就是空间滤波器，不同麦克风上的信号加权系数组合就是一个空间的窗函数。求解窗函数的谱就是求解波束形成的beampattern。对于连续的线阵（一条直线处处都认为可接受信号），麦克风不给予任何加权的空间傅立叶变换是采样函数。而更普遍意义上直线阵的波束形成就是空间采样了的连续线阵，其空间的傅立叶变换就是上述采样函数的周期延拓。。。</p><a id="more"></a>
+        <p>波束形成的本质就是空间滤波器，不同麦克风上的信号加权系数组合就是一个空间的窗函数。求解窗函数的谱就是求解波束形成的beampattern。对于连续的线阵（一条直线处处都认为可接受信号），麦克风不给予任何加权系数（矩形窗）的空间傅立叶变换是采样函数。而更普遍意义上直线阵的波束形成就是空间采样了的连续线阵，其空间的傅立叶变换就是上述采样函数的周期延拓。</p><a id="more"></a>
 <p>波束形成有太多可以和时域离散信号处理类比的地方了，再比如：</p>
 <p>对于一类固定滤波器系数的阵列来说，无论输入信号或者噪声信号是啥样的（统计特征），其滤波器系数雷打不动，此类波束形成叫Fixed Beamforming，这好比传统数字信号处理里面的经典滤波器；可以联想到，现代数字信号里面有一类自适应滤波器，对应的，阵列里就有相应的Adaptive Beamforming，其滤波器的系数是跟随着噪声场的变化而变化的。</p>
-<p>此外，阵列根据形状不同还分为线阵、环阵、中心阵等，为了便于理解，我们先从一维的Fixed Beamforming开始着手研究uniform linear arrays，由此情况推导其他以及引申到普适情况也不会是什么难事。</p>
+<p>此外，阵列根据形状不同还分为线阵、环阵、中心阵等，为了便于理解，我们先从一维的Fixed Beamforming开始研究uniform linear arrays，由此情况推导其他以及引申到普适情况也不会是什么难事。</p>
 <h3 id="问题建模及求解"><a href="#问题建模及求解" class="headerlink" title="问题建模及求解"></a>问题建模及求解</h3><p><img src="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E7%AE%80%E4%BB%8B/阵列模型.png" style="zoom:50%;"></p>
 <p>远场假设，一声源与共有M个麦克风线阵的轴线夹角呈$\theta_d$入射，麦克风间距为 $\delta$, 则每两个麦克风之间的单位时延为 $\tau_0 = cos(\theta_d)*\delta/c$ ，其中c为声速，则以最右侧，也即离声源最近的麦克风为参考可以定义一个导向矢量(Steering Vector)：</p>
 <script type="math/tex; mode=display">d(f, \cos(\theta)) = [1  \ \  e^{-j2\pi f\tau_{0}\cos(\theta)}\ ... \ e^{-j(M-1)2\pi f\tau_{0}\cos(\theta)}]^T</script><p>这其实就是做空间傅立叶变换的一组完备正交基中对应频率$f$的那一个。</p>
@@ -297,25 +297,31 @@
 = \phi_{X}(f)d(f,\cos(\theta_d))d^{H}(f,\cos(\theta_d)) + \Phi_{V}(f)</script><p>其中 $\phi_{X}(f)$ 为信号的方差，$\Phi_{V}(f)$ 为噪声的相关系数矩阵。</p>
 <p>Fixed Beamforming过程中我们最终求解都是为了降低其他方向的噪声而尽可能不失真地提取到目标信号，操作核心思想是对接受信号 $y(f)$进行系数加权求和。</p>
 <h3 id="线阵模型"><a href="#线阵模型" class="headerlink" title="线阵模型"></a>线阵模型</h3><p>上一部分最后提到加权求和，这就有点滤波器的意思了，时域上的滤波器就对过去的输入或者输出进行加权求和。而麦克风阵列呢，就是对声场中不同的空间点信号进行加权求和。如下：</p>
-<script type="math/tex; mode=display">Z(f) = \sum_{m=1}^{M}H_m^{*}(f)Y_{m}(f) = h^{H}(f)y(f) = X_{fd}(f) + V_{rn}(f)</script><p>$Z(f)$ 是最终输出信号，$h(f) = [H_{1}(f),  H_{2}(f), …  H_{M}(f)]^T$ 是M个麦克风的加权系数，每个麦克风对应一个。$X_{fd}(f) = X(f)h^{H}(f)d(f,\cos(\theta_d))$ 是我们的desired 信号，<strong>要求做到不失真满足 $h^{H}(f)d(f,\cos(\theta_d))=1$ 即可。记住这个式子，对后面求解的简化非常重要。 </strong>  $V_{rn}(f) = h^{H}(f)v(f)$ 则是剩余的残留信号。</p>
+<script type="math/tex; mode=display">
+\begin{aligned} Z(f) &=\sum_{m=1}^{M} H_{m}^{*}(f) Y_{m}(f) \\ &=\mathbf{h}^{H}(f) \mathbf{y}(f) \\ &=X_{\mathrm{fd}}(f)+V_{\mathrm{rn}}(f) \end{aligned}</script><p>$Z(f)$ 是最终输出信号，$h(f) = [H_{1}(f),  H_{2}(f), …  H_{M}(f)]^T$ 是M个麦克风的加权系数，每个麦克风对应一个。$X_{fd}(f) = X(f)h^{H}(f)d(f,\cos(\theta_d))$ 是我们的desired 信号，**要求做到不失真满足 $h^{H}(f)d(f,\cos(\theta_d))=1$ 即可。 $V_{rn}(f) = h^{H}(f)v(f)$ 则是剩余的残留信号。</p>
 <h3 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h3><p>评价麦克风阵列的性能指标无非是考察麦克风在不同声场下的表现，直接可以想到的有信噪比提升和指向性因数等。</p>
 <ul>
 <li>波束模式（beam pattern），理解为阵列在不同方位空间上的响应，其平方的形式power pattern常常通过Polar画出。公式为以下（对照离散傅立叶变换的公式，你会感慨这个世界是真它喵的巧妙啊）:</li>
 </ul>
-<script type="math/tex; mode=display">\begin{aligned} \mathcal{B}[\mathbf{h}(f), \cos \theta] &=\mathbf{d}^{H}(f, \cos \theta) \mathbf{h}(f) =\sum_{m=1}^{M} H_{m}(f) e^{\jmath(m-1) 2 \pi f \tau_{0} \cos \theta} \end{aligned}</script><ul>
+<script type="math/tex; mode=display">
+  \begin{aligned} \mathcal{B}[\mathbf{h}(f), \cos \theta] &=\mathbf{d}^{H}(f, \cos \theta) \mathbf{h}(f) \\ &=\sum_{m=1}^{M} H_{m}(f) e^{\jmath(m-1) 2 \pi f \tau_{0} \cos \theta} \end{aligned}</script><ul>
 <li>阵列增益，<strong>阵列的输出信噪比比阵列的输入信噪比</strong>，推导过程不上了，公式为：</li>
 </ul>
-<script type="math/tex; mode=display">\begin{aligned} \mathcal{G}[\mathbf{h}(f)] &=\frac{\operatorname{oSNR}[\mathbf{h}(f)]}{\operatorname{iSNR}(f)} =\frac{\left|\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)\right|^{2}}{\mathbf{h}^{H}(f) \mathbf{\Gamma}_{\mathbf{v}}(f) \mathbf{h}(f)} \end{aligned}</script><p>​        注意在Fixed Beamforming 中上述式子的分子为1。增益越大，说明麦克风对提升信噪比越有帮助。即理论        上是越大越好，同理下面的白噪声增益（White Noise Gain）和指向性因数（Directivity Index）。</p>
+<script type="math/tex; mode=display">
+  \mathcal{G}[\mathbf{h}(f)]=\frac{\operatorname{oSNR}[\mathbf{h}(f)]}{\mathrm{i} \operatorname{sNR}(f)}=\frac{\left|\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)\right|^{2}}{\mathbf{h}^{H}(f) \mathbf{\Gamma}_{\mathbf{v}}(f) \mathbf{h}(f)}</script><p>​        注意在Fixed Beamforming 中上述式子的分子为1。增益越大，说明麦克风对提升信噪比越有帮助。即理论        上是越大越好，同理下面的白噪声增益（White Noise Gain）和指向性因数（Directivity Index）。</p>
 <ul>
 <li>当考察的噪声是白噪声时，空间中不同的任意两点的相关系数为0，所以上述 $\Gamma_V$ 是主对角为1，其余全为0 的单位阵。上述Array Gain可以写成：</li>
 </ul>
-<script type="math/tex; mode=display">WNG = \frac{oSNR(f)}{iSNR(f)} = \frac{|h^{H}(f)d(f,\cos(\theta_d)|^2}{h^{H}(f) (f)h(f)}</script><p>  ​    可以证明WNG数值上可达到最大值为M，即阵列中麦克风的个数。实际计算时在取对数。</p>
+<script type="math/tex; mode=display">
+  \mathcal{W}[\mathbf{h}(f)]=\frac{\left|\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)\right|^{2}}{\mathbf{h}^{H}(f) \mathbf{h}(f)}</script><p>  ​    可以证明WNG数值上可达到最大值为M，即阵列中麦克风的个数。实际计算时在取对数。</p>
 <ul>
 <li><p>指向性因Directivity Factor（DI），则是考虑阵列工作于扩散声场，因此可同理写为：</p>
-<script type="math/tex; mode=display">DI = \frac{oSNR(f)}{iSNR(f)} = \frac{|h^{H}(f)d(f,\cos(\theta_d)|^2}{h^{H}(f) \Gamma_{0,\pi}(f)h(f)}</script><p> 其中 $\Gamma_{0,\pi} =\frac {\sin(\omega\tau)}{\omega\tau}$翻看讲义一里面的声场统计模型，有关于此的讨论。</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathcal{D}[\mathbf{h}(f)] &=\frac{\left|\mathcal{B}\left[\mathbf{h}(f), \cos \theta_{\mathrm{d}}\right]\right|^{2}}{\frac{1}{2} \int_{0}^{\pi}|\mathcal{B}[\mathbf{h}(f), \cos \theta]|^{2} \sin \theta d \theta} \\ &=\frac{\left|\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)\right|^{2}}{\mathbf{h}^{H}(f) \mathbf{\Gamma}_{0, \pi}(f) \mathbf{h}(f)} \end{aligned}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\Gamma_{0, \pi}(f)=\frac{1}{2} \int_{0}^{\pi} \mathrm{d}(f, \cos \theta) \mathrm{d}^{H}(f, \cos \theta) \sin \theta d \theta</script><p>翻看讲义一里面的声场统计模型，有关于此的讨论。所以，关于任意beamforming性能指标的讨论，只要得到阵列的滤波器系数，其他（三指标）的自然都迎    刃而解了。而许多beamforming技术也都是在这三个指标上玩花样，比如说最大化WNG或者DF。</p>
 </li>
 </ul>
-<p>  ​    所以，关于任意beamforming性能指标的讨论，只要得到阵列的滤波器系数，其他（三指标）的自然都迎    刃而解了。而许多beamforming技术也都是在这三个指标上玩花样，比如说最大化WNG或者DF。</p>
 <h3 id="空间混叠"><a href="#空间混叠" class="headerlink" title="空间混叠"></a>空间混叠</h3><p>开篇已经提及了，这里面的采样混叠其实和数字信号采样混叠道理是一样一样的，这里作一下推导演绎。空间发生混叠，即阵列分不清信号来自哪个方向了，也就是存在两个不同的 $\theta_d$, 满足 :</p>
 <p><script type="math/tex">d(f,\cos(\theta_1)) = d(f,cos(\theta_2))</script> ,  </p>
 <p>观察steering vector，可以得到：</p>
@@ -356,8 +362,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag"><i class="fa fa-tag"></i> 波束形成</a>
               <a href="/tags/beamforming/" rel="tag"><i class="fa fa-tag"></i> beamforming</a>
+              <a href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag"><i class="fa fa-tag"></i> 波束形成</a>
           </div>
 
         
@@ -372,8 +378,8 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/11/11/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%86%92%E6%B3%A1%E3%80%81%E6%8F%92%E5%85%A5%E3%80%81%E9%80%89%E6%8B%A9/" rel="prev" title="排序算法（一）：冒泡、插入、选择排序的Cpp实现">
-                  排序算法（一）：冒泡、插入、选择排序的Cpp实现 <i class="fa fa-chevron-right"></i>
+                <a href="/2019/11/11/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%B7%AE%E5%88%86%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="prev" title="波束形成技术（五）：差分波束形成">
+                  波束形成技术（五）：差分波束形成 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -430,7 +436,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -488,7 +494,7 @@
           <h3 class="widget-title">云 标签</h3>
           <div id="myCanvasContainer" class="widget tagcloud">
               <canvas width="250" height="250" id="resCanvas" style="width=100%">
-                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
               </canvas>
           </div>
         </div>
@@ -520,13 +526,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">102k</span>
+    <span title="站点总字数">108k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:33</span>
+    <span title="站点阅读时长">1:39</span>
 </div>
 
 <!--
