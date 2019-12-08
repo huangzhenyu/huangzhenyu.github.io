@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Python面向对象很强大，不能仅仅局限于一些基本功能啊！迈开步子朝前跨，以后多用这些高级功能，很赞！">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python面向对象中要多使用这些语法啊！">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;08&#x2F;Python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E8%A6%81%E5%A4%9A%E4%BD%BF%E7%94%A8%E8%BF%99%E4%BA%9B%E8%AF%AD%E6%B3%95%E7%B3%96%E5%95%8A&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="Python面向对象很强大，不能仅仅局限于一些基本功能啊！迈开步子朝前跨，以后多用这些高级功能，很赞！">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-08T13:13:46.246Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/12/08/Python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E8%A6%81%E5%A4%9A%E4%BD%BF%E7%94%A8%E8%BF%99%E4%BA%9B%E8%AF%AD%E6%B3%95%E7%B3%96%E5%95%8A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python面向对象中要多使用这些语法啊！ | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/12/08/Python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E8%A6%81%E5%A4%9A%E4%BD%BF%E7%94%A8%E8%BF%99%E4%BA%9B%E8%AF%AD%E6%B3%95%E7%B3%96%E5%95%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python面向对象中要多使用这些语法啊！
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-08 19:50:15 / 修改时间：21:13:46" itemprop="dateCreated datePublished" datetime="2019-12-08T19:50:15+08:00">2019-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/08/Python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E8%A6%81%E5%A4%9A%E4%BD%BF%E7%94%A8%E8%BF%99%E4%BA%9B%E8%AF%AD%E6%B3%95%E7%B3%96%E5%95%8A/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/08/Python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E8%A6%81%E5%A4%9A%E4%BD%BF%E7%94%A8%E8%BF%99%E4%BA%9B%E8%AF%AD%E6%B3%95%E7%B3%96%E5%95%8A/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+            <div class="post-description">Python面向对象很强大，不能仅仅局限于一些基本功能啊！迈开步子朝前跨，以后多用这些高级功能，很赞！</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Python写了也有一年多了，谈不上精通，也算是熟练了。从最开始的瞎写到面向过程再到最近的面向对象，确切地感受到了Python的强大。前一段时间学习C++，由于是系统的学习，接触到了很多面向对象的语法，如菱形继承、成员函数重载运算符等功能时，惊呼C家族的面向对象竟然这么牛逼，连Python中没有的它都有！</p><a id="more"></a>
+<p>是真的没有嘛？当然不是了，只是我之前没有了解接触过而已，所以造成了没有这种语法功能的错误。这也和我入门学习Python的路径有关，直接看了基本语法之后上手，且在后续的项目中只围绕这些基本语法展开实战，没有及时地补充新鲜知识从而导致此之现状。所以入门并快速熟练使用一门语言的最佳路径应该是：<strong>熟悉完基本语法后快速上手实战的同时继续补充稍微高级一点的语法，然后再实战，如此反复，直到精通。</strong></p>
+<p>周天在家刷油管视频，看到有一门叫<a href="https://www.youtube.com/watch?v=ZDa-Z5JzLYM&amp;list=PL-osiE80TeTsqhIuOqKhwlXsIBIdSeYtc" target="_blank" rel="noopener">Python OOP Tutorials</a>的教程就想着随便点进去看看，结果这不是发现了新大陆了。</p>
+<h2 id="类或者静态变量"><a href="#类或者静态变量" class="headerlink" title="类或者静态变量"></a>类或者静态变量</h2><p><strong>类或者静态变量被所有的类对象共享。</strong>比如下面的stream属性，在C++或者Java中所有成员共享的属性，要在定义前面加关键字，在python中就简单多了。定义在class声明后的属性就是类成员，而在其他方法定义的就是实例属性。<strong>这在我之前的编程中的是没有这个概念的。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python program to show that the variables with a value </span></span><br><span class="line"><span class="comment"># assigned in class declaration, are class variables </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Class for Computer Science Student </span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CSStudent</span>:</span> </span><br><span class="line">		stream = <span class="string">'cse'</span>				 <span class="comment"># Class Variable </span></span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name,roll)</span>:</span> </span><br><span class="line">				self.name = name		 <span class="comment"># Instance Variable </span></span><br><span class="line">				self.roll = roll		 <span class="comment"># Instance Variable </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Objects of CSStudent class </span></span><br><span class="line">a = CSStudent(<span class="string">'Geek'</span>, <span class="number">1</span>) </span><br><span class="line">b = CSStudent(<span class="string">'Nerd'</span>, <span class="number">2</span>) </span><br><span class="line"></span><br><span class="line">print(a.stream) <span class="comment"># prints "cse" </span></span><br><span class="line">print(b.stream) <span class="comment"># prints "cse" </span></span><br><span class="line">print(a.name) <span class="comment"># prints "Geek" </span></span><br><span class="line">print(b.name) <span class="comment"># prints "Nerd" </span></span><br><span class="line">print(a.roll) <span class="comment"># prints "1" </span></span><br><span class="line">print(b.roll) <span class="comment"># prints "2" </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Class variables can be accessed using class </span></span><br><span class="line"><span class="comment"># name also </span></span><br><span class="line">print(CSStudent.stream) <span class="comment"># prints "cse"</span></span><br></pre></td></tr></table></figure>
+<p>输出打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cse</span><br><span class="line">cse</span><br><span class="line">Geek</span><br><span class="line">Nerd</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">cse</span><br></pre></td></tr></table></figure>
+<h2 id="类方法和静态方法"><a href="#类方法和静态方法" class="headerlink" title="类方法和静态方法"></a>类方法和静态方法</h2><p>在早之前接触过类方法和静态方法，也在自己编写的静态方法中用过staticmethod，和static variables一样是类所有实例共享的，不能改变类成员的属性。作为与类有关联的函数，在类中定义了，类似于<strong>定义了一个局部域函数为该类专门服务。</strong>见过许多面向对象的写法是先定义个staticmethod然后再定一个self的普通的method，达到改变类状态的功能以方便使用。</p>
+<p>但是关于类方法，一直也没明白使用场景是啥，见到过别的程序用过，但上下文写的及其抽象也没搞懂到底是搞啥的。观看上面所说的视频后，我茅塞顿开。类方法的使用场景：作为工厂方法创建实例对象，例如内置模块 datetime.date 类中就有大量使用类方法作为工厂方法，以此来创建date对象。说白了<strong>就是一个和类名不同名的构造函数。</strong>更方便的实例化对象。</p>
+<p>比如以下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python program to demonstrate </span></span><br><span class="line"><span class="comment"># use of class method and static method. </span></span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> date </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span> </span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span> </span><br><span class="line">				self.name = name </span><br><span class="line">				self.age = age </span><br><span class="line">	</span><br><span class="line">		<span class="comment"># a class method to create a Person object by birth year. </span></span><br><span class="line"><span class="meta">		@classmethod</span></span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">fromBirthYear</span><span class="params">(cls, name, year)</span>:</span> </span><br><span class="line">				<span class="keyword">return</span> cls(name, date.today().year - year) </span><br><span class="line">	</span><br><span class="line">	<span class="comment"># a static method to check if a Person is adult or not. </span></span><br><span class="line"><span class="meta">		@staticmethod</span></span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">isAdult</span><span class="params">(age)</span>:</span> </span><br><span class="line">				<span class="keyword">return</span> age &gt; <span class="number">18</span></span><br><span class="line"></span><br><span class="line">person1 = Person(<span class="string">'mayank'</span>, <span class="number">21</span>) </span><br><span class="line">person2 = Person.fromBirthYear(<span class="string">'mayank'</span>, <span class="number">1996</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> person1.age </span><br><span class="line"><span class="keyword">print</span> person2.age </span><br><span class="line"></span><br><span class="line"><span class="comment"># print the result </span></span><br><span class="line"><span class="keyword">print</span> Person.isAdult(<span class="number">22</span>)</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">21</span><br><span class="line">21</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<h2 id="魔术方法（Magic-Dunder）"><a href="#魔术方法（Magic-Dunder）" class="headerlink" title="魔术方法（Magic/Dunder）"></a>魔术方法（Magic/Dunder）</h2><p>我理解这种方法非常类似于C++中内置函数的重载，比如加减乘除等等在新建的类中完成定义后，可以像内置类型一样运用搞得飞起。比如像str()\repr()等等。</p>
+<p>引用 <a href="https://www.geeksforgeeks.org/str-vs-repr-in-python/" target="_blank" rel="noopener">str() vs repr() in Python</a>中的一段话</p>
+<blockquote>
+<p>Following are differences:</p>
+<ul>
+<li><strong><em>str() is used for creating output for end user while repr() is mainly used for debugging and development. repr’s goal is to be unambiguous and str’s is to be readable</em></strong>. For example, if we suspect a float has a small rounding error, repr will show us while str may not.</li>
+<li>repr() <a href="http://docs.python.org/reference/datamodel.html#object.__repr__" target="_blank" rel="noopener">compute the “official” string representation of an object </a>(a representation that has all information about the abject) and str() is used to <a href="http://docs.python.org/reference/datamodel.html#object.__str__" target="_blank" rel="noopener">compute the “informal” string representation of an object</a> (a representation that is useful for printing the object).</li>
+<li>The print statement and str() built-in function uses <strong>str</strong> to display the string representation of the object while the repr() built-in function uses <strong>repr</strong> to display the object.</li>
+</ul>
+</blockquote>
+<p>str()方法呢是给最终的用户，告诉大家返回了一个什么玩意，而repr呢则更底层一些告诉了这个对象是如何产生的，如果不使用这些方法呢，打印出来就是<strong>_xxxdad_, objectxxx</strong>之类的乱七八糟的妖魔鬼怪。</p>
+<p>比如我们定义个虚数的类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python program to demonstrate writing of __repr__ and </span></span><br><span class="line"><span class="comment"># __str__ for user defined classes </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># A user defined class to represent Complex numbers </span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Complex</span>:</span> </span><br><span class="line"></span><br><span class="line">	<span class="comment"># Constructor </span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, real, imag)</span>:</span> </span><br><span class="line">			self.real = real </span><br><span class="line">			self.imag = imag </span><br><span class="line"></span><br><span class="line">	<span class="comment"># For call to repr(). Prints object's information </span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span> </span><br><span class="line">			<span class="keyword">return</span> <span class="string">'Rational(%s, %s)'</span> % (self.real, self.imag)	 </span><br><span class="line"></span><br><span class="line">	<span class="comment"># For call to str(). Prints readable form </span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span> </span><br><span class="line">			<span class="keyword">return</span> <span class="string">'%s + i%s'</span> % (self.real, self.imag)	 </span><br><span class="line">	</span><br><span class="line">  <span class="comment"># For call to len(). Get the rational length</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span></span><br><span class="line">    	<span class="keyword">return</span> len(self.real) + len(self.imag)</span><br><span class="line">   </span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other_complex)</span>:</span></span><br><span class="line">			<span class="keyword">return</span> Complex(self.real + other_complex.real, self.imag + other_complex.imag)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Driver program to test above </span></span><br><span class="line">t = Complex(<span class="number">10</span>, <span class="number">20</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> str(t) <span class="comment"># Same as "print t" </span></span><br><span class="line"><span class="keyword">print</span> repr(t) </span><br><span class="line"></span><br><span class="line">len(t)</span><br><span class="line">t + Complex(<span class="number">10</span>, <span class="number">30</span>)</span><br></pre></td></tr></table></figure>
+<p>输出则为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10 + i20</span><br><span class="line">Rational(10, 20)</span><br></pre></td></tr></table></figure>
+<p>可以观察到上面的方法定义前后都有两条横杠’__’，这就权当是重载内部函数的标志吧，同样的还有len/add/，比如上面我定义的len和add。还有其他的类似：</p>
+<blockquote>
+<p><code>__eq__(self, other)</code> 定义了等号的行为, <code>==</code> 。</p>
+<p><code>__ne__(self, other)</code> 定义了不等号的行为, <code>!=</code> 。</p>
+<p><code>__lt__(self, other)</code> 定义了小于号的行为， <code>&lt;</code> 。</p>
+<p><code>__gt__(self, other)</code> 定义了大于等于号的行为， <code>&gt;=</code> 。</p>
+</blockquote>
+<h2 id="属性装饰器（Getters-Setters-Deleters）"><a href="#属性装饰器（Getters-Setters-Deleters）" class="headerlink" title="属性装饰器（Getters,Setters, Deleters）"></a>属性装饰器（Getters,Setters, Deleters）</h2><p>实例化一个类之后，在通过直接操作属性赋值的方法行不通了。如果像在重新设置或定义一个属性，笨一点的方法就是在额外定义个Set方法，或者在构造函数中写了一坨又长又烂的东西。但大可不必这么做。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span>:</span></span><br><span class="line">  	</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, first, last)</span>:</span></span><br><span class="line">      	self.first = first</span><br><span class="line">        self.last = last</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 调用email属性的时候会执行此函数</span></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">email</span><span class="params">(self)</span>:</span></span><br><span class="line">      	<span class="keyword">return</span>  <span class="string">'&#123;&#125;.&#123;&#125;@email.com'</span>.format(self.first, self.last)</span><br><span class="line">     </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fullname</span><span class="params">(self)</span>:</span></span><br><span class="line">      	<span class="keyword">return</span> <span class="string">'&#123;&#125;. &#123;&#125;'</span>.format(self.first, self.last)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 调用full属性的时候会执行此函数</span></span><br><span class="line"><span class="meta">    @property.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fullname</span><span class="params">(self, name)</span>:</span></span><br><span class="line">      	</span><br><span class="line">        first, last = name.split(<span class="string">' '</span>)</span><br><span class="line">        self.first = first</span><br><span class="line">        self.last = last</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="meta">    @property.deleter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fullname</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'Delete Name'</span>)</span><br><span class="line">        self.first = <span class="literal">None</span></span><br><span class="line">        self.last = <span class="literal">None</span></span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">emp = Employee(<span class="string">'Jack'</span>, <span class="string">'Rose'</span>)</span><br><span class="line">print(emp.fullname)</span><br><span class="line">print(emp.email)</span><br><span class="line">emp.fullname(<span class="string">'Pattrick'</span>, <span class="string">'Jalen'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fullname</span></span></span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&apos;Jack Rose&apos;</span><br><span class="line">&apos;jack.rose@email.com&apos;</span><br><span class="line">&apos;Delete Name&apos;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/04/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E5%B7%AE%E5%88%86%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="next" title="波束形成技术（五）：差分波束形成">
+                  <i class="fa fa-chevron-left"></i> 波束形成技术（五）：差分波束形成
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类或者静态变量"><span class="nav-number">1.</span> <span class="nav-text">类或者静态变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类方法和静态方法"><span class="nav-number">2.</span> <span class="nav-text">类方法和静态方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#魔术方法（Magic-Dunder）"><span class="nav-number">3.</span> <span class="nav-text">魔术方法（Magic/Dunder）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性装饰器（Getters-Setters-Deleters）"><span class="nav-number">4.</span> <span class="nav-text">属性装饰器（Getters,Setters, Deleters）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">数据挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">116k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:46</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
