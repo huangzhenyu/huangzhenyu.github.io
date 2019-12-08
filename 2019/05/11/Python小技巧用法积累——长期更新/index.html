@@ -71,7 +71,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;抽象类的定义.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;numpy矩阵的链接.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;启动tensorboard.png">
-<meta property="og:updated_time" content="2019-12-08T13:00:05.475Z">
+<meta property="og:updated_time" content="2019-12-08T13:26:56.592Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;05&#x2F;11&#x2F;Python%E5%B0%8F%E6%8A%80%E5%B7%A7%E7%94%A8%E6%B3%95%E7%A7%AF%E7%B4%AF%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0&#x2F;glob的使用.png">
 
@@ -234,7 +234,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-08 21:00:05" itemprop="dateModified" datetime="2019-12-08T21:00:05+08:00">2019-12-08</time>
+                <time title="修改时间：2019-12-08 21:26:56" itemprop="dateModified" datetime="2019-12-08T21:26:56+08:00">2019-12-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -275,14 +275,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.6k</span>
+              <span>3.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>3 分钟</span>
             </span>
             <div class="post-description">如何优雅地使用python？除了多写，就是积累一些比较有趣的python用法咯。每次看到很优雅的用法，都不禁感叹其之奇妙，同时在想自己何时可以如此！！然而，每次遇到可以使用的类似情况时又怎么都回想不起来，怎么办咧？好记性不如烂笔头，记下来，自己慢慢琢磨使用呗。</div>
 
@@ -376,15 +376,11 @@
 </ul>
 <ul>
 <li><p>Python中计算两个计算贝塞尔函数的小函数：</p>
-<p>scipy.special.jv(v, z)</p>
-<p>计算第一类贝塞尔函数，输入v： order(float)， z(float or complex) z就是定义阈区间，v是阶数</p>
-<p>以下微分方程 v是实数常量，称为贝塞尔方程，它的解为Bessel函数。</p>
+<p>1.scipy.special.jv(v, z)计算第一类贝塞尔函数，输入v： order(float)， z(float or complex) z就是定义阈区间，v是阶数。以下微分方程 v是实数常量，称为贝塞尔方程，它的解为Bessel函数。</p>
 <script type="math/tex; mode=display">
-z^{2} \frac{d^{2} y}{d z^{2}}+z \frac{d y}{d z}+\left(z^{2}-\nu^{2}\right) y=0</script></li>
+z^{2} \frac{d^{2} y}{d z^{2}}+z \frac{d y}{d z}+\left(z^{2}-\nu^{2}\right) y=0</script><p>2.scipy.special.iv(v, z)计算修正的第一类贝塞尔函数，输入v： order(float)， z(float or complex) z就是定义阈区间，v是阶数。以下微分方程 v是实数常量，称为贝塞尔方程，它的解为修正Bessel函数。</p>
+</li>
 </ul>
-<p>​        scipy.special.iv(v, z)</p>
-<p>​        计算修正的第一类贝塞尔函数，输入v： order(float)， z(float or complex) z就是定义阈区间，v是阶数</p>
-<p>​        以下微分方程 v是实数常量，称为贝塞尔方程，它的解为修正Bessel函数。</p>
 <script type="math/tex; mode=display">
 z^{2} \frac{d^{2} y}{d z^{2}}+z \frac{d y}{d z}-\left(z^{2}+\nu^{2}\right) y=0</script><ul>
 <li><p>Python内置类属性</p>
@@ -398,15 +394,11 @@ z^{2} \frac{d^{2} y}{d z^{2}}+z \frac{d y}{d z}-\left(z^{2}+\nu^{2}\right) y=0</
 <li><p><strong>module</strong>: 类定义所在的模块（类的全名是’<strong>main</strong>.className’，如果类位于一个导入模块mymod中，那么className.<strong>module</strong> 等于 mymod）</p>
 </li>
 <li><p><strong>bases</strong> : 类的所有父类构成元素（包含了一个由所有父类组成的元组）</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span>:</span></span><br><span class="line">   <span class="string">'所有员工的基类'</span></span><br><span class="line">   empCount = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, salary)</span>:</span></span><br><span class="line">      self.name = name</span><br><span class="line">      self.salary = salary</span><br><span class="line">      Employee.empCount += <span class="number">1</span></span><br><span class="line">   </span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">displayCount</span><span class="params">(self)</span>:</span></span><br><span class="line">     <span class="keyword">print</span> <span class="string">"Total Employee %d"</span> % Employee.empCount</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">displayEmployee</span><span class="params">(self)</span>:</span></span><br><span class="line">      <span class="keyword">print</span> <span class="string">"Name : "</span>, self.name,  <span class="string">", Salary: "</span>, self.salary</span><br><span class="line"> </span><br><span class="line"><span class="keyword">print</span> <span class="string">"Employee.__doc__:"</span>, Employee.__doc__</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Employee.__name__:"</span>, Employee.__name__</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Employee.__module__:"</span>, Employee.__module__</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Employee.__bases__:"</span>, Employee.__bases__</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Employee.__dict__:"</span>, Employee.__dict__</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
 </ul>
-<pre><code>输出为：
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Employee.__doc__: 所有员工的基类</span><br><span class="line">Employee.__name__: Employee</span><br><span class="line">Employee.__module__: __main__</span><br><span class="line">Employee.__bases__: ()</span><br><span class="line">Employee.__dict__: &#123;&apos;__module__&apos;: &apos;__main__&apos;, &apos;displayCount&apos;: &lt;function displayCount at 0x10a939c80&gt;, &apos;empCount&apos;: 0, &apos;displayEmployee&apos;: &lt;function displayEmployee at 0x10a93caa0&gt;, &apos;__doc__&apos;: &apos;\xe6\x89\x80\xe6\x9c\x89\xe5\x91\x98\xe5\xb7\xa5\xe7\x9a\x84\xe5\x9f\xba\xe7\xb1\xbb&apos;, &apos;__init__&apos;: &lt;function __init__ at 0x10a939578&gt;&#125;</span><br></pre></td></tr></table></figure>
-</code></pre><ul>
+<ul>
 <li><p>类属性和方法</p>
 <p>类的私有属性</p>
 <p><strong>__private_attrs</strong>：两个下划线开头，声明该属性为私有，不能在类的外部被使用或直接访问。在类内部的方法中使用时 <strong>self.__private_attrs</strong>。</p>
@@ -621,13 +613,13 @@ z^{2} \frac{d^{2} y}{d z^{2}}+z \frac{d y}{d z}-\left(z^{2}+\nu^{2}\right) y=0</
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">116k</span>
+    <span title="站点总字数">115k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:46</span>
+    <span title="站点阅读时长">1:45</span>
 </div>
 
 <!--
@@ -705,6 +697,54 @@ z^{2} \frac{d^{2} y}{d z^{2}}+z \frac{d y}{d z}-\left(z^{2}+\nu^{2}\right) y=0</
   
 
   
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 
