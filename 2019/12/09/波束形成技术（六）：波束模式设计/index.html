@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="想要啥样的波束形状？啥，葫芦娃形状？好说好说，照着这个来就是了！">
+<meta name="keywords" content="波束形成,beamforming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="波束形成技术（六）：波束模式设计">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="想要啥样的波束形状？啥，葫芦娃形状？好说好说，照着这个来就是了！">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;non_rubust_beampattern.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;non_rubust_df.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;non_rubust_wng.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;rubust_beampattern.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;rubust_df.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;rubust_wng.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;FreqInvariant_beampattern_polar.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;FreqInvariant_beampattern_df.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;FreqInvariant_beampattern_wng.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;rls_df.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;rls_wng.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;joint_df.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;joint_wng.png">
+<meta property="og:updated_time" content="2019-12-09T14:48:34.696Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1&#x2F;non_rubust_beampattern.png">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>波束形成技术（六）：波束模式设计 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          波束形成技术（六）：波束模式设计
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-09 19:17:15 / 修改时间：22:48:34" itemprop="dateCreated datePublished" datetime="2019-12-09T19:17:15+08:00">2019-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%AD%E9%9F%B3%E5%A2%9E%E5%BC%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">语音增强</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+            <div class="post-description">想要啥样的波束形状？啥，葫芦娃形状？好说好说，照着这个来就是了！</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>构造一个差分波束形成思路大概是这个样子的，确定设计阶数，设计麦克风个数，设计要陷落的角度，然后就可以照葫芦画瓢得到一个差分波束形成了。只不过一般意义上，一些心形，偶极子式的波束陷落角是固定的，所以在差分波束形成中没有提及到“设计”的概念。其实我们要抛开固定陷落角的局限，也可以得到任何想要的beampattern，这不失为一种设计。且如果我们把想得到的beampattern随着theta变化的函数写出来，会观察到这么个规律：波束模式是余弦函数($cos\theta$)最高次幂为阶数的，所有低阶次幂余弦函数的加权和。</p><a id="more"></a>
+<p>比如一个二阶的超指向差分麦克风最后的beampattern是：</p>
+<script type="math/tex; mode=display">
+\mathcal{B}_{2, \mathrm{Sd}}(\cos \theta)=\frac{1}{2(3+\sqrt{7})}+\frac{\sqrt{7}}{3+\sqrt{7}} \cos \theta+\frac{5}{2(3+\sqrt{7})} \cos ^{2} \theta</script><p>依次可以类推到更高阶。这是从物理出发获得数学形式的解读，今天我们说的波束设计是从数学公式出发获得物理形式的解读。Let‘s go！！公式会比较多哦。</p>
+<h2 id="再探波束模式"><a href="#再探波束模式" class="headerlink" title="再探波束模式"></a>再探波束模式</h2><p>我们只关注设计最大响应的角度为endfire方向，即($\phi=0$)的情况，此时的beampattern解是周期的偶对称函数：</p>
+<script type="math/tex; mode=display">
+\mathcal{B}[\mathbf{h}(f), \cos (-\theta)]=\mathcal{B}[\mathbf{h}(f), \cos \theta]</script><script type="math/tex; mode=display">
+\mathcal{B}[\mathbf{h}(f), \cos (\theta+2 \pi)]=\mathcal{B}[\mathbf{h}(f), \cos \theta]</script><p>那么上述的beampattern一定可以按照傅立叶余弦级数展开：</p>
+<script type="math/tex; mode=display">
+\mathcal{B}(\theta)=\sum_{n=0}^{\infty} b_{n} \cos (n \theta)</script><p>其中，</p>
+<script type="math/tex; mode=display">
+\left\{\begin{array}{l}{b_{0}=\frac{1}{\pi} \int_{0}^{\pi} \mathcal{B}(\theta) d \theta} \\ {b_{i}=\frac{2}{\pi} \int_{0}^{\pi} \mathcal{B}(\theta) \cos (i \theta) d \theta, \quad i \geq 1}\end{array}\right.</script><p>所以波束模式就可以写成以下的式子了（大一基础知识哦），</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathcal{B}\left(\mathbf{b}_{N}, \cos \theta\right) &=\sum_{n=0}^{N} b_{N, n} \cos (n \theta) \\ &=\mathbf{b}_{N}^{T} \mathbf{p}_{\mathrm{C}}(\cos \theta) \end{aligned}</script><script type="math/tex; mode=display">
+\begin{aligned} \mathbf{b}_{N} &=\left[\begin{array}{llll}{b_{N, 0}} & {b_{N, 1}} & {\cdots} & {b_{N, N}}\end{array}\right]^{T} \\ \mathbf{p}_{\mathrm{C}}(\cos \theta) &=\left[\begin{array}{llll}{1} & {\cos \theta} & {\cdots} & {\cos (N \theta)}\end{array}\right]^{T} \end{aligned}</script><p>仔细观察这个，这个和我们开篇说的余弦指数的幂级数之和不对啊，一个是$\cos^n\theta$一个是$cosn\theta$，</p>
+<script type="math/tex; mode=display">
+\mathcal{B}\left(\mathbf{a}_{N}, \cos \theta\right)=\sum_{n=0}^{N} a_{N, n} \cos ^{n} \theta=\mathbf{a}_{N}^{T} \mathbf{p}(\cos \theta)</script><script type="math/tex; mode=display">
+\begin{aligned} \mathbf{a}_{N} &=\left[\begin{array}{llll}{a_{N, 0}} & {a_{N, 1}} & {\cdots} & {a_{N, N}}\end{array}\right]^{T} \\ \mathbf{p}(\cos \theta) &=\left[\begin{array}{llll}{1} & {\cos \theta} & {\cdots} & {\cos ^{N} \theta}\end{array}\right]^{T} \end{aligned}</script><p>这个差别还是很明显的，但是其实二者本质上是等价的（三角函数 + 递归公式）。别看这个公式细小的差别，<strong>写成$cosn\theta$x形式之后就可以在另一组正交基上解释beampattern了！</strong></p>
+<h2 id="波束模式化简求解"><a href="#波束模式化简求解" class="headerlink" title="波束模式化简求解"></a>波束模式化简求解</h2><p>为了方便运算，把beampattern简化成下式：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathcal{B}[\mathbf{h}(f), \cos \theta] &=\mathbf{d}^{H}(f, \cos \theta) \mathbf{h}(f) \\ &=\sum_{m=1}^{M} H_{m}(f) e^{\bar{f}_{m} \cos \theta} \end{aligned}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\bar{f}_{m}=\frac{2 \pi \delta}{c}(m-1) f=2 \pi \tau_{0}(m-1) f</script><p>经过一些列的推导，假设（Jacobi-Anger Expansion）,</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathcal{B}[\mathbf{h}(f), \cos \theta] &=\sum_{m=1}^{M} H_{m}(f) e^{\jmath \bar{f}_{m} \cos \theta} \\ &=\sum_{m=1}^{M} H_{m}(f) \sum_{n=0}^{\infty} \jmath_{n} J_{n}\left(\bar{f}_{m}\right) \cos (n \theta) \\ &=\sum_{n=0}^{\infty} \cos (n \theta)\left[\sum_{m=1}^{M} \jmath_{n} J_{n}\left(\bar{f}_{m}\right) H_{m}(f)\right] \end{aligned}</script><p>写成N阶的形式：</p>
+<script type="math/tex; mode=display">
+\mathcal{B}_{N}[\mathbf{h}(f), \cos \theta]=\sum_{n=0}^{N} \cos (n \theta)\left[\sum_{m=1}^{M} \jmath_{n} J_{n}\left(\bar{f}_{m}\right) H_{m}(f)\right]</script><p>其中$J_n(z)$是第一类贝塞尔函数。</p>
+<script type="math/tex; mode=display">
+\jmath_{n}=\left\{\begin{array}{ll}{1,} & {n=0} \\ {2 \jmath^{n},} & {n=1,2, \ldots, N}\end{array}\right.</script><p>基于上述，我们就可以为所欲为了。</p>
+<h2 id="Nonrubust-Method"><a href="#Nonrubust-Method" class="headerlink" title="Nonrubust Method"></a>Nonrubust Method</h2><p>M个麦克风，设计N阶模式，$M=N+1$。</p>
+<p>Nonrubust是因为和之前许多篇幅讲述的一样，是因为它的white noise gain。</p>
+<p>把beampattern写成</p>
+<script type="math/tex; mode=display">
+\mathcal{B}_{M-1}[\mathbf{h}(f), \cos \theta]=\sum_{i=0}^{M-1} \cos (i \theta) \overline{\mathbf{b}}_{i}^{T}(f) \mathbf{h}(f)</script><p>其中</p>
+<script type="math/tex; mode=display">
+\overline{\mathbf{b}}_{i}(f)=\jmath_{i}\left[J_{i}\left(\bar{f}_{1}\right) \quad J_{i}\left(\bar{f}_{2}\right) \quad \cdots \quad J_{i}\left(\bar{f}_{M}\right)\right]^{T}</script><p>对比下文章开头提到的</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathcal{B}\left(\mathbf{b}_{N}, \cos \theta\right) &=\sum_{n=0}^{N} b_{N, n} \cos (n \theta) \\ &=\mathbf{b}_{N}^{T} \mathbf{p}_{\mathrm{C}}(\cos \theta) \end{aligned}</script><p>可以得到：</p>
+<script type="math/tex; mode=display">
+\overline{\mathbf{B}}_{M-1}(f) \mathbf{h}(f)=\mathbf{b}_{M-1}</script><script type="math/tex; mode=display">
+\overline{\mathbf{B}}_{M-1}(f)=\left[\begin{array}{c}{\overline{\mathbf{b}}_{0}^{T}(f)} \\ {\overline{\mathbf{b}}_{1}^{T}(f)} \\ {\vdots} \\ {\overline{\mathbf{b}}_{M-1}^{T}(f)}\end{array}\right]</script><p>于是我们要求的$h(f)$就可以写成：</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_{\mathrm{NR}}(f)=\overline{\mathbf{B}}_{M-1}^{-1}(f) \mathbf{b}_{M-1}</script><p><strong>其中矩阵$B$是可求的，$b_{M-1}$是我们设计的模式的余弦级数的系数。就是这么简单。</strong></p>
+<p>以麦克风间距为0.5，给予b不同的值也可以得到偶极子、心形、Hyper和super超心形，如下图，如果仔细点不难发现陷落角的角度比差分波束形成中的陷落幅度要低很多，这是因为上述近似(Jacob-Anger)引起的。</p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/non_rubust_beampattern.png" style="zoom:50%;"></p>
+<p>以b= [0.25, 0.75] 麦克风间距遍历0.1，1，2，3cm的hypercardioid麦克风为例看下DF和WNG的表现。麦克风间距要小会有不错的DF但是WNG很差。增大麦克风间距了WNG会表现的不错，但是最初的假设以及beampattern的形状肯定会受损，这和之前差分波束形成是一样的。</p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/non_rubust_df.png" style="zoom:33%;"></p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/non_rubust_wng.png" style="zoom:33%;"></p>
+<h2 id="Robust-Method"><a href="#Robust-Method" class="headerlink" title="Robust Method"></a>Robust Method</h2><p>和差分波束形成中一样，要想提升WNG的性能，更Robust一些，那么就只能增加麦克风的个数求解最小范数解了。</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_{\mathrm{R}}(f)=\overline{\mathbf{B}}_{N}^{H}(f)\left[\overline{\mathbf{B}}_{N}(f) \overline{\mathbf{B}}_{N}^{H}(f)\right]^{-1} \mathbf{b}_{N}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\overline{\mathbf{B}}_{N}(f)=\left[\begin{array}{c}{\overline{\mathbf{b}}_{0}^{T}(f)} \\ {\overline{\mathbf{b}}_{1}^{T}(f)} \\ {\vdots} \\ {\overline{\mathbf{b}}_{N}^{T}(f)}\end{array}\right]</script><p>看下M=2（就是Nonrubust）和4时候的Hypercardioid的beampattern，其实差的不太多。</p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/rubust_beampattern.png" style="zoom:50%;"></p>
+<p>但是WNG和DF差的就比较多了，对比了M=2、4、6、8时候的DF和WNG。可以得到结论：波束模式基本不变的情况下，麦克风数越多，WNG越稳定，但是DF会相对下降。</p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/rubust_df.png" style="zoom:33%;"></p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/rubust_wng.png" style="zoom:33%;"></p>
+<h2 id="Freq-Invariant"><a href="#Freq-Invariant" class="headerlink" title="Freq-Invariant"></a>Freq-Invariant</h2><p>引入目标函数，使其最小化可得到频率不变的（变化最小）beampattern：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} J_{\mathrm{FI}}[\mathbf{h}(f)] &=\frac{1}{\pi} \int_{0}^{\pi}|\mathcal{B}[\mathbf{h}(f), \cos \theta]|^{2} d \theta \\ &=\mathbf{h}^{H}(f) \mathbf{\Gamma}_{\mathrm{C}}(f) \mathbf{h}(f) \end{aligned}</script><p>其中：</p>
+<script type="math/tex; mode=display">
+\mathbf{\Gamma}_{\mathrm{C}}(f)=\frac{1}{\pi} \int_{0}^{\pi} \mathbf{d}(f, \cos \theta) \mathbf{d}^{H}(f, \cos \theta) d \theta</script><p>设计beampattern的问题就变成了约束的优化问题：</p>
+<script type="math/tex; mode=display">
+\min _{\mathbf{h}(f)} \mathbf{h}^{H}(f) \mathbf{\Gamma}_{\mathrm{C}}(f) \mathbf{h}(f) \quad \text { subject to } \quad \overline{\mathbf{B}}_{N}(f) \mathbf{h}(f)=\mathbf{b}_{N}</script><p>得到的结果为：</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_{\mathrm{FI}}(f)=\boldsymbol{\Gamma}_{\mathrm{C}}^{-1}(f) \overline{\mathbf{B}}_{N}^{H}(f)\left[\overline{\mathbf{B}}_{N}(f) \boldsymbol{\Gamma}_{\mathrm{C}}^{-1}(f) \overline{\mathbf{B}}_{N}^{H}(f)\right]^{-1} \mathbf{b}_{N}</script><p>这个结果可以预想到WNG会很差，所以引入一个平衡因子用以控制WNG</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_{\mathrm{FI}, \epsilon}(f)=\mathbf{\Gamma}_{\mathrm{C}, \epsilon}^{-1}(f) \overline{\mathbf{B}}_{N}^{H}(f)\left[\overline{\mathbf{B}}_{N}(f) \Gamma_{\mathrm{C}, \epsilon}^{-1}(f) \overline{\mathbf{B}}_{N}^{H}(f)\right]^{-1} \mathbf{b}_{N}</script><p>其中：</p>
+<script type="math/tex; mode=display">
+\Gamma_{\mathrm{C}, \epsilon}(f)=\Gamma_{\mathrm{C}}(f)+\epsilon \mathbf{I}_{M}</script><p>以M=6，d=0.5，epsilin=0,0.00001,0.001,1的hypercardioid的beampattern举例：</p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/FreqInvariant_beampattern_polar.png" style="zoom:50%;"></p>
+<p>epsilon增大WNG会增大，同时DF基本不太变化（除了epsilon=1），但看到没beampattern陷落角的陷落幅度相应变小了。这就是上帝给你打开一扇窗，必须要给你关掉一扇门，始终讲究的是一个Tradeoff。</p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/FreqInvariant_beampattern_df.png" style="zoom:33%;"></p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/FreqInvariant_beampattern_wng.png" style="zoom:33%;"></p>
+<h2 id="LeastSquare-Method"><a href="#LeastSquare-Method" class="headerlink" title="LeastSquare Method"></a>LeastSquare Method</h2><p>引入设计波束于最终波束直接的差距的均方值，并作为约束条件优化。</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathcal{E}[\mathbf{h}(f), \cos \theta] &=\mathcal{B}[\mathbf{h}(f), \cos \theta]-\mathcal{B}\left(\mathbf{b}_{N}, \cos \theta\right) \\ &=\mathbf{d}^{H}(f, \cos \theta) \mathbf{h}(f)-\mathbf{p}_{C}^{T}(\cos \theta) \mathbf{b}_{N} \end{aligned}</script><p>得到最小均方值的beamformer，同理引入白噪声平衡因子：</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_{\mathrm{LS}, \epsilon}(f)=\mathbf{\Gamma}_{\mathrm{C}, \epsilon}^{-1}(f) \boldsymbol{\Gamma}_{\mathrm{dpc}}(f) \mathbf{b}_{N}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\Gamma_{\mathrm{dp}_{\mathrm{C}}}(f)=\frac{1}{\pi} \int_{0}^{\pi} \mathrm{d}(f, \cos \theta) \mathbf{p}_{\mathrm{C}}^{T}(\cos \theta) d \theta</script><p>这个可以推导其本质上是和上节的Freq_Invariant是一样的。</p>
+<p>这里面引申一下，抛开本章前提设计的假设，假设还是基于Fixedbeamforming的假设，我们得到另外一个beamformer：</p>
+<script type="math/tex; mode=display">
+\min _{\mathbf{h}(f)} \operatorname{LSE}[\mathbf{h}(f)] \quad \text { subject to } \quad \mathbf{h}^{H}(f) \mathbf{d}(f, 1)=1</script><script type="math/tex; mode=display">
+\mathbf{h}_{\mathrm{CLS}, \epsilon}(f)=\mathbf{h}_{\mathrm{LS}, \epsilon}(f)-\frac{1-\mathbf{d}^{H}(f, 1) \mathbf{h}_{\mathrm{LS}, \epsilon}(f)}{\mathbf{d}^{H}(f, 1) \mathbf{\Gamma}_{\mathrm{C}, \epsilon}^{-1}(f) \mathbf{d}(f, 1)} \mathbf{\Gamma}_{\mathrm{C}, \epsilon}^{-1}(f) \mathbf{d}(f, 1)</script><p>波束模式千篇一律，我们就不多做研究了。</p>
+<p>瞅一瞅RLS的DF和WNG吧（DF的结果与书本不一致）</p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/rls_df.png" style="zoom:33%;"></p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/rls_wng.png" style="zoom:33%;"></p>
+<h2 id="联合优化"><a href="#联合优化" class="headerlink" title="联合优化"></a>联合优化</h2><p>在前面的波束形成设计中，只能在给定条件下，再给一个约束条件求解系数。即一个是目标优化函数，一个是设计条件，无法再引入第三个条件，比如endfire设计方向无损失。联合优化的方法就是通过数学技巧构造了一个矩阵，使得满足设计模式、endfire方向不失真的情况下，在去优化目标。</p>
+<p>两个约束条件，加一个目标函数，即联合优化。</p>
+<p>一共有三个：</p>
+<ol>
+<li>最大化白噪声增益</li>
+<li>设计模式最小化误差（最小均方）</li>
+<li>上述两者的组合</li>
+</ol>
+<p>公式又臭又长，不上了，直接对比DF和WNG的性能吧。</p>
+<p>对比了M=6，d=0.5，一阶hypercardioid的MaxWNG和最小化误差，以及mu=0，0.5，0.9，0.99情况下的tradeoff。</p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/joint_df.png" style="zoom:40%;"></p>
+<p><img src="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/joint_wng.png" style="zoom:40%;"></p>
+<p>太累了，不写了。这部分估计用的不多。嗯。</p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag"><i class="fa fa-tag"></i> 波束形成</a>
+              <a href="/tags/beamforming/" rel="tag"><i class="fa fa-tag"></i> beamforming</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/08/Python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E8%A6%81%E5%A4%9A%E4%BD%BF%E7%94%A8%E8%BF%99%E4%BA%9B%E8%AF%AD%E6%B3%95%E7%B3%96%E5%95%8A/" rel="next" title="Python面向对象中要多使用这些语法啊！">
+                  <i class="fa fa-chevron-left"></i> Python面向对象中要多使用这些语法啊！
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#再探波束模式"><span class="nav-number">1.</span> <span class="nav-text">再探波束模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#波束模式化简求解"><span class="nav-number">2.</span> <span class="nav-text">波束模式化简求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nonrubust-Method"><span class="nav-number">3.</span> <span class="nav-text">Nonrubust Method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Robust-Method"><span class="nav-number">4.</span> <span class="nav-text">Robust Method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Freq-Invariant"><span class="nav-number">5.</span> <span class="nav-text">Freq-Invariant</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeastSquare-Method"><span class="nav-number">6.</span> <span class="nav-text">LeastSquare Method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#联合优化"><span class="nav-number">7.</span> <span class="nav-text">联合优化</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">数据挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">123k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:52</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
