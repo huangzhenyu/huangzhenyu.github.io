@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="代码写的太乱了，安利利器：设计模式。">
+<meta name="keywords" content="Python,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python设计模式（一）：工厂模式">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;10&#x2F;Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="代码写的太乱了，安利利器：设计模式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-10T14:02:58.639Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/12/10/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python设计模式（一）：工厂模式 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/12/10/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python设计模式（一）：工厂模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-10 21:47:15 / 修改时间：22:02:58" itemprop="dateCreated datePublished" datetime="2019-12-10T21:47:15+08:00">2019-12-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/10/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/10/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+            <div class="post-description">代码写的太乱了，安利利器：设计模式。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>自己写面向对象发现代码写的杂乱无章，一点结构组织都没有，看大牛写的代码，整洁干净思路清晰，敬佩之心油然而生。有幸得知有一门艺术学科“设计模式”是专门教人如何写易维护、易扩展的代码，索性入坑。</p><p>本文参考：</p><p> <a href="https://www.cnblogs.com/wly923/archive/2013/05/10/3068313.html" target="_blank" rel="noopener">Python实践设计模式(一)概述和工厂模式</a></p><p>精通Python设计模式</p><p>正文：</p><p>对类的实例化过程进行了抽象，能够使软件模块做到与对象创建和组织的无关性。为了使体系结构更加清晰，一些软件在设计上要求当创建类的具体实例时，能够根据具体的语境来动态地决定怎样创建对象，创建哪些对象，以及怎样组织和表示这些对象，而创建型模式所要描述的就是该如何来解决这些问题。</p><a id="more"></a>
+
+
+
+
+
+<p>创建型模式包括以下几种：</p>
+<p>1.Simple Factory模式（有的地方不把他归为设计模式）<br>　　专门定义一个类来负责创建其它类的实例，被创建的实例通常都具有共同的父类。</p>
+<p>2.Factory Method模式<br>　　将对象的创建交由父类中定义的一个标准方法来完成，而不是其构造函数，究竟应该创建何种对象由具体的子类负责决定。</p>
+<p>3.Abstract Factory模式<br>　　提供一个共同的接口来创建相互关联的多个对象。</p>
+<p><strong>1.Simple Factory模式</strong></p>
+<p>Simple Factory模式不是独立的设计模式，他是Factory Method模式的一种简单的、特殊的实现。他也被称为静态工厂模式，通常创建者的创建方法被设计为static方便调用，但是python没有static一说。所以可以把创建者也就是工厂设计为一个普通class或全局函数即可。如果是class还需要实例化才能调用工厂方法，而全局函数比较简单，比较接近静态工厂的简便特性。</p>
+<p>Simple Factory模式包含以下角色部分：</p>
+<p>1) 工厂类角色：这是本模式的核心，含有一定的商业逻辑和判断逻辑。由一个具体类实现，通常该类的工厂方法是静态的。<strong>在python中工厂为一个普通class或全局函数</strong>。</p>
+<p>2) 抽象产品角色：它一般是具体产品继承的父类或者实现的接口。由接口或者抽象类来实现。在python中抽象产品一般为父类。</p>
+<p>3) 具体产品角色：工厂类所创建的对象就是此角色的实例。由一个具体类实现。</p>
+<p>一个Simple Factory模式代码实例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">1</span> <span class="class"><span class="keyword">class</span> <span class="title">car</span>:</span></span><br><span class="line"> <span class="number">2</span>     <span class="string">'''interface as Product 抽象产品或类'''</span></span><br><span class="line"> <span class="number">3</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"> <span class="number">4</span>         <span class="keyword">pass</span></span><br><span class="line"> <span class="number">5</span> </span><br><span class="line"> <span class="number">6</span> <span class="class"><span class="keyword">class</span> <span class="title">BMW</span><span class="params">(car)</span>:</span></span><br><span class="line"> <span class="number">7</span>     <span class="string">'''Concrete Product 具体产品'''</span></span><br><span class="line"> <span class="number">8</span>     <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,carname)</span>:</span></span><br><span class="line"> <span class="number">9</span>         self.__name=carname</span><br><span class="line"><span class="number">10</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">11</span>         <span class="keyword">print</span> <span class="string">"Drive the BMW as "</span>+self.__name</span><br><span class="line"><span class="number">12</span> </span><br><span class="line"><span class="number">13</span> <span class="class"><span class="keyword">class</span> <span class="title">Benz</span><span class="params">(car)</span>:</span></span><br><span class="line"><span class="number">14</span>     <span class="string">'''Concrete Product 具体产品'''</span></span><br><span class="line"><span class="number">15</span>     <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,carname)</span>:</span></span><br><span class="line"><span class="number">16</span>         self.__name=carname</span><br><span class="line"><span class="number">17</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">18</span>         <span class="keyword">print</span> <span class="string">"Drive the Benz as "</span>+self.__name</span><br><span class="line"><span class="number">19</span> </span><br><span class="line"><span class="number">20</span> <span class="class"><span class="keyword">class</span> <span class="title">driver</span>:</span></span><br><span class="line"><span class="number">21</span>     <span class="string">'''Factory also called Creator 工厂'''</span></span><br><span class="line"><span class="number">22</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverCar</span><span class="params">(self,name)</span>:</span></span><br><span class="line"><span class="number">23</span>         <span class="keyword">if</span> name==<span class="string">"BMW"</span>:</span><br><span class="line"><span class="number">24</span>             <span class="keyword">return</span> BMW(<span class="string">"BMW"</span>)</span><br><span class="line"><span class="number">25</span>         <span class="keyword">elif</span> name==<span class="string">"Benz"</span>:</span><br><span class="line"><span class="number">26</span>             <span class="keyword">return</span> Benz(<span class="string">"Benz"</span>)</span><br><span class="line"><span class="number">27</span>         <span class="keyword">else</span>:</span><br><span class="line"><span class="number">28</span>             <span class="keyword">raise</span> MyInputException(name)</span><br><span class="line"><span class="number">29</span> </span><br><span class="line"><span class="number">30</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInputException</span><span class="params">(Exception)</span>:</span>  </span><br><span class="line"><span class="number">31</span>     <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>  </span><br><span class="line"><span class="number">32</span>         Exception.__init__(self)  </span><br><span class="line"><span class="number">33</span>         self.name = name</span><br><span class="line"><span class="number">34</span>  </span><br><span class="line"><span class="number">35</span> </span><br><span class="line"><span class="number">36</span> <span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line"><span class="number">37</span>     <span class="keyword">print</span> <span class="string">"please input \"BMW\" or \"Benz\" :"</span></span><br><span class="line"><span class="number">38</span>     carname=raw_input()</span><br><span class="line"><span class="number">39</span>     dier=driver()</span><br><span class="line"><span class="number">40</span>     <span class="keyword">try</span>:</span><br><span class="line"><span class="number">41</span>         d=dier.driverCar(carname)</span><br><span class="line"><span class="number">42</span>     <span class="keyword">except</span> MyInputException,e:</span><br><span class="line"><span class="number">43</span>         <span class="keyword">print</span> <span class="string">"input worry name "</span>+e.name</span><br><span class="line"><span class="number">44</span>     <span class="keyword">else</span>:</span><br><span class="line"><span class="number">45</span>         d.drive()</span><br></pre></td></tr></table></figure>
+<p>用全局函数改写工厂类，其他部分省略，变化部分如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">1</span> <span class="string">'''Factory also called Creator 工厂'''</span></span><br><span class="line"> <span class="number">2</span> <span class="function"><span class="keyword">def</span> <span class="title">driver</span><span class="params">(name)</span>:</span> </span><br><span class="line"> <span class="number">3</span>     <span class="keyword">if</span> name==<span class="string">"BMW"</span>:</span><br><span class="line"> <span class="number">4</span>         <span class="keyword">return</span> BMW(<span class="string">"BMW"</span>)</span><br><span class="line"> <span class="number">5</span>     <span class="keyword">elif</span> name==<span class="string">"Benz"</span>:</span><br><span class="line"> <span class="number">6</span>         <span class="keyword">return</span> Benz(<span class="string">"Benz"</span>)</span><br><span class="line"> <span class="number">7</span>     <span class="keyword">else</span>:</span><br><span class="line"> <span class="number">8</span>         <span class="keyword">raise</span> MyInputException(name)</span><br><span class="line"> <span class="number">9</span> </span><br><span class="line"><span class="number">10</span> <span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line"><span class="number">11</span>     <span class="keyword">print</span> <span class="string">"please input \"BMW\" or \"Benz\" :"</span></span><br><span class="line"><span class="number">12</span>     carname=raw_input()</span><br><span class="line"><span class="number">13</span>     <span class="keyword">try</span>:</span><br><span class="line"><span class="number">14</span>         d=driver(carname)</span><br><span class="line"><span class="number">15</span>     <span class="keyword">except</span> MyInputException,e:</span><br><span class="line"><span class="number">16</span>         <span class="keyword">print</span> <span class="string">"input worry name "</span>+e.name</span><br><span class="line"><span class="number">17</span>     <span class="keyword">else</span>:</span><br><span class="line"><span class="number">18</span>         d.drive()</span><br></pre></td></tr></table></figure>
+<p> 　<strong>2. Factory Method工厂模式</strong></p>
+<p>工厂方法模式去掉了简单工厂模式中工厂方法的静态属性，使得它可以被子类继承。<strong>对于python来说，就是工厂类被具体工厂继承</strong>。这样在简单工厂模式里集中在工厂方法上的压力可以由工厂方法模式里不同的工厂子类来分担。也就是工厂外面再封装一层。</p>
+<p>1) 抽象工厂角色： 这是工厂方法模式的核心，它与应用程序无关。是具体工厂角色必须实现的接口或者必须继承的父类。</p>
+<p>2) 具体工厂角色：它含有和具体业务逻辑有关的代码。由应用程序调用以创建对应的具体产品的对象。</p>
+<p>3) 抽象产品角色：它是具体产品继承的父类或者是实现的接口。在python中抽象产品一般为父类。</p>
+<p>4) 具体产品角色：具体工厂角色所创建的对象就是此角色的实例。由一个具体类实现。</p>
+<p> 一个Factory Method代码实例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">1</span> <span class="class"><span class="keyword">class</span> <span class="title">car</span>:</span></span><br><span class="line"> <span class="number">2</span>     <span class="string">'''interface as Product 抽象产品'''</span></span><br><span class="line"> <span class="number">3</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"> <span class="number">4</span>         <span class="keyword">pass</span></span><br><span class="line"> <span class="number">5</span> </span><br><span class="line"> <span class="number">6</span> <span class="class"><span class="keyword">class</span> <span class="title">BMW</span><span class="params">(car)</span>:</span></span><br><span class="line"> <span class="number">7</span>     <span class="string">'''Concrete Product 具体产品'''</span></span><br><span class="line"> <span class="number">8</span>     <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,carname)</span>:</span></span><br><span class="line"> <span class="number">9</span>         self.__name=carname</span><br><span class="line"><span class="number">10</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">11</span>         <span class="keyword">print</span> <span class="string">"Drive the BMW as "</span>+self.__name</span><br><span class="line"><span class="number">12</span> </span><br><span class="line"><span class="number">13</span> <span class="class"><span class="keyword">class</span> <span class="title">Benz</span><span class="params">(car)</span>:</span></span><br><span class="line"><span class="number">14</span>     <span class="string">'''Concrete Product 具体产品'''</span></span><br><span class="line"><span class="number">15</span>     <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,carname)</span>:</span></span><br><span class="line"><span class="number">16</span>         self.__name=carname</span><br><span class="line"><span class="number">17</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">18</span>         <span class="keyword">print</span> <span class="string">"Drive the Benz as "</span>+self.__name</span><br><span class="line"><span class="number">19</span> </span><br><span class="line"><span class="number">20</span> <span class="class"><span class="keyword">class</span> <span class="title">driver</span>:</span></span><br><span class="line"><span class="number">21</span>     <span class="string">'''Factory also called Creator 抽象工厂'''</span></span><br><span class="line"><span class="number">22</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverCar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">23</span>         <span class="keyword">return</span> car()</span><br><span class="line"><span class="number">24</span> </span><br><span class="line"><span class="number">25</span> <span class="class"><span class="keyword">class</span> <span class="title">BMWdriver</span><span class="params">(driver)</span>:</span></span><br><span class="line"><span class="number">26</span>     <span class="string">'''Concrete Creator 具体工厂'''</span></span><br><span class="line"><span class="number">27</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverCar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">28</span>         <span class="keyword">return</span> BMW(<span class="string">"BMW"</span>)</span><br><span class="line"><span class="number">29</span> </span><br><span class="line"><span class="number">30</span> <span class="class"><span class="keyword">class</span> <span class="title">Benzdriver</span><span class="params">(driver)</span>:</span></span><br><span class="line"><span class="number">31</span>     <span class="string">'''Concrete Creator 具体工厂'''</span></span><br><span class="line"><span class="number">32</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverCar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">33</span>         <span class="keyword">return</span> Benz(<span class="string">"Benz"</span>)    </span><br><span class="line"><span class="number">34</span> </span><br><span class="line"><span class="number">35</span> <span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line"><span class="number">36</span>     driver=BMWdriver()</span><br><span class="line"><span class="number">37</span>     car=driver.driverCar()</span><br><span class="line"><span class="number">38</span>     car.drive()</span><br><span class="line"><span class="number">39</span>     driver=Benzdriver()</span><br><span class="line"><span class="number">40</span>     car=driver.driverCar()</span><br><span class="line"><span class="number">41</span>     car.drive()</span><br></pre></td></tr></table></figure>
+<p>　　<strong>3. Abstract Factory模式</strong></p>
+<p>抽象工厂是工厂模式的进一步延伸，产品的类变的更加复杂，也就说产品不只是一个接口或父类而是有多个接口和父类了，形成了一个产品族的概念。</p>
+<p><strong>同属于单个类的许多个工厂方法用于创建一系列种类相关对象。</strong></p>
+<p>模式的角色与Factory Method基本一样：</p>
+<p>抽象工厂模式的用意为：给客户端提供一个接口，可以创建多个产品族中的产品对象。 不过使用抽象工厂是有条件的：<br>1.系统中有多个产品族，而系统一次只可能消费其中一族产品<br>2.同属于同一个产品族的产品在一起使用，这一约束必须在系统的设计中体现出来。 </p>
+<p>简单的实现代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">1</span> <span class="class"><span class="keyword">class</span> <span class="title">Newcar</span>:</span></span><br><span class="line"> <span class="number">2</span>     <span class="string">'''Abstract Product 产品抽象'''</span></span><br><span class="line"> <span class="number">3</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"> <span class="number">4</span>         <span class="keyword">pass</span></span><br><span class="line"> <span class="number">5</span> </span><br><span class="line"> <span class="number">6</span> <span class="class"><span class="keyword">class</span> <span class="title">NewBMW</span><span class="params">(Newcar)</span>:</span></span><br><span class="line"> <span class="number">7</span>     <span class="string">'''Concrete Product 具体产品一'''</span></span><br><span class="line"> <span class="number">8</span>     <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,carname)</span>:</span></span><br><span class="line"> <span class="number">9</span>         self.__name=carname</span><br><span class="line"><span class="number">10</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">11</span>         <span class="keyword">print</span> <span class="string">"Drive the New BMW as "</span>+self.__name</span><br><span class="line"><span class="number">12</span> </span><br><span class="line"><span class="number">13</span> <span class="class"><span class="keyword">class</span> <span class="title">NewBenz</span><span class="params">(Newcar)</span>:</span></span><br><span class="line"><span class="number">14</span>     <span class="string">'''Concrete Product 具体产品二'''</span></span><br><span class="line"><span class="number">15</span>     <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,carname)</span>:</span></span><br><span class="line"><span class="number">16</span>         self.__name=carname</span><br><span class="line"><span class="number">17</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">18</span>         <span class="keyword">print</span> <span class="string">"Drive the New Benz as "</span>+self.__name</span><br><span class="line"><span class="number">19</span> </span><br><span class="line"><span class="number">20</span> <span class="class"><span class="keyword">class</span> <span class="title">Oldcar</span>:</span></span><br><span class="line"><span class="number">21</span>     <span class="string">'''Abstract Product 抽象产品'''</span></span><br><span class="line"><span class="number">22</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">23</span>         <span class="keyword">pass</span></span><br><span class="line"><span class="number">24</span> </span><br><span class="line"><span class="number">25</span> <span class="class"><span class="keyword">class</span> <span class="title">OldBMW</span><span class="params">(Oldcar)</span>:</span></span><br><span class="line"><span class="number">26</span>     <span class="string">'''Concrete Product 具体产品一'''</span></span><br><span class="line"><span class="number">27</span>     <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,carname)</span>:</span></span><br><span class="line"><span class="number">28</span>         self.__name=carname</span><br><span class="line"><span class="number">29</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">30</span>         <span class="keyword">print</span> <span class="string">"Drive the Old BMW as "</span>+self.__name</span><br><span class="line"><span class="number">31</span> </span><br><span class="line"><span class="number">32</span> <span class="class"><span class="keyword">class</span> <span class="title">OldBenz</span><span class="params">(Oldcar)</span>:</span></span><br><span class="line"><span class="number">33</span>     <span class="string">'''Concrete Product 具体产品二'''</span></span><br><span class="line"><span class="number">34</span>     <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,carname)</span>:</span></span><br><span class="line"><span class="number">35</span>         self.__name=carname</span><br><span class="line"><span class="number">36</span>     <span class="function"><span class="keyword">def</span> <span class="title">drive</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">37</span>         <span class="keyword">print</span> <span class="string">"Drive the Old Benz as "</span>+self.__name</span><br><span class="line"><span class="number">38</span> </span><br><span class="line"><span class="number">39</span> <span class="class"><span class="keyword">class</span> <span class="title">driver</span>:</span></span><br><span class="line"><span class="number">40</span>     <span class="string">'''Abstract Factory also called Creator 抽象工厂'''</span></span><br><span class="line"><span class="number">41</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverNewCar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">42</span>         <span class="keyword">return</span> Newcar()</span><br><span class="line"><span class="number">43</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverOldCar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">44</span>         <span class="keyword">return</span> Oldcar()</span><br><span class="line"><span class="number">45</span> </span><br><span class="line"><span class="number">46</span> <span class="class"><span class="keyword">class</span> <span class="title">BMWdriver</span><span class="params">(driver)</span>:</span></span><br><span class="line"><span class="number">47</span>     <span class="string">'''Concrete Factory or Creator 产品组装厂一'''</span></span><br><span class="line"><span class="number">48</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverNewCar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">49</span>         <span class="keyword">return</span> NewBMW(<span class="string">"NewBMW"</span>)</span><br><span class="line"><span class="number">50</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverOldCar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">51</span>         <span class="keyword">return</span> OldBMW(<span class="string">"OldBMW"</span>)</span><br><span class="line"><span class="number">52</span> </span><br><span class="line"><span class="number">53</span> <span class="class"><span class="keyword">class</span> <span class="title">Benzdriver</span><span class="params">(driver)</span>:</span></span><br><span class="line"><span class="number">54</span>     <span class="string">'''Concrete Factory or Creator 产品组装厂二'''</span></span><br><span class="line"><span class="number">55</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverNewCar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">56</span>         <span class="keyword">return</span> NewBenz(<span class="string">"NewBenz"</span>)</span><br><span class="line"><span class="number">57</span>     <span class="function"><span class="keyword">def</span> <span class="title">driverOldCar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="number">58</span>         <span class="keyword">return</span> OldBenz(<span class="string">"OldBenz"</span>)    </span><br><span class="line"><span class="number">59</span> </span><br><span class="line"><span class="number">60</span> <span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line"><span class="number">61</span>     driver=BMWdriver()</span><br><span class="line"><span class="number">62</span>     car=driver.driverNewCar()</span><br><span class="line"><span class="number">63</span>     car.drive()</span><br><span class="line"><span class="number">64</span>     car=driver.driverOldCar()</span><br><span class="line"><span class="number">65</span>     car.drive()</span><br><span class="line"><span class="number">66</span>     driver=Benzdriver()</span><br><span class="line"><span class="number">67</span>     car=driver.driverNewCar()</span><br><span class="line"><span class="number">68</span>     car.drive()</span><br><span class="line"><span class="number">69</span>     car=driver.driverOldCar()</span><br><span class="line"><span class="number">70</span>     car.drive()</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 设计模式</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/09/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9A%E6%B3%A2%E6%9D%9F%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" rel="next" title="波束形成技术（六）：波束模式设计">
+                  <i class="fa fa-chevron-left"></i> 波束形成技术（六）：波束模式设计
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">数据挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">129k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:57</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
