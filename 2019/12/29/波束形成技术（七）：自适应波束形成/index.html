@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="终于到自适应波束形成了">
+<meta name="keywords" content="波束形成,beamforming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="波束形成技术（七）：自适应波束形成">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="终于到自适应波束形成了">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;wiener_beampattern.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;wiener_performance.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;mvdr_beampattern.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;MVDR_performance.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;tradeoff_beampattern.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;tradeoff_performance_M30.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;lcmv_beampattern.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;lcmv_performance.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;doa_m2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;doa_m12.png">
+<meta property="og:updated_time" content="2019-12-30T01:03:40.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;29&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;wiener_beampattern.png">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>波束形成技术（七）：自适应波束形成 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          波束形成技术（七）：自适应波束形成
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-29 20:57:15" itemprop="dateCreated datePublished" datetime="2019-12-29T20:57:15+08:00">2019-12-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-30 09:03:40" itemprop="dateModified" datetime="2019-12-30T09:03:40+08:00">2019-12-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%AD%E9%9F%B3%E5%A2%9E%E5%BC%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">语音增强</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+            <div class="post-description">终于到自适应波束形成了</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>终于到自适应波束形成了，距离上一期有关波束形成的更新有20天了，不是我不努力，实在是自适应太难搞，加上早之前写的代码烂到天际，看起来无比吃力，好吧，早晚都会有这么一个过程，来的越早越好。</p><p>回归正文，自适应波束形成（Adaptive Beamforming，以下简称AB）是指阵列系数跟随声场状态变化而不停变化的波束形成技术。Adaptive由此而来，但是变化到什么样的状态才能停止，停止有何依据？如何得到这个依据？这两个问题也是AB的核心问题，即AB的损失函数与如何根据能观测到的物理量得到这个损失函数。AB问题也由此转变为优化问题。</p><a id="more"></a>
+
+<h2 id="声场统计物理量"><a href="#声场统计物理量" class="headerlink" title="声场统计物理量"></a>声场统计物理量</h2><p>由于需要借助声场的统计物理量来得到不同的损失函数，所以很有必要说明以下两个统计物理量：</p>
+<p>1.观测信号的相关系数矩阵（空间功率谱密度矩阵），其中v表示噪声，x表示desired 信号，噪声和期望信号不相关。小phi表示方差，大phi表示矩阵。</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathbf{\Phi}_{\mathbf{y}}(f) &=\mathbf{\Phi}_{\mathbf{x}}(f)+\mathbf{\Phi}_{\mathbf{v}}(f) \\ &=\phi_{X}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right) \mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right)+\mathbf{\Phi}_{\mathbf{v}}(f) \end{aligned}</script><p>2.观测信号的方差：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \phi_{Z}(f) &=\phi_{X_{\mathrm{fd}}}(f)+\phi_{V_{\mathrm{rn}}}(f) \\ &=\phi_{X}(f)\left|\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)\right|^{2}+\mathbf{h}^{H}(f) \mathbf{\Phi}_{\mathbf{v}}(f) \mathbf{h}(f) \end{aligned}</script><p>上述两式包含信号的相关系数矩阵和方差，以及噪声的相关系数矩阵和方差，这些统计量在不同的AB中或多或少都会用到。</p>
+<h2 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h2><p>由于噪声场的变化，所以AB不像FB（FixedBeamformer）一样，有着放之四海而皆准的噪声场评价指标（白噪声增益和指向性因数）。但AB的不同约束准则，会对阵列的输入输出信噪比、输入输出噪声抑制、输入输出信号损益等有着不同的影响，在正式列出不同的AB时，也很有必要介绍一些这些性能指标的由来。这些指标可以是单频的也可以是宽带（单频累积叠加，积分求和）的，一般而言提到这些指标会默认是宽带。</p>
+<p>1.阵列的增益，输出信噪比 比上输入信噪比，</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathcal{G}[\mathbf{h}(f)] &=\frac{\operatorname{oSNR}[\mathbf{h}(f)]}{\mathrm{iSNR}(f)} \\ \mathcal{G}(\mathbf{h}) &=\frac{\operatorname{oSNR}(\mathbf{h})}{\mathrm{iSNR}} \end{aligned}</script><p>2.降噪因数，噪声输入能量</p>
+<script type="math/tex; mode=display">
+\xi_{\mathrm{n}}(\mathbf{h})=\frac{\int_{f} \phi_{V_{1}}(f) d f}{\int_{f} \mathbf{h}^{H}(f) \mathbf{\Phi}_{\mathbf{v}}(f) \mathbf{h}(f) d f}</script><p>在输入信号不损失情况下，即满足</p>
+<script type="math/tex; mode=display">
+\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)=1</script><p>的条件下阵列增益和降噪因数是相等的。</p>
+<p>3.设计信号损失因数</p>
+<script type="math/tex; mode=display">
+\xi_{\mathrm{d}}(\mathbf{h})=\frac{\int_{f} \phi_{X}(f) d f}{\int_{f} \phi_{X}(f)\left|\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)\right|^{2} d f}</script><p>如果信号不损失，肯定等于1，若是损失那可就大于1了。</p>
+<p>4.设计信号损失指数，3的变式，代表损失了多少</p>
+<script type="math/tex; mode=display">
+v_{\mathrm{d}}(\mathbf{h})=\frac{\int_{f} \phi_{X}(f)\left|\mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)-1\right|^{2} d f}{\int_{f} \phi_{X}(f) d f}</script><p>5.均方误差(MSE)，估计信号和设计信号之间的误差，</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathcal{E}(f) &=Z(f)-X(f) \\ &=X_{\mathrm{fd}}(f)+V_{\mathrm{rn}}(f)-X(f) \\ &=\mathcal{E}_{\mathrm{d}}(f)+\mathcal{E}_{\mathrm{n}}(f) \end{aligned}</script><p>窄带的MSE，表达为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} J[\mathbf{h}(f)]=& E\left[|\mathcal{E}(f)|^{2}\right] \\=& E\left[\left|\mathcal{E}_{\mathrm{d}}(f)\right|^{2}\right]+E\left[\left|\mathcal{E}_{\mathrm{n}}(f)\right|^{2}\right] \\=& J_{\mathrm{d}}[\mathbf{h}(f)]+J_{\mathrm{n}}[\mathbf{h}(f)] \\=& \phi_{X}(f)+\mathbf{h}^{H}(f) \mathbf{\Phi}_{\mathbf{y}}(f) \mathbf{h}(f)-\phi_{X}(f) \mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)-\\ & \quad \phi_{X}(f) \mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right) \mathbf{h}(f) \end{aligned}</script><h2 id="声场介绍"><a href="#声场介绍" class="headerlink" title="声场介绍"></a>声场介绍</h2><p>由于AB在不同声场下的表现不同，所以我们数值仿真一个声场（这个仿真真是搞了太久）：</p>
+<p>  1.信号源来自阵列70度方向，是一个包含了500个采样的正弦脉冲，幅度为A=0.05，频率为 $f_0=0.1c/d_{mic}$，相位随机分布。</p>
+<ol>
+<li>两个能量相同的高斯噪声分别来自阵列的30和50度角方向</li>
+<li>阵列存在高斯底噪，能量是上述干扰信号的0.01倍</li>
+</ol>
+<p>基于上述，信源的能量已经定下来，噪声彼此的相对能量已经定下来，但是噪声相对于信源的能量未定下来，因此可以设置不同的信噪比来模拟不同的场景。</p>
+<p>由此也可以得到声场的不同统计量，比如观测相关系数矩阵、方差等。</p>
+<h2 id="Adaptive-Beamforming"><a href="#Adaptive-Beamforming" class="headerlink" title="Adaptive Beamforming"></a>Adaptive Beamforming</h2><p>介绍完上述，终于可以进入正题了</p>
+<h3 id="Wiener-Beamforming"><a href="#Wiener-Beamforming" class="headerlink" title="Wiener Beamforming"></a>Wiener Beamforming</h3><p>Winer的原则很简单，最小化MSE，得到系数解如下</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_{\mathrm{W}}\left(f, \cos \theta_{\mathrm{d}}\right)=\left[\mathbf{I}_{M}-\mathbf{\Phi}_{\mathrm{y}}^{-1}(f) \mathbf{\Phi}_{\mathrm{v}}(f)\right] \mathbf{i}_{\mathrm{i}}</script><p>或者如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathbf{h}_{\mathrm{W}}\left(f, \cos \theta_{\mathrm{d}}\right)=& \frac{\phi_{X}(f) \Phi_{\mathrm{v}}^{-1}(f) \mathrm{d}\left(f, \cos \theta_{\mathrm{d}}\right)}{1+\phi_{X}(f) \mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right) \mathbf{\Phi}_{\mathrm{v}}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)} \\=& \frac{\mathbf{\Phi}_{\mathrm{v}}^{-1}(f) \mathbf{\Phi}_{\mathbf{y}}(f)-\mathbf{I}_{M}}{1-M+\operatorname{tr}\left[\mathbf{\Phi}_{\mathrm{v}}^{-1}(f) \mathbf{\Phi}_{\mathbf{y}}(f)\right]} \mathbf{i}_{\mathrm{i}} \end{aligned}</script><p>可以看到需要两个统计量，观测信号与噪声信号的相关系数矩阵，不同的表达式需要对其中一个求逆。</p>
+<p>先来看看Wiener的beampattern，以麦克风间距为1cm，输入SNR-10dB为例，可以看到在30和50有两个较低的陷落，且当M变大，陷落的越深，陷落的角度越精确。</p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/wiener_beampattern.png" alt></p>
+<p>再来看不同SNR和M下的Wiener的表现，对于一个给定的SNR，随着M的增加，增益和降噪因数相应增大，而信号损失则相应减小。对于一个给定的M，随着信噪比的增大，四个指标全部减小。</p>
+<p>即信噪比较小的情况下，阵列的输出增益和降噪因数会很大，但相应地信号的损耗因子也会很大，这也是一个tradeoff。</p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/wiener_performance.png" style="zoom:50%;"></p>
+<h3 id="MVDR"><a href="#MVDR" class="headerlink" title="MVDR"></a>MVDR</h3><p>Minumum Variance Distortionless Response</p>
+<p>最小化输出噪声方差的同时信号不失真</p>
+<script type="math/tex; mode=display">
+\min _{\mathbf{h}(f)} \mathbf{h}^{H}(f) \mathbf{\Phi}_{\mathbf{v}}(f) \mathbf{h}(f) \quad \text { subject to } \quad \mathbf{h}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)=1</script><p>解为：</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_{\mathrm{MVDR}}\left(f, \cos \theta_{\mathrm{d}}\right)=\frac{\mathbf{\Phi}_{\mathrm{v}}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}{\mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right) \mathbf{\Phi}_{\mathrm{v}}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}</script><p>或者：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathbf{h}_{\mathrm{MVDR}}\left(f, \cos \theta_{\mathrm{d}}\right)=& \frac{\mathbf{\Phi}_{\mathrm{y}}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}{\mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right) \mathbf{\Phi}_{\mathbf{y}}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)} \\=& \frac{\mathbf{\Gamma}_{\mathbf{y}}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}{\mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right) \mathbf{\Gamma}_{\mathbf{y}}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)} \end{aligned}</script><p>一个需要噪声的统计特征，一个需要观测信号的统计特征。MVDR最大化窄带的阵列增益，但对于宽带增益来说会小于维纳。且理想情况下，输出噪声方差为0，但考虑到混响的存在，在实际情况中是不可能的。</p>
+<p>以麦克风间距为1cm，输入SNR-10dB为例，beampattern的变化和Wiener大差不差。</p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/mvdr_beampattern.png" style="zoom:50%;"></p>
+<p>再来看不同情况下的性能表现，因为是信号不失真，且输出噪声方差最小，阵列增益和噪声降低因数是一样的。</p>
+<p>而信号的损耗因子小到可以忽略不计了。</p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/MVDR_performance.png" style="zoom:50%;"></p>
+<h3 id="Tradeoff"><a href="#Tradeoff" class="headerlink" title="Tradeoff"></a>Tradeoff</h3><p>又来了一个tradeoff，关于降噪和信号的失真，如何保持一个平衡？？</p>
+<p>这个时候需要引入一个banlance的因数了，有以下约束条件：</p>
+<script type="math/tex; mode=display">
+\min _{\mathbf{h}(f)} J_{\mathrm{d}}[\mathbf{h}(f)] \quad \text { subject to } \quad J_{\mathrm{n}}[\mathbf{h}(f)]=\aleph \phi_{V_{1}}(f)</script><p>需要噪声前面的因数确保在0和1之间。</p>
+<p>经过一系列的计算得到一个带$\mu$的式子：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathbf{h}_{\mathrm{T}, \mu}\left(f, \cos \theta_{\mathrm{d}}\right) &=\phi_{X}(f)\left[\mathbf{\Phi}_{\mathbf{x}}(f)+\mu \mathbf{\Phi}_{\mathbf{v}}(f)\right]^{-1} \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right) \\ &=\frac{\phi_{X}(f) \mathbf{\Phi}_{\mathbf{v}}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)}{\mu+\phi_{X}(f) \mathbf{d}^{H}\left(f, \cos \theta_{\mathrm{d}}\right) \mathbf{\Phi}_{\mathbf{v}}^{-1}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)} \\ &=\frac{\mathbf{\Phi}_{\mathbf{v}}^{-1}(f) \mathbf{\Phi}_{\mathbf{y}}(f)-\mathbf{I}_{M}}{\mu-M+\operatorname{tr}\left[\mathbf{\Phi}_{\mathbf{v}}^{-1}(f) \mathbf{\Phi}_{\mathbf{y}}(f)\right]} \mathbf{i} \end{aligned}</script><p>1.当$\mu=1$，tradeoff是Wiener</p>
+<p>2.当$\mu=0$，tradeoff是MVDR</p>
+<p>3.当$\mu&gt;1$，tradeoff是一个降噪很猛但信号损失很强的beamformer</p>
+<p>4.当$\mu&lt;1$，tradeoff是一个降噪不太猛信号保留较为完整的beamformer</p>
+<p>以下为M=30时候miu分别为0.5、1、2、5的beampattern，可以看到差别不是很大。</p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/tradeoff_beampattern.png" style="zoom:50%;"></p>
+<p>再来看看M=30时候，不同$ \mu$值下的表现：$\mu$越大降噪越猛，但是信号损失就越大。</p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/tradeoff_performance_M30.png" style="zoom:50%;"></p>
+<h3 id="LCMV"><a href="#LCMV" class="headerlink" title="LCMV"></a>LCMV</h3><p>Linearly constraited minimum variance，这个和Fixedbeamforming中的Mininorm是一样的。</p>
+<p>最小化输出噪声方差的同时，满足信号在信源角度方向不失真，在干扰方向置为零。即：</p>
+<script type="math/tex; mode=display">
+\min _{\mathbf{h}(f)} \mathbf{h}^{H}(f) \mathbf{\Phi}_{\mathbf{v}}(f) \mathbf{h}(f) \quad \text { subject to } \quad \mathbf{C}^{H}\left(f, \theta_{\mathrm{d}}, \theta_{1: N}\right) \mathbf{h}(f)=\mathbf{i}_{\mathrm{c}}</script><p>其中：</p>
+<script type="math/tex; mode=display">
+\mathbf{C}\left(f, \theta_{\mathrm{d}}, \theta_{1: N}\right)=\left[\begin{array}{llll}{\mathbf{d}\left(f, \theta_{\mathrm{d}}\right)} & {\mathbf{d}\left(f, \theta_{1}\right)} & {\cdots} & {\mathbf{d}\left(f, \theta_{N}\right)}\end{array}\right]</script><script type="math/tex; mode=display">
+\mathbf{i}_{\mathrm{c}}=\left[\begin{array}{llll}{1} & {0} & {\cdots} & {0}\end{array}\right]^{T}</script><p>一样的，解可以写为包含噪声或观测信号统计特征的形式。</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathbf{h}_{\mathrm{LCMV}}\left(f, \cos \theta_{\mathrm{d}}\right)=& \mathbf{\Phi}_{\mathrm{v}}^{-1}(f) \mathbf{C}\left(f, \theta_{\mathrm{d}}, \theta_{1: N}\right) \times \\ &\left[\mathbf{C}^{H}\left(f, \theta_{\mathrm{d}}, \theta_{1: N}\right) \mathbf{\Phi}_{\mathrm{v}}^{-1}(f) \mathbf{C}\left(f, \theta_{\mathrm{d}}, \theta_{1: N}\right)\right]^{-1} \mathbf{i}_{\mathrm{c}} \end{aligned}</script><script type="math/tex; mode=display">
+\begin{aligned} \mathbf{h}_{\mathrm{LCMV}}\left(f, \cos \theta_{\mathrm{d}}\right)=& \Gamma_{\mathrm{y}}^{-1}(f) \mathbf{C}\left(f, \theta_{\mathrm{d}}, \theta_{1: N}\right) \times \\ &\left[\mathbf{C}^{H}\left(f, \theta_{\mathrm{d}}, \theta_{1: N}\right) \mathbf{\Gamma}_{\mathbf{y}}^{-1}(f) \mathbf{C}\left(f, \theta_{\mathrm{d}}, \theta_{1: N}\right)\right]^{-1} \mathbf{i}_{\mathrm{c}} \end{aligned}</script><p>先看beampattern，在30和50度方向有两个null值，且M增大主瓣宽度下降。</p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/lcmv_beampattern.png" style="zoom:50%;"></p>
+<p>再来看下性能表现，阵列增益或者降噪系数其实已经很小了对比Wiener或者MVDR，这是在干扰方向有了null值的均衡的结果。</p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/lcmv_performance.png" style="zoom:50%;"></p>
+<h3 id="声场统计估计"><a href="#声场统计估计" class="headerlink" title="声场统计估计"></a>声场统计估计</h3><p>在上述几种AB中许多都用到了观测信号或者噪声信号的相关系数矩阵，也有的可以通过推演输出信噪比来得到最终的表达式，比如Wiener和Tradeoff，这里有两种方法可以达到估计SNR的目的，但是由于篇幅及用途不多就不赘述了。</p>
+<p>另外一种情况就是实际我们并不知道声源的角度，这个也是需要估计的，估计声源达波方向(DOA)是个非常有意思的课题，可以重新开一个系列进行讲述，这里就简单提一下MUSIC（多信号分类算法，multi signal classification）估计方法，利用观测信号协方差矩阵的对角化，把信号分解到协方差矩阵特征向量的空间中（一个是信号子空间，一个是噪声子空间），<strong>协方差矩阵大特征值对应的特征向量张成的空间与入射信号的导向矢量张成的空间是同一个空间</strong>，信号子空间和噪声子空间是相互正交，可知信号子空间的导向矢量和噪声子空间也正交。有以下，其中t是协方差矩阵的较小的特征向量（因为只有一个声源方向，所以认为是从第二个特征向量开始）：</p>
+<script type="math/tex; mode=display">
+\left|\mathfrak{t}_{i}^{H}(f) \mathbf{d}\left(f, \cos \theta_{\mathrm{d}}\right)\right|^{2}=0, i=2,3, \ldots, M</script><script type="math/tex; mode=display">
+\left|\mathfrak{t}_{i}^{H}(f) \mathrm{d}(f, \cos \theta)\right|^{2}>0, i=2,3, \ldots, M, \theta \neq \theta_{\mathrm{d}}</script><p>由于实际干扰，上述不能严格成立，即不会满足完全正交，因此可以通过寻找最小化来得到：</p>
+<script type="math/tex; mode=display">
+\widehat{\theta}_{\mathrm{d}}=\arg \min _{\theta} \sum_{i=2}^{M}\left|\mathbf{t}_{i}^{H}(f) \mathbf{d}(f, \cos \theta)\right|^{2}</script><p>扩展到宽带：</p>
+<script type="math/tex; mode=display">
+\widehat{\theta}_{\mathrm{d}}=\arg \min _{\theta} \int_{f_{1}}^{f_{2}} \sum_{i=2}^{M}\left|\mathfrak{t}_{i}^{H}(f) \mathbf{d}(f, \cos \theta)\right|^{2} d f</script><p>下图为声源70度方向的估计角度，其中声场为虚拟构建的，实际情况要想办法估计协方差矩阵。</p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/doa_m2.png" style="zoom:33%;"></p>
+<p><img src="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/doa_m12.png" style="zoom:33%;"></p>
+<p>至此，自适应以及频域的波束形成告一段落了，耗时蛮久的，收获也颇丰。无论是数值编程和算法知识都有了提升，后面计划抽2-3周把宽带的波束形成搞一搞，然后就暂停波束形成学习一段时间，转到降噪/AEC/DOA上面去。这样知识体系就更丰富了，另外也要开始着重研究基于深度学习的语音增强了。最近恶补基础知识中。。。</p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag"><i class="fa fa-tag"></i> 波束形成</a>
+              <a href="/tags/beamforming/" rel="tag"><i class="fa fa-tag"></i> beamforming</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/28/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="next" title="深度学习小知识点">
+                  <i class="fa fa-chevron-left"></i> 深度学习小知识点
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#声场统计物理量"><span class="nav-number">1.</span> <span class="nav-text">声场统计物理量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能指标"><span class="nav-number">2.</span> <span class="nav-text">性能指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声场介绍"><span class="nav-number">3.</span> <span class="nav-text">声场介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adaptive-Beamforming"><span class="nav-number">4.</span> <span class="nav-text">Adaptive Beamforming</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Wiener-Beamforming"><span class="nav-number">4.1.</span> <span class="nav-text">Wiener Beamforming</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVDR"><span class="nav-number">4.2.</span> <span class="nav-text">MVDR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tradeoff"><span class="nav-number">4.3.</span> <span class="nav-text">Tradeoff</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LCMV"><span class="nav-number">4.4.</span> <span class="nav-text">LCMV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声场统计估计"><span class="nav-number">4.5.</span> <span class="nav-text">声场统计估计</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">数据挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">157k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:23</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
