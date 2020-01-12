@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Python设计模式的最后一部分行为型模式，包括啦责任链模式、命令模式、解释器模式、观察者模式、状态模式、策略模式、模版模式">
+<meta name="keywords" content="Python,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python设计模式（四）：行为型模式">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2020&#x2F;01&#x2F;04&#x2F;Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="Python设计模式的最后一部分行为型模式，包括啦责任链模式、命令模式、解释器模式、观察者模式、状态模式、策略模式、模版模式">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-04T04:44:10.149Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2020/01/04/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python设计模式（四）：行为型模式 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2020/01/04/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python设计模式（四）：行为型模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-04 11:52:15 / 修改时间：12:44:10" itemprop="dateCreated datePublished" datetime="2020-01-04T11:52:15+08:00">2020-01-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/04/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/04/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+            <div class="post-description">Python设计模式的最后一部分行为型模式，包括啦责任链模式、命令模式、解释器模式、观察者模式、状态模式、策略模式、模版模式</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>解释器模式、状态模式，由于没大看明白，且目前所浏览的代码没有见过此类型，所以暂且束之高阁。此篇主要放在责任链模式、命令模式、解释器模式、观察者模式、策略模式和模版模式上，内容主要来源于《Mastering Python Design Patterns》中译版。</p><h2 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h2><p>这个模式并不陌生，公司架构级的Dnn Training Tool中的Feature Extraction就是应用的此种模式，整体类似于<strong>链式编程的思想</strong>，当如果一节点对某个请求不感兴趣或者不知道如何处理这个请求时，就将请求发送给下个节点。在提取音频特征的时候，每个特征都没有及时处理，而是直接丢给他的下一节点，直到读取到音频文件为止，很值得学习的编程思想，要多看几遍，以下为上述参考书籍的示例代码。</p><a id="more"></a>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Event</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, parent=None)</span>:</span></span><br><span class="line">        self.parent = parent</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        handler = <span class="string">'handle_&#123;&#125;'</span>.format(event)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 核心代码，如果类有定义该方法，则执行</span></span><br><span class="line">        <span class="keyword">if</span> hasattr(self, handler):</span><br><span class="line">            method = getattr(self, handler)</span><br><span class="line">            method(event)</span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 该类没有，则看其传入的参数parent</span></span><br><span class="line">        <span class="keyword">elif</span> self.parent:</span><br><span class="line">            self.parent.handle(event)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 还没有的话，再看有无 handle_default</span></span><br><span class="line">        <span class="keyword">elif</span> hasattr(self, <span class="string">'handle_default'</span>):</span><br><span class="line">            self.handle_default(event)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainWindow</span><span class="params">(Widget)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_close</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        print(<span class="string">'MainWindow: &#123;&#125;'</span>.format(event))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_default</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        print(<span class="string">'MainWindow Default: &#123;&#125;'</span>.format(event))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SendDialog</span><span class="params">(Widget)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_paint</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        print(<span class="string">'SendDialog: &#123;&#125;'</span>.format(event))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MsgText</span><span class="params">(Widget)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_down</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        print(<span class="string">'MsgText: &#123;&#125;'</span>.format(event))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    mw = MainWindow()</span><br><span class="line">    sd = SendDialog(mw)</span><br><span class="line">    msg = MsgText(sd)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> (<span class="string">'down'</span>, <span class="string">'paint'</span>, <span class="string">'unhandled'</span>, <span class="string">'close'</span>):</span><br><span class="line">        evt = Event(e)</span><br><span class="line">        print(<span class="string">'\nSending event -&#123;&#125;- to MainWindow'</span>.format(evt))</span><br><span class="line">        mw.handle(evt)</span><br><span class="line">        print(<span class="string">'Sending event -&#123;&#125;- to SendDialog'</span>.format(evt))</span><br><span class="line">        sd.handle(evt)</span><br><span class="line">        print(<span class="string">'Sending event -&#123;&#125;- to MsgText'</span>.format(evt))</span><br><span class="line">        msg.handle(evt)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h2 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h2><p>命令模式能解一个操作（复制、粘贴）封装为一个对象，这样能提供很多好处。如下所述：</p>
+<p>1.可以在任何时候执行一个命令，而并不一定是在命令创建的时候。</p>
+<p>2.执行一个命令的客户端代码并不需要知道命令的任何实现细节。</p>
+<p>3.可以对命令进行分组，并按一定的顺序执行。</p>
+<p>命令模式也可适应于组合多个命令，这有助于实现宏、多级撤销以及事务。一个事务应该：要么成功，这意味着事务中所有操作应该都成功；要么如果至少一个操作失败，则全部失败（回滚操作）。</p>
+<p><strong>在做测试开发自动化的时候，命令模式应该是一个不错的选择，或者进一步说对于任何涉及到顺序步骤执行的操作，都可以试试命令模式。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">verbose = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RenameFile</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, path_src, path_dest)</span>:</span></span><br><span class="line">        self.src, self.dest = path_src, path_dest</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">execute</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> verbose:</span><br><span class="line">            print(<span class="string">"[renaming '&#123;&#125;' to '&#123;&#125;']"</span>.format(self.src, self.dest))</span><br><span class="line">        os.rename(self.src, self.dest)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">undo</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> verbose:</span><br><span class="line">            print(<span class="string">"[renaming '&#123;&#125;' back to '&#123;&#125;']"</span>.format(self.dest, self.src))</span><br><span class="line">        os.rename(self.dest, self.src)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CreateFile</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, path, txt=<span class="string">'hello world\n'</span>)</span>:</span></span><br><span class="line">        self.path, self.txt = path, txt</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">execute</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> verbose:</span><br><span class="line">            print(<span class="string">"[creating file '&#123;&#125;']"</span>.format(self.path))</span><br><span class="line">        <span class="keyword">with</span> open(self.path, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> out_file:</span><br><span class="line">            out_file.write(self.txt)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">undo</span><span class="params">(self)</span>:</span></span><br><span class="line">        delete_file(self.path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReadFile</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, path)</span>:</span></span><br><span class="line">        self.path = path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">execute</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> verbose:</span><br><span class="line">            print(<span class="string">"[reading file '&#123;&#125;']"</span>.format(self.path))</span><br><span class="line">        <span class="keyword">with</span> open(self.path, mode=<span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> in_file:</span><br><span class="line">            print(in_file.read(), end=<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete_file</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> verbose:</span><br><span class="line">        print(<span class="string">"deleting file '&#123;&#125;'"</span>.format(path))</span><br><span class="line">    os.remove(path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    orig_name, new_name = <span class="string">'file1'</span>, <span class="string">'file2'</span></span><br><span class="line"></span><br><span class="line">    commands = []</span><br><span class="line">    <span class="keyword">for</span> cmd <span class="keyword">in</span> CreateFile(orig_name), ReadFile(orig_name), RenameFile(orig_name, new_name):</span><br><span class="line">        commands.append(cmd)</span><br><span class="line"></span><br><span class="line">    [c.execute() <span class="keyword">for</span> c <span class="keyword">in</span> commands]</span><br><span class="line"></span><br><span class="line">    answer = input(<span class="string">'reverse the executed commands? [y/n] '</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> answer <span class="keyword">not</span> <span class="keyword">in</span> <span class="string">'yY'</span>:</span><br><span class="line">        print(<span class="string">"the result is &#123;&#125;"</span>.format(new_name))</span><br><span class="line">        exit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> reversed(commands):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            c.undo()</span><br><span class="line">        <span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p>如希望在一个对象的状态改变变化时，能够通知/提醒所有相关者（一个对象或者一组对象），则可以使用观察者模式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Publisher</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.observers = []</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(self, observer)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> observer <span class="keyword">not</span> <span class="keyword">in</span> self.observers:</span><br><span class="line">            self.observers.append(observer)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'Failed to add: &#123;&#125;'</span>.format(observer))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">remove</span><span class="params">(self, observer)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.observers.remove(observer)</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            print(<span class="string">'Failed to remove: &#123;&#125;'</span>.format(observer))</span><br><span class="line">		</span><br><span class="line">    <span class="comment"># 主要的通知功能，注意写法</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">notify</span><span class="params">(self)</span>:</span></span><br><span class="line">        [o.notify(self) <span class="keyword">for</span> o <span class="keyword">in</span> self.observers]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DefaultFormatter</span><span class="params">(Publisher)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        Publisher.__init__(self)</span><br><span class="line">        self.name = name</span><br><span class="line">        self._data = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"&#123;&#125;: '&#123;&#125;' has data = &#123;&#125;"</span>.format(type(self).__name__, self.name, self._data)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">data</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._data</span><br><span class="line"></span><br><span class="line"><span class="meta">    @data.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">data</span><span class="params">(self, new_value)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self._data = int(new_value)</span><br><span class="line">        <span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">            print(<span class="string">'Error: &#123;&#125;'</span>.format(e))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.notify()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HexFormatter</span>:</span></span><br><span class="line">		<span class="string">'''</span></span><br><span class="line"><span class="string">		订阅者一，注意notify函数，需要参数publisher，在Publiser类里面，给入的是self</span></span><br><span class="line"><span class="string">		'''</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">notify</span><span class="params">(self, publisher)</span>:</span></span><br><span class="line">        print(<span class="string">"&#123;&#125;: '&#123;&#125;' has now hex data = &#123;&#125;"</span>.format(type(self).__name__,</span><br><span class="line">                                                      publisher.name, hex(publisher.data)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BinaryFormatter</span>:</span></span><br><span class="line">		<span class="string">'''</span></span><br><span class="line"><span class="string">		订阅者二</span></span><br><span class="line"><span class="string">		'''</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">notify</span><span class="params">(self, publisher)</span>:</span></span><br><span class="line">        print(<span class="string">"&#123;&#125;: '&#123;&#125;' has now bin data = &#123;&#125;"</span>.format(type(self).__name__,</span><br><span class="line">                                                      publisher.name, bin(publisher.data)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    df = DefaultFormatter(<span class="string">'test1'</span>)</span><br><span class="line">    print(df)</span><br><span class="line"></span><br><span class="line">    print()</span><br><span class="line">    hf = HexFormatter()</span><br><span class="line">    df.add(hf)</span><br><span class="line">    df.data = <span class="number">3</span></span><br><span class="line">    print(df)</span><br><span class="line"></span><br><span class="line">    print()</span><br><span class="line">    bf = BinaryFormatter()</span><br><span class="line">    df.add(bf)</span><br><span class="line">    df.data = <span class="number">21</span></span><br><span class="line">    print(df)</span><br><span class="line"></span><br><span class="line">    print()</span><br><span class="line">    df.remove(hf)</span><br><span class="line">    df.data = <span class="number">40</span></span><br><span class="line">    print(df)</span><br><span class="line"></span><br><span class="line">    print()</span><br><span class="line">    df.remove(hf)</span><br><span class="line">    df.add(bf)</span><br><span class="line">    df.data = <span class="string">'hello'</span></span><br><span class="line">    print(df)</span><br><span class="line"></span><br><span class="line">    print()</span><br><span class="line">    df.data = <span class="number">15.8</span></span><br><span class="line">    print(df)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>策略模式是一种非常重要的模式设计方法，鼓励使用多种算法来解决一个问题。其杀手级的特性是能够在运行时透明地切换算法，如果你有两种算法，其中一种对少量输入效果较好，一个对大量输入效果较好，则可以使用策略模式在运行时基于输入数据决定使用哪种算法，比如排序算法。</p>
+<p>以下例子，参数传入实际上是函数指针。通常，<strong>我们想要使用的策略不应该由用户来选，策略模式要点是可以透明地使用不同的算法</strong>。这个是同下述的模版模式的一个区别。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">SLOW = <span class="number">3</span>  <span class="comment"># 单位为秒</span></span><br><span class="line">LIMIT = <span class="number">5</span>   <span class="comment"># 字符数</span></span><br><span class="line">WARNING = <span class="string">'too bad, you picked the slow algorithm :('</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pairs</span><span class="params">(seq)</span>:</span></span><br><span class="line">    n = len(seq)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        <span class="keyword">yield</span> seq[i], seq[(i + <span class="number">1</span>) % n]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">allUniqueSort</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> len(s) &gt; LIMIT:</span><br><span class="line">        print(WARNING)</span><br><span class="line">        time.sleep(SLOW)</span><br><span class="line">    srtStr = sorted(s)</span><br><span class="line">    <span class="keyword">for</span> (c1, c2) <span class="keyword">in</span> pairs(srtStr):</span><br><span class="line">        <span class="keyword">if</span> c1 == c2:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">allUniqueSet</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> len(s) &lt; LIMIT:</span><br><span class="line">        print(WARNING)</span><br><span class="line">        time.sleep(SLOW)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span> <span class="keyword">if</span> len(set(s)) == len(s) <span class="keyword">else</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 策略函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">allUnique</span><span class="params">(s, strategy)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> strategy(s)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        word = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> word:</span><br><span class="line">            word = input(<span class="string">'Insert word (type quit to exit)&gt; '</span>)</span><br><span class="line">            <span class="keyword">if</span> word == <span class="string">'quit'</span>:</span><br><span class="line">                print(<span class="string">'bye'</span>)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">						</span><br><span class="line">            <span class="comment"># 由用户来选则了使用哪个算法，实际上不应该</span></span><br><span class="line">            strategy_picked = <span class="literal">None</span></span><br><span class="line">            strategies = &#123;<span class="string">'1'</span>: allUniqueSet, <span class="string">'2'</span>: allUniqueSort&#125;</span><br><span class="line">            <span class="keyword">while</span> strategy_picked <span class="keyword">not</span> <span class="keyword">in</span> strategies.keys():</span><br><span class="line">                strategy_picked = input(<span class="string">'Choose strategy: [1] Use a set, [2] Sort and pair&gt; '</span>)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    strategy = strategies[strategy_picked]</span><br><span class="line">                    print(<span class="string">'allUnique(&#123;&#125;): &#123;&#125;'</span>.format(word, allUnique(word, strategy)))</span><br><span class="line">                <span class="keyword">except</span> KeyError <span class="keyword">as</span> err:</span><br><span class="line">                    print(<span class="string">'Incorrect option: &#123;&#125;'</span>.format(strategy_picked))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>另一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pprint</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> attrgetter</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    ProgrammingLang = namedtuple(<span class="string">'ProgrammingLang'</span>, <span class="string">'name ranking'</span>)</span><br><span class="line">    stats = ((<span class="string">'Ruby'</span>, <span class="number">14</span>), (<span class="string">'Javascript'</span>, <span class="number">8</span>), (<span class="string">'Python'</span>, <span class="number">7</span>),</span><br><span class="line">             (<span class="string">'Scala'</span>, <span class="number">31</span>), (<span class="string">'Swift'</span>, <span class="number">18</span>), (<span class="string">'Lisp'</span>, <span class="number">23</span>))</span><br><span class="line">    lang_stats = [ProgrammingLang(n, r) <span class="keyword">for</span> n, r <span class="keyword">in</span> stats]</span><br><span class="line">    pp = pprint.PrettyPrinter(indent=<span class="number">5</span>)</span><br><span class="line">    </span><br><span class="line">    pp.pprint(sorted(lang_stats, key=attrgetter(<span class="string">'name'</span>)))</span><br><span class="line">    print()</span><br><span class="line">    pp.pprint(sorted(lang_stats, key=attrgetter(<span class="string">'ranking'</span>)))</span><br></pre></td></tr></table></figure>
+<h2 id="模版模式"><a href="#模版模式" class="headerlink" title="模版模式"></a>模版模式</h2><p>另外一个非常重要的设计模式。</p>
+<p>用于抽象一个算法的通用部分，如果两个算法绝大部分都是同样的，只有少部分需要不同，如果把两个算法都完整的写出来，那么就会有许多冗余的代码。模版模式的思想就是无法改变算法结构重新定义一个算法的某些部分。为了避免重复而进行必要的重构，以图中BFS和DFS遍历举例。</p>
+<p>最笨的一种写法，代码重复冗余，很多地方都写了两遍。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bfs</span><span class="params">(graph, start, end)</span>:</span></span><br><span class="line">    path = []</span><br><span class="line">    visited = [start]</span><br><span class="line">    <span class="keyword">while</span> visited:</span><br><span class="line">        current = visited.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> current <span class="keyword">not</span> <span class="keyword">in</span> path:</span><br><span class="line">            path.append(current)</span><br><span class="line">            <span class="keyword">if</span> current == end:</span><br><span class="line">                print(path)</span><br><span class="line">                <span class="keyword">return</span> (<span class="literal">True</span>, path)</span><br><span class="line">            <span class="comment"># 两个顶点不相连，则跳过</span></span><br><span class="line">            <span class="keyword">if</span> current <span class="keyword">not</span> <span class="keyword">in</span> graph:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">        visited = visited + graph[current]</span><br><span class="line">    <span class="keyword">return</span> (<span class="literal">False</span>, path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dfs</span><span class="params">(graph, start, end)</span>:</span></span><br><span class="line">    path = []</span><br><span class="line">    visited = [start]</span><br><span class="line">    <span class="keyword">while</span> visited:</span><br><span class="line">        current = visited.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> current <span class="keyword">not</span> <span class="keyword">in</span> path:</span><br><span class="line">            path.append(current)</span><br><span class="line">            <span class="keyword">if</span> current == end:</span><br><span class="line">                print(path)</span><br><span class="line">                <span class="keyword">return</span> (<span class="literal">True</span>, path)</span><br><span class="line">            <span class="comment"># 两个顶点不相连，则跳过</span></span><br><span class="line">            <span class="keyword">if</span> current <span class="keyword">not</span> <span class="keyword">in</span> graph:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">        visited = graph[current] + visited</span><br><span class="line">    <span class="keyword">return</span> (<span class="literal">False</span>, path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    graph = &#123;</span><br><span class="line">        <span class="string">'Frankfurt'</span>: [<span class="string">'Mannheim'</span>, <span class="string">'Wurzburg'</span>, <span class="string">'Kassel'</span>],</span><br><span class="line">        <span class="string">'Mannheim'</span>: [<span class="string">'Karlsruhe'</span>],</span><br><span class="line">        <span class="string">'Karlsruhe'</span>: [<span class="string">'Augsburg'</span>],</span><br><span class="line">        <span class="string">'Augsburg'</span>: [<span class="string">'Munchen'</span>],</span><br><span class="line">        <span class="string">'Wurzburg'</span>: [<span class="string">'Erfurt'</span>, <span class="string">'Nurnberg'</span>],</span><br><span class="line">        <span class="string">'Nurnberg'</span>: [<span class="string">'Stuttgart'</span>, <span class="string">'Munchen'</span>],</span><br><span class="line">        <span class="string">'Kassel'</span>: [<span class="string">'Munchen'</span>],</span><br><span class="line">        <span class="string">'Erfurt'</span>: [],</span><br><span class="line">        <span class="string">'Stuttgart'</span>: [],</span><br><span class="line">        <span class="string">'Munchen'</span>: []</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    bfs_path = bfs(graph, <span class="string">'Frankfurt'</span>, <span class="string">'Nurnberg'</span>)</span><br><span class="line">    dfs_path = dfs(graph, <span class="string">'Frankfurt'</span>, <span class="string">'Nurnberg'</span>)</span><br><span class="line">    print(<span class="string">'bfs Frankfurt-Nurnberg: &#123;&#125;'</span>.format(bfs_path[<span class="number">1</span>] <span class="keyword">if</span> bfs_path[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line">    print(<span class="string">'dfs Frankfurt-Nurnberg: &#123;&#125;'</span>.format(dfs_path[<span class="number">1</span>] <span class="keyword">if</span> dfs_path[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line"></span><br><span class="line">    bfs_nopath = bfs(graph, <span class="string">'Wurzburg'</span>, <span class="string">'Kassel'</span>)</span><br><span class="line">    print(<span class="string">'bfs Wurzburg-Kassel: &#123;&#125;'</span>.format(bfs_nopath[<span class="number">1</span>] <span class="keyword">if</span> bfs_nopath[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line">    dfs_nopath = dfs(graph, <span class="string">'Wurzburg'</span>, <span class="string">'Kassel'</span>)</span><br><span class="line">    print(<span class="string">'dfs Wurzburg-Kassel: &#123;&#125;'</span>.format(dfs_nopath[<span class="number">1</span>] <span class="keyword">if</span> dfs_nopath[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>第二种方法，内部添加一个条件来检测应该使用哪个算法来遍历，但是</p>
+<ol>
+<li><p>traverse()难以维护，如果添加第三种方式来延伸路径，需要扩展traverse()，最好的方法是此函数能发挥作用却好像根本不知道应该执行哪个action</p>
+</li>
+<li><p>他只对一行有区别的算法有效，还是把这些都不相同的细节交给另外一个函数比较好。</p>
+</li>
+<li><p>且每次都需要判断使用哪个算法，运行起来也可能会更慢一些。</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line">BFS = <span class="number">1</span></span><br><span class="line">DFS = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">traverse</span><span class="params">(graph, start, end, algorithm)</span>:</span></span><br><span class="line">    path = []</span><br><span class="line">    visited = [start]</span><br><span class="line">    <span class="keyword">while</span> visited:</span><br><span class="line">        current = visited.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> current <span class="keyword">not</span> <span class="keyword">in</span> path:</span><br><span class="line">            path.append(current)</span><br><span class="line">            <span class="keyword">if</span> current == end:</span><br><span class="line">                <span class="keyword">return</span> (<span class="literal">True</span>, path)</span><br><span class="line">            <span class="comment"># 顶点不相连，则跳过</span></span><br><span class="line">            <span class="keyword">if</span> current <span class="keyword">not</span> <span class="keyword">in</span> graph:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> algorithm == BFS:</span><br><span class="line">            visited = extend_bfs_path(visited, graph[current])</span><br><span class="line">        <span class="keyword">elif</span> algorithm == DFS:</span><br><span class="line">            visited = extend_dfs_path(visited, graph[current])</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"No such algorithm"</span>)</span><br><span class="line">    <span class="keyword">return</span> (<span class="literal">False</span>, path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">extend_bfs_path</span><span class="params">(visited, current)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> visited + current</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">extend_dfs_path</span><span class="params">(visited, current)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> current + visited</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    graph = &#123;</span><br><span class="line">        <span class="string">'Frankfurt'</span>: [<span class="string">'Mannheim'</span>, <span class="string">'Wurzburg'</span>, <span class="string">'Kassel'</span>],</span><br><span class="line">        <span class="string">'Mannheim'</span>: [<span class="string">'Karlsruhe'</span>],</span><br><span class="line">        <span class="string">'Karlsruhe'</span>: [<span class="string">'Augsburg'</span>],</span><br><span class="line">        <span class="string">'Augsburg'</span>: [<span class="string">'Munchen'</span>],</span><br><span class="line">        <span class="string">'Wurzburg'</span>: [<span class="string">'Erfurt'</span>, <span class="string">'Nurnberg'</span>],</span><br><span class="line">        <span class="string">'Nurnberg'</span>: [<span class="string">'Stuttgart'</span>, <span class="string">'Munchen'</span>],</span><br><span class="line">        <span class="string">'Kassel'</span>: [<span class="string">'Munchen'</span>],</span><br><span class="line">        <span class="string">'Erfurt'</span>: [],</span><br><span class="line">        <span class="string">'Stuttgart'</span>: [],</span><br><span class="line">        <span class="string">'Munchen'</span>: []</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    bfs_path = traverse(graph, <span class="string">'Frankfurt'</span>, <span class="string">'Nurnberg'</span>, <span class="number">1</span>)</span><br><span class="line">    dfs_path = traverse(graph, <span class="string">'Frankfurt'</span>, <span class="string">'Nurnberg'</span>, <span class="number">2</span>)</span><br><span class="line">    print(<span class="string">'bfs Frankfurt-Nurnberg: &#123;&#125;'</span>.format(bfs_path[<span class="number">1</span>] <span class="keyword">if</span> bfs_path[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line">    print(<span class="string">'dfs Frankfurt-Nurnberg: &#123;&#125;'</span>.format(dfs_path[<span class="number">1</span>] <span class="keyword">if</span> dfs_path[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line"></span><br><span class="line">    bfs_nopath = traverse(graph, <span class="string">'Wurzburg'</span>, <span class="string">'Kassel'</span>, <span class="number">1</span>)</span><br><span class="line">    print(<span class="string">'bfs Wurzburg-Kassel: &#123;&#125;'</span>.format(bfs_nopath[<span class="number">1</span>] <span class="keyword">if</span> bfs_nopath[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line">    dfs_nopath = traverse(graph, <span class="string">'Wurzburg'</span>, <span class="string">'Kassel'</span>, <span class="number">2</span>)</span><br><span class="line">    print(<span class="string">'dfs Wurzburg-Kassel: &#123;&#125;'</span>.format(dfs_nopath[<span class="number">1</span>] <span class="keyword">if</span> dfs_nopath[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>所以还是下面这种属于最佳写法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 传入参数的是一个函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">traverse</span><span class="params">(graph, start, end, action)</span>:</span></span><br><span class="line">    path = []</span><br><span class="line">    visited = [start]</span><br><span class="line">    <span class="keyword">while</span> visited:</span><br><span class="line">        current = visited.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> current <span class="keyword">not</span> <span class="keyword">in</span> path:</span><br><span class="line">            path.append(current)</span><br><span class="line">            <span class="keyword">if</span> current == end:</span><br><span class="line">                <span class="keyword">return</span> (<span class="literal">True</span>, path)</span><br><span class="line">            <span class="comment"># 两个顶点不相连，则跳过</span></span><br><span class="line">            <span class="keyword">if</span> current <span class="keyword">not</span> <span class="keyword">in</span> graph:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">        visited = action(visited, graph[current])</span><br><span class="line">    <span class="keyword">return</span> (<span class="literal">False</span>, path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">extend_bfs_path</span><span class="params">(visited, current)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> visited + current</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">extend_dfs_path</span><span class="params">(visited, current)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> current + visited</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    graph = &#123;</span><br><span class="line">        <span class="string">'Frankfurt'</span>: [<span class="string">'Mannheim'</span>, <span class="string">'Wurzburg'</span>, <span class="string">'Kassel'</span>],</span><br><span class="line">        <span class="string">'Mannheim'</span>: [<span class="string">'Karlsruhe'</span>],</span><br><span class="line">        <span class="string">'Karlsruhe'</span>: [<span class="string">'Augsburg'</span>],</span><br><span class="line">        <span class="string">'Augsburg'</span>: [<span class="string">'Munchen'</span>],</span><br><span class="line">        <span class="string">'Wurzburg'</span>: [<span class="string">'Erfurt'</span>, <span class="string">'Nurnberg'</span>],</span><br><span class="line">        <span class="string">'Nurnberg'</span>: [<span class="string">'Stuttgart'</span>, <span class="string">'Munchen'</span>],</span><br><span class="line">        <span class="string">'Kassel'</span>: [<span class="string">'Munchen'</span>],</span><br><span class="line">        <span class="string">'Erfurt'</span>: [],</span><br><span class="line">        <span class="string">'Stuttgart'</span>: [],</span><br><span class="line">        <span class="string">'Munchen'</span>: []</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    bfs_path = traverse(graph, <span class="string">'Frankfurt'</span>, <span class="string">'Nurnberg'</span>, extend_bfs_path)</span><br><span class="line">    dfs_path = traverse(graph, <span class="string">'Frankfurt'</span>, <span class="string">'Nurnberg'</span>, extend_dfs_path)</span><br><span class="line">    print(<span class="string">'bfs Frankfurt-Nurnberg: &#123;&#125;'</span>.format(bfs_path[<span class="number">1</span>] <span class="keyword">if</span> bfs_path[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line">    print(<span class="string">'dfs Frankfurt-Nurnberg: &#123;&#125;'</span>.format(dfs_path[<span class="number">1</span>] <span class="keyword">if</span> dfs_path[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line"></span><br><span class="line">    bfs_nopath = traverse(graph, <span class="string">'Wurzburg'</span>, <span class="string">'Kassel'</span>, extend_bfs_path)</span><br><span class="line">    print(<span class="string">'bfs Wurzburg-Kassel: &#123;&#125;'</span>.format(bfs_nopath[<span class="number">1</span>] <span class="keyword">if</span> bfs_nopath[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line">    dfs_nopath = traverse(graph, <span class="string">'Wurzburg'</span>, <span class="string">'Kassel'</span>, extend_dfs_path)</span><br><span class="line">    print(<span class="string">'dfs Wurzburg-Kassel: &#123;&#125;'</span>.format(dfs_nopath[<span class="number">1</span>] <span class="keyword">if</span> dfs_nopath[<span class="number">0</span>] <span class="keyword">else</span> <span class="string">'Not found'</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>至此，Python设计模式搞完了。说实话有点懵逼，有些简单或者常用的模式在其他地方见过还比较好理解一些。但是很多模式见都没见过，看起来也很吃力。阅读更多大神的代码以及自己在遇到不同问题时尝试使用相应的模式设计去解决，如此才能逐渐建立起来“架构”的高瞻远瞩高屋建瓴的气势。</p>
+<p>另外，DNN Training Tool中应用了许多设计模式，后面还要花时间仔细读一遍并做笔记，这属于大神级别的代码。</p>
+<p>道阻且长，才刚刚开始。</p>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 设计模式</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/29/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%83%EF%BC%89%EF%BC%9A%E8%87%AA%E9%80%82%E5%BA%94%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="next" title="波束形成技术（七）：自适应波束形成">
+                  <i class="fa fa-chevron-left"></i> 波束形成技术（七）：自适应波束形成
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2020/01/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84input-shape/" rel="prev" title="深度学习中的Input_shape参数">
+                  深度学习中的Input_shape参数 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#责任链模式"><span class="nav-number">1.</span> <span class="nav-text">责任链模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令模式"><span class="nav-number">2.</span> <span class="nav-text">命令模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式"><span class="nav-number">3.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#策略模式"><span class="nav-number">4.</span> <span class="nav-text">策略模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模版模式"><span class="nav-number">5.</span> <span class="nav-text">模版模式</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">数据挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">176k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:40</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

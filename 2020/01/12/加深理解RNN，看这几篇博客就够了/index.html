@@ -50,16 +50,18 @@
   };
 </script>
 
-  <meta name="description" content="数据挖掘&#x2F;音频算法&#x2F;zhenyuhuang0501@gmail.com">
-<meta property="og:type" content="website">
-<meta property="og:title" content="JUMPSHOT">
-<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;tags&#x2F;matplotlib&#x2F;index.html">
+  <meta name="description" content="一个周末看了几篇Blog终于搞明白Rnn是咋回事了">
+<meta name="keywords" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="加深理解Rnn，这几篇博客足矣！">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2020&#x2F;01&#x2F;12&#x2F;%E5%8A%A0%E6%B7%B1%E7%90%86%E8%A7%A3RNN%EF%BC%8C%E7%9C%8B%E8%BF%99%E5%87%A0%E7%AF%87%E5%8D%9A%E5%AE%A2%E5%B0%B1%E5%A4%9F%E4%BA%86&#x2F;index.html">
 <meta property="og:site_name" content="JUMPSHOT">
-<meta property="og:description" content="数据挖掘&#x2F;音频算法&#x2F;zhenyuhuang0501@gmail.com">
+<meta property="og:description" content="一个周末看了几篇Blog终于搞明白Rnn是咋回事了">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-12T12:00:52.569Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://huangzhenyu.github.io/tags/matplotlib/">
+<link rel="canonical" href="https://huangzhenyu.github.io/2020/01/12/%E5%8A%A0%E6%B7%B1%E7%90%86%E8%A7%A3RNN%EF%BC%8C%E7%9C%8B%E8%BF%99%E5%87%A0%E7%AF%87%E5%8D%9A%E5%AE%A2%E5%B0%B1%E5%A4%9F%E4%BA%86/">
 
 
 <script id="page-configurations">
@@ -67,13 +69,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>标签: matplotlib | JUMPSHOT</title>
+  <title>加深理解Rnn，这几篇博客足矣！ | JUMPSHOT</title>
   
 
 
@@ -183,74 +185,183 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h1 class="collection-header">matplotlib
-          <small>标签</small>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2020/01/12/%E5%8A%A0%E6%B7%B1%E7%90%86%E8%A7%A3RNN%EF%BC%8C%E7%9C%8B%E8%BF%99%E5%87%A0%E7%AF%87%E5%8D%9A%E5%AE%A2%E5%B0%B1%E5%A4%9F%E4%BA%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          加深理解Rnn，这几篇博客足矣！
         </h1>
-      </div>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-12 12:17:15 / 修改时间：20:00:52" itemprop="dateCreated datePublished" datetime="2020-01-12T12:17:15+08:00">2020-01-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/12/%E5%8A%A0%E6%B7%B1%E7%90%86%E8%A7%A3RNN%EF%BC%8C%E7%9C%8B%E8%BF%99%E5%87%A0%E7%AF%87%E5%8D%9A%E5%AE%A2%E5%B0%B1%E5%A4%9F%E4%BA%86/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/12/%E5%8A%A0%E6%B7%B1%E7%90%86%E8%A7%A3RNN%EF%BC%8C%E7%9C%8B%E8%BF%99%E5%87%A0%E7%AF%87%E5%8D%9A%E5%AE%A2%E5%B0%B1%E5%A4%9F%E4%BA%86/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+            <div class="post-description">一个周末看了几篇Blog终于搞明白Rnn是咋回事了</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2019</h1>
-    </div>
+        <h2 id="1-如何Reshape-Data"><a href="#1-如何Reshape-Data" class="headerlink" title="1.如何Reshape Data"></a>1.如何Reshape Data</h2><p><a href="https://machinelearningmastery.com/reshape-input-data-long-short-term-memory-networks-keras/" target="_blank" rel="noopener">How to Reshape Input Data for Long Short-Term Memory Networks in Keras</a></p><p>Jason Brownlee PhD的作品，通过一个简单的例子给大家演示了如何重塑数据形状构建一个Rnn</p><p>三维的(samples, timesteps, inputfeatures)。给入参数input_shape时，samples会缺省。给入batch_input_shape时候，则没有缺省。</p><a id="more"></a>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-11-25T11:17:15+08:00"
-              content="2019-11-25">
-          11-25
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/11/25/Matplotlib%E4%B8%ADsubplot%E5%85%B1%E7%94%A8colorbar%E7%9A%84%E8%AE%BE%E7%BD%AE/" itemprop="url">
-            <span itemprop="name">Matplotlib中subplot共用colorbar的设置方法。</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-11-24T18:23:15+08:00"
-              content="2019-11-24">
-          11-24
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/11/24/matplotlib%E7%BB%98%E5%9B%BE%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E7%BB%B4/" itemprop="url">
-            <span itemprop="name">Matplotlib作图的面向对象思维</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
+<h2 id="2-如何使用TimeDistrubuted-Layer"><a href="#2-如何使用TimeDistrubuted-Layer" class="headerlink" title="2.如何使用TimeDistrubuted Layer"></a>2.如何使用TimeDistrubuted Layer</h2><p><a href="https://machinelearningmastery.com/timedistributed-layer-for-long-short-term-memory-networks-in-python/" target="_blank" rel="noopener">How to Use the TimeDistributed Layer in Keras</a></p>
+<p>仍然通过简单的例子，演示1-1，M-M，M-1，非常通俗易懂。</p>
+<h2 id="3-训练预测Batch-size如何选择？"><a href="#3-训练预测Batch-size如何选择？" class="headerlink" title="3. 训练预测Batch_size如何选择？"></a>3. 训练预测Batch_size如何选择？</h2><ol>
+<li><p>训练和预测都是online的，batch_size都是1，这样会给训练收敛带来不确定性。</p>
+</li>
+<li><p>训练和预测使用同一的非1点batch_size，这样无法达到online的要求。</p>
+</li>
+<li><p>训练预测使用不同的batch_size，但要重新建立一个新模型，新模型的batch_size=1, 但权重系数要复用旧模型。使用get_weights()和set_weights()两个函数实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># re-define the batch size</span></span><br><span class="line">n_batch = <span class="number">1</span></span><br><span class="line"><span class="comment"># re-define model</span></span><br><span class="line">new_model = Sequential()</span><br><span class="line">new_model.add(LSTM(n_neurons, batch_input_shape=(n_batch, X.shape[<span class="number">1</span>], X.shape[<span class="number">2</span>]), stateful=<span class="literal">True</span>))</span><br><span class="line">new_model.add(Dense(<span class="number">1</span>))</span><br><span class="line"><span class="comment"># copy weights</span></span><br><span class="line">old_weights = model.get_weights()</span><br><span class="line">new_model.set_weights(old_weights)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><a href="https://machinelearningmastery.com/use-different-batch-sizes-training-predicting-python-keras/" target="_blank" rel="noopener">How to use Different Batch Sizes when Training and Predicting with LSTMs</a></p>
+<p>还是上述那个大神的作品。</p>
+<h2 id="4-理解statefull-return-sequences参数"><a href="#4-理解statefull-return-sequences参数" class="headerlink" title="4. 理解statefull/return_sequences参数"></a>4. 理解statefull/return_sequences参数</h2><p>同样的作者</p>
+<p><a href="https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/" target="_blank" rel="noopener">Time Series Prediction with LSTM Recurrent Neural Networks in Python with Keras</a></p>
+<p>不过在Youtube上有个博主，在此基础上做了解读</p>
+<p><a href="https://www.youtube.com/watch?v=ywinX5wgdEU" target="_blank" rel="noopener">LSTM and Statefull stacking</a></p>
+<p>都是不错的例子。</p>
+<p>以上都是作者自己创造了一个简单的时间序列，并展开测试验证，其实没多难。这个方法一定要掌握起来！</p>
+<p>statefull，是本次batch_size的训练是否<strong>要用到上次batch_size的输出</strong>，如果用就需要改为True。这里面需要保证的是每次epoch中的训练数据也要保持先后顺序，不能使用shuffle，必须要置为False。但每次epoch**结束的时候，可能这个时候换了一个序列或者从别的地方又开始了，这个时候需要reset_states了。将LSTM网络中的记忆状态参数reset初始化（指的是<code>c，h</code>而并非权重<code>w</code>），即调用<code>model.reset_states()</code>。</p>
+<p>比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">200</span>):</span><br><span class="line">	model.fit(trianx, trainy, shuffle=<span class="literal">False</span>)</span><br><span class="line">	model.reset_states()</span><br></pre></td></tr></table></figure>
+<p>Return_squences，要做的则是保证每个timestep都是输出，输出的是一个序列，而不仅仅是最后的状态。</p>
 
     </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
   </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/01/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84input-shape/" rel="next" title="深度学习中的Input_shape参数">
+                  <i class="fa fa-chevron-left"></i> 深度学习中的Input_shape参数
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
   
   
   
 
-  
-
+  </div>
 
 
           </div>
           
+    <div class="comments" id="comments"></div>
 
         </div>
           
@@ -275,6 +386,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-如何Reshape-Data"><span class="nav-number">1.</span> <span class="nav-text">1.如何Reshape Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-如何使用TimeDistrubuted-Layer"><span class="nav-number">2.</span> <span class="nav-text">2.如何使用TimeDistrubuted Layer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-训练预测Batch-size如何选择？"><span class="nav-number">3.</span> <span class="nav-text">3. 训练预测Batch_size如何选择？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-理解statefull-return-sequences参数"><span class="nav-number">4.</span> <span class="nav-text">4. 理解statefull/return_sequences参数</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

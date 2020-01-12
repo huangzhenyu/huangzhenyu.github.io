@@ -59,7 +59,7 @@
 <meta property="og:description" content="好记性不如烂笔头，小知识点系列第三篇——深度学习">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;28&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9&#x2F;WX20191229-114551@2x.png">
-<meta property="og:updated_time" content="2019-12-29T03:51:10.679Z">
+<meta property="og:updated_time" content="2020-01-04T09:22:17.442Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2019&#x2F;12&#x2F;28&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9&#x2F;WX20191229-114551@2x.png">
 
@@ -222,7 +222,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-29 11:51:10" itemprop="dateModified" datetime="2019-12-29T11:51:10+08:00">2019-12-29</time>
+                <time title="修改时间：2020-01-04 17:22:17" itemprop="dateModified" datetime="2020-01-04T17:22:17+08:00">2020-01-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,14 +263,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
+              <span>2.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
             <div class="post-description">好记性不如烂笔头，小知识点系列第三篇——深度学习</div>
 
@@ -284,10 +284,12 @@
 
       
         <ul>
-<li><p>Binary CE Loss</p>
-<p>与softmax不同，binary CE Loss对于每个向量都是独立的，这意味着每个向量分量计算的损失不受其他分量的影响，因此常用于<strong>多标签分类模型(multi-label classification)</strong> ，训练中Loss使用”binary_crossentropy”</p>
-<p>Categorical CE Loss 则用于向量的<strong>多类别分类(multi-class classification)</strong>，训练Loss使用”categorical_crossentropy”。</p>
+<li><p>Binary CE（Cross-Entropy）Loss</p>
+<p>与softmax不同，binary CE Loss对于每个向量都是独立的，这意味着每个向量分量计算的损失不受其他分量的影响，因此常用于<strong>多标签分类模型(multi-label classification)</strong> ，训练中Loss使用”binary_crossentropy”。不止于用于二分类。由sigmoid函数输出。</p>
 </li>
+</ul><a id="more"></a>
+<p>  Categorical CE Loss 则用于One-hot向量的<strong>多类别分类(multi-class classification)</strong>，训练Loss使用”categorical_crossentropy”。激活函数有softmax输出。</p>
+<ul>
 <li><p>优化器</p>
 <p>SGD随机梯度下降，在遇到沟壑时陷入震荡</p>
 <p>SGD-M 引入动量，使用上一轮的梯度并给予适当权重，加速SGD在正确方向下降并抑制震荡</p>
@@ -296,8 +298,7 @@
 <p>Adam 结合RMSprop和SGD-M，一二阶动量 指数移动平均</p>
 <p>优化器对比：鞍点引入</p>
 </li>
-<li><p>模型fit之后可以通过调用history的字典查看具体的数值，并可以据此画图</p>
-<p>比如</p>
+<li><p>模型fit之后可以通过调用history的字典查看具体的数值，并可以据此画图。比如</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">model.complie(loss=<span class="string">"categorical_crossentropy"</span>, metrics=[<span class="string">'accuracy'</span>], optimizer=<span class="string">'adam'</span>)</span><br><span class="line">history = model.fit(X_train, Y_train, batch_size=<span class="number">128</span>, epochs=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">history.history[<span class="string">'acc'</span>]</span><br><span class="line">histoty.history[<span class="string">'val_acc'</span>] <span class="comment">#验证集上准确率</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">history.history[<span class="string">'loss'</span>]</span><br><span class="line">histoty.history[<span class="string">'val_loss'</span>] <span class="comment"># 验证集上的loss</span></span><br></pre></td></tr></table></figure>
 <p>模型可以保存起来，格式为.h5</p>
 <p>输出的log信息也可以保存起来，格式为.history</p>
@@ -306,17 +307,30 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keras.utils.vis_utils.plot_model(model, to_file, show_shapes=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>利用keras加tensorboard， 可以在fit里面配上callbacks的参数列表，加上tensorboard即可。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras.callbacks <span class="keyword">import</span> Tensorflow</span><br><span class="line"></span><br><span class="line">tensorboard = Tensorboard(log_dir=<span class="string">'logs/'</span>)</span><br><span class="line"></span><br><span class="line">history = model.fit(X_train, </span><br><span class="line">										Y_train, </span><br><span class="line">										batch_size=<span class="number">128</span>, </span><br><span class="line">										epochs=<span class="number">5</span>,</span><br><span class="line">										callbacks=[tensorboard])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras.callbacks <span class="keyword">import</span> Tensorflow</span><br><span class="line"></span><br><span class="line">tensorboard = Tensorboard(log_dir=<span class="string">'logs/'</span>)</span><br><span class="line"></span><br><span class="line">history = model.fit(X_train, Y_train, batch_size=<span class="number">128</span>, epochs=<span class="number">5</span>, callbacks=[tensorboard])</span><br></pre></td></tr></table></figure>
 <p>另外不用等训练完了再回头看训练等结果，可以实时观测训练数据的变化</p>
 </li>
-<li></li>
-<li><p>tensorflow添加graphy的时候加名字作用阈可以抽象节点，可以帮助梳理数据流图的结构，使得看上去不那么杂乱无章。但是目前还不知道在keras里面如何调用：</p>
+<li><p>tensorflow添加graphy的时候加名字作用阈可以抽象节点，可以帮助梳理数据流图的结构，使得看上去不那么杂乱无章。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">alpha =<span class="number">0.0001</span></span><br><span class="line">epoch = <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">'input'</span>):</span><br><span class="line">	x = </span><br><span class="line">	y = </span><br><span class="line">	</span><br><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">'hypothesis'</span>):</span><br><span class="line">	W =</span><br><span class="line">	y = </span><br><span class="line">	</span><br><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">'loss'</span>):</span><br><span class="line">	loss = </span><br><span class="line">	</span><br><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">'train'</span>):</span><br><span class="line">	train =</span><br></pre></td></tr></table></figure>
 <p><img src="/2019/12/28/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/WX20191229-114551@2x.png" style="zoom:50%;"></p>
 <p>如何创建会话呢？</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">	sess.run(tf.global_variable_initiallizer())</span><br><span class="line">	</span><br><span class="line">	writer = tf.summary.Filesummary(<span class="string">'/logdir'</span>, sess.graph)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">#开始训练</span></span><br><span class="line">	</span><br><span class="line">write.close()</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>定义模型一共有两种方法：一种是利用Sequential类，用于层的线形叠加，目前最常用的网络架构，还有一种是函数式API。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一，利用Sequential</span></span><br><span class="line"><span class="keyword">from</span> keras <span class="keyword">import</span> models</span><br><span class="line"><span class="keyword">from</span> keras <span class="keyword">import</span> layers</span><br><span class="line"></span><br><span class="line">model = model.Sequential()</span><br><span class="line">model.add(layers.Dense(<span class="number">32</span>))</span><br><span class="line">model.add(layers.Dense(<span class="number">32</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#利用API</span></span><br><span class="line"></span><br><span class="line">input_tensor = layers.Input(shape=(<span class="number">784</span>,))</span><br><span class="line">x= layers.Dense(<span class="number">32</span>)(input_tensor)</span><br><span class="line">output_tensor = layers.Dense(<span class="number">10</span>, activation=<span class="string">'relu'</span>)(x)</span><br><span class="line"></span><br><span class="line">model = models.Model(inputs=input_tensor, outputs=output_tensor)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将标签向量化有两种方法，一种是onehot-encode编码，还有一种是将标签转化为整数张量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y_train = np.array(train_labels)</span><br><span class="line">x_train = np.array(test_labels)</span><br></pre></td></tr></table></figure>
+<p>对于这种编码方法，唯一需要改变的是损失函数的选择， 由categorical_crossentropy改为sparse_categorical_crossentropy。</p>
+</li>
+<li><p>fit中的verbose控制日志输出的打印格式：</p>
+<p>verbose =0 , silent模式，什么也不打印</p>
+<p>verbose=1，progress bar 打印进度条</p>
+<p>verbose=2，onelint per epoch 直接打印信息。</p>
+</li>
+<li></li>
 </ul>
+
     </div>
 
     
@@ -420,7 +434,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -478,7 +492,7 @@
           <h3 class="widget-title">云 标签</h3>
           <div id="myCanvasContainer" class="widget tagcloud">
               <canvas width="250" height="250" id="resCanvas" style="width=100%">
-                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
               </canvas>
           </div>
         </div>
@@ -500,7 +514,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -510,13 +524,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">157k</span>
+    <span title="站点总字数">176k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:23</span>
+    <span title="站点阅读时长">2:40</span>
 </div>
 
 <!--

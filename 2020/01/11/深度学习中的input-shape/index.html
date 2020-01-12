@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="老是搞不清楚Dense\Rnn\Input中的几个input_shape，看了一些源代码和示例后不知道搞懂了没">
+<meta name="keywords" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习中的Input_shape参数">
+<meta property="og:url" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2020&#x2F;01&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84input-shape&#x2F;index.html">
+<meta property="og:site_name" content="JUMPSHOT">
+<meta property="og:description" content="老是搞不清楚Dense\Rnn\Input中的几个input_shape，看了一些源代码和示例后不知道搞懂了没">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-12T11:23:59.974Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://huangzhenyu.github.io/2020/01/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84input-shape/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>深度学习中的Input_shape参数 | JUMPSHOT</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JUMPSHOT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">data analysis/audio algorithm</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://huangzhenyu.github.io/2020/01/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84input-shape/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="跳投哥">
+      <meta itemprop="description" content="数据挖掘/音频算法/zhenyuhuang0501@gmail.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JUMPSHOT">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习中的Input_shape参数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-11 23:00:15" itemprop="dateCreated datePublished" datetime="2020-01-11T23:00:15+08:00">2020-01-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-12 19:23:59" itemprop="dateModified" datetime="2020-01-12T19:23:59+08:00">2020-01-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84input-shape/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84input-shape/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+            <div class="post-description">老是搞不清楚Dense\Rnn\Input中的几个input_shape，看了一些源代码和示例后不知道搞懂了没</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Base-Layer"><a href="#Base-Layer" class="headerlink" title="Base Layer"></a>Base Layer</h1><p>几乎所有的Layer都继承了这个base_layer.Layer</p><p>Layer中可输入参数有：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># These properties should be set by the user via keyword arguments.</span></span><br><span class="line"><span class="comment"># note that 'dtype', 'input_shape' and 'batch_input_shape'</span></span><br><span class="line"><span class="comment"># are only applicable to input layers: do not pass these keywords</span></span><br><span class="line"><span class="comment"># to non-input layers.</span></span><br><span class="line">allowed_kwargs = &#123;<span class="string">'input_shape'</span>,</span><br><span class="line">                  <span class="string">'batch_input_shape'</span>,</span><br><span class="line">                  <span class="string">'batch_size'</span>,</span><br><span class="line">                  <span class="string">'dtype'</span>,</span><br><span class="line">                  <span class="string">'name'</span>,</span><br><span class="line">                  <span class="string">'trainable'</span>,</span><br><span class="line">                  <span class="string">'weights'</span>,</span><br><span class="line">                  <span class="string">'input_dtype'</span>,  <span class="comment"># legacy</span></span><br><span class="line">                 &#125;</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<p>但input_shape不是必选参数，但最终都通过if else赋给了self.batch_input_shape这个属性：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="string">'input_shape'</span> <span class="keyword">in</span> kwargs <span class="keyword">or</span> <span class="string">'batch_input_shape'</span> <span class="keyword">in</span> kwargs:</span><br><span class="line"><span class="comment"># In this case we will later create an input layer</span></span><br><span class="line"><span class="comment"># to insert before the current layer</span></span><br><span class="line">	<span class="keyword">if</span> <span class="string">'batch_input_shape'</span> <span class="keyword">in</span> kwargs:</span><br><span class="line">    batch_input_shape = tuple(kwargs[<span class="string">'batch_input_shape'</span>])</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">'input_shape'</span> <span class="keyword">in</span> kwargs:</span><br><span class="line">      batch_size = kwargs.get(<span class="string">'batch_size'</span>) <span class="comment"># 注意这个地方很巧妙，如果列表中没有键值，会赋值None</span></span><br><span class="line">      batch_input_shape = (</span><br><span class="line">        batch_size,) + tuple(kwargs[<span class="string">'input_shape'</span>])</span><br><span class="line">   </span><br><span class="line">  self.batch_input_shape = batch_input_shape</span><br></pre></td></tr></table></figure>
+<p>到这，我们应该知道了</p>
+<p>input_shape，batch_input_shape，batch_size直接的关系了。再初始化神经网络层的时候，也就不会重复或者模糊定义了。但这个input_shape是几维张量就看具体输入特征和实际情况了。</p>
+<h1 id="Input-Layer"><a href="#Input-Layer" class="headerlink" title="Input Layer"></a>Input Layer</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keras.engine.input_layer.Input()</span><br></pre></td></tr></table></figure>
+<p>其实<strong>不是一个Layer，而是一个tensor</strong>,  用来初始化一个Keras的张量。</p>
+<p>通过工厂模式在Input()这个函数中创建了一个InputLayer()的实例，InputLayer()这个类继承于base_layer中的Layer函数，<strong>也就是上面的那个基类</strong>。用法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">For instance, if a, b and c are Keras tensors, it becomes possible to do: model = Model(input=[a, b], output=c)</span><br></pre></td></tr></table></figure>
+<p>而关于input_shape，在这个Input()函数的文档说明中有这么个定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Arguments</span><br><span class="line">  shape: A shape tuple (integer), not including the batch size.</span><br><span class="line">  	For instance, `shape=(32,)` indicates that the expected input</span><br><span class="line">  	will be batches of 32-dimensional vectors.</span><br><span class="line">  </span><br><span class="line">  batch_shape: A shape tuple (integer), including the batch size.</span><br><span class="line">  	For instance, `batch_shape=(10, 32)` indicates that</span><br><span class="line">  	the expected input will be batches of 10 32-dimensional vectors.</span><br><span class="line">  	`batch_shape=(None, 32)` indicates batches of an arbitrary number</span><br><span class="line">  	of 32-dimensional vectors.</span><br></pre></td></tr></table></figure>
+<p>则函数Input()里有这么一段，所以一切也就豁然开朗了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> shape <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="keyword">not</span> batch_shape:</span><br><span class="line">        batch_shape = (<span class="literal">None</span>,) + tuple(shape)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> dtype:</span><br><span class="line">        dtype = K.floatx()</span><br><span class="line">    input_layer = InputLayer(batch_input_shape=batch_shape,</span><br><span class="line">                             name=name, dtype=dtype,</span><br><span class="line">                             sparse=sparse,</span><br><span class="line">                             input_tensor=tensor)</span><br></pre></td></tr></table></figure>
+<p>使用Input()则可以这么来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># this is a logistic regression in Keras</span></span><br><span class="line">x = Input(shape=(<span class="number">32</span>,))</span><br><span class="line">y = Dense(<span class="number">16</span>, activation=<span class="string">'softmax'</span>)(x)</span><br><span class="line">model = Model(x, y)</span><br></pre></td></tr></table></figure>
+<h1 id="Dense-Layer"><a href="#Dense-Layer" class="headerlink" title="Dense Layer"></a>Dense Layer</h1><p>Dense()也继承本文最开始提到的Layer基类，在文档注释中关于input_shape是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Input shape</span><br><span class="line">  nD tensor with shape: `(batch_size, ..., input_dim)`.</span><br><span class="line">  The most common situation would be</span><br><span class="line">  a 2D input with shape `(batch_size, input_dim)`.</span><br></pre></td></tr></table></figure>
+<p>用法和其父类是一样的，但之前一直迷惑我但地方是，明明给input_shape是一个input_shape=(16, ), 怎么到model那边就成了input arrays的shape是(*, 16)了，这个✳️号是batch_size，而上述input_shape确实是（16，1）的数据，只不过默认缺省了1。</p>
+<p>这都是为了合成本文最开始提到的batch_input_shape这个属性。其实就是Dim的概念，</p>
+<p>引用<a href="https://stackoverflow.com/questions/44747343/keras-input-explanation-input-shape-units-batch-size-dim-etc" target="_blank" rel="noopener">Keras input explanation: input_shape, units, batch_size, dim, etc</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Dim</span><br><span class="line"></span><br><span class="line">And in the end, what is dim?</span><br><span class="line">If your input shape has only one dimension, you don&apos;t need to give it as a tuple, you give input_dim as a scalar number.</span><br><span class="line"></span><br><span class="line">So, in your model, where your input layer has 3 elements, you can use any of these two:</span><br><span class="line"></span><br><span class="line">1.input_shape=(3,) -- The comma is necessary when you have only one dimension</span><br><span class="line">2. input_dim = 3 , 最新版以及没有这个input_dim，好像被删了</span><br><span class="line">But when dealing directly with the tensors, often dim will refer to how many dimensions a tensor has. For instance a tensor with shape (25,10909) has 2 dimensions.</span><br></pre></td></tr></table></figure>
+<h1 id="RNN-CNN-Layer"><a href="#RNN-CNN-Layer" class="headerlink" title="RNN/CNN Layer"></a>RNN/CNN Layer</h1><p>RNN的输入，则多加了一个timestep的维度，所以在DenseLayer中写成(16, )的输入形状，如果在RNN中需要利用前面16个的timestep的输出信息，那么input_shape就要写成(16,16)了，而batch_size则保持原来不变。</p>
+<p>而对于CNN来说，情况就更复杂，但也更容易理解一些了。图片本身的维度就三维，所以如果对于50x50个像素点，RGB保存的图像来说，其input_shape就是（50， 50，3），当然这是针对channel last如果说channel first那就是(3, 50, 50)了，再如果有30个batch_size的话，那就是(30, 50, 50, 3)或者（30，3，50，50）了。</p>
+<p>最后举个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 1 .With the Sequential model:</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Sequential  </span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> *  </span><br><span class="line"></span><br><span class="line">model = Sequential()    </span><br><span class="line"></span><br><span class="line"><span class="comment">#start from the first hidden layer, since the input is not actually a layer   </span></span><br><span class="line"><span class="comment">#but inform the shape of the input, with 3 elements.    </span></span><br><span class="line">model.add(Dense(units=<span class="number">4</span>,input_shape=(<span class="number">3</span>,))) <span class="comment">#hidden layer 1 with input</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#further layers:    </span></span><br><span class="line">model.add(Dense(units=<span class="number">4</span>)) <span class="comment">#hidden layer 2</span></span><br><span class="line">model.add(Dense(units=<span class="number">1</span>)) <span class="comment">#output layer   </span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 2.With the functional API Model:</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Model   </span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> * </span><br><span class="line"></span><br><span class="line"><span class="comment">#Start defining the input tensor:</span></span><br><span class="line">inpTensor = Input((<span class="number">3</span>,))   </span><br><span class="line"></span><br><span class="line"><span class="comment">#create the layers and pass them the input tensor to get the output tensor:    </span></span><br><span class="line">hidden1Out = Dense(units=<span class="number">4</span>)(inpTensor)    </span><br><span class="line">hidden2Out = Dense(units=<span class="number">4</span>)(hidden1Out)    </span><br><span class="line">finalOut = Dense(units=<span class="number">1</span>)(hidden2Out)   </span><br><span class="line"></span><br><span class="line"><span class="comment">#define the model's start and end points    </span></span><br><span class="line">model = Model(inpTensor,finalOut)</span><br></pre></td></tr></table></figure>
+<p>而它们输入输出则为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Shapes of the tensors</span><br><span class="line"></span><br><span class="line">Remember you ignore batch sizes when defining layers:</span><br><span class="line"></span><br><span class="line">inpTensor: (None,3)</span><br><span class="line">hidden1Out: (None,4)</span><br><span class="line">hidden2Out: (None,4)</span><br><span class="line">finalOut: (None,1)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+      
+        <div class="reward-container">
+  <div>请我吃个串？</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="跳投哥 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="跳投哥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/01/04/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="next" title="Python设计模式（四）：行为型模式">
+                  <i class="fa fa-chevron-left"></i> Python设计模式（四）：行为型模式
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2020/01/12/%E5%8A%A0%E6%B7%B1%E7%90%86%E8%A7%A3RNN%EF%BC%8C%E7%9C%8B%E8%BF%99%E5%87%A0%E7%AF%87%E5%8D%9A%E5%AE%A2%E5%B0%B1%E5%A4%9F%E4%BA%86/" rel="prev" title="加深理解Rnn，这几篇博客足矣！">
+                  加深理解Rnn，这几篇博客足矣！ <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Base-Layer"><span class="nav-number">1.</span> <span class="nav-text">Base Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Input-Layer"><span class="nav-number">2.</span> <span class="nav-text">Input Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dense-Layer"><span class="nav-number">3.</span> <span class="nav-text">Dense Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RNN-CNN-Layer"><span class="nav-number">4.</span> <span class="nav-text">RNN/CNN Layer</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="跳投哥"
+    src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">跳投哥</p>
+  <div class="site-description" itemprop="description">数据挖掘/音频算法/zhenyuhuang0501@gmail.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangzhenyu" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;huangzhenyu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6457254143/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;6457254143&#x2F;profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      以下链接可能对你有帮助
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://sigpack.sourceforge.net/index.html" title="http:&#x2F;&#x2F;sigpack.sourceforge.net&#x2F;index.html" rel="noopener" target="_blank">音频处理C++包</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://people.xiph.org/~jm/demo/rnnoise/" title="https:&#x2F;&#x2F;people.xiph.org&#x2F;~jm&#x2F;demo&#x2F;rnnoise&#x2F;" rel="noopener" target="_blank">RNNoise</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pyroomacoustics.readthedocs.io/en/pypi-release/index.html" title="https:&#x2F;&#x2F;pyroomacoustics.readthedocs.io&#x2F;en&#x2F;pypi-release&#x2F;index.html" rel="noopener" target="_blank">Pyroomacoustics</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">云 标签</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VScode/" rel="tag">VScode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beamforming/" rel="tag">beamforming</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5/" rel="tag">协方差矩阵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">小知识点</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%87%E9%92%88/" rel="tag">指针</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/" rel="tag">波束形成</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag">结构体</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91/" rel="tag">音频</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E7%AE%97%E6%B3%95/" rel="tag">音频算法</a><span class="tag-list-count">2</span></li></ul>
+              </canvas>
+          </div>
+        </div>
+      
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">跳投哥</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">176k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:40</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FniAiQWdIijyYRl3o9TevI5g-gzGzoHsz',
+    appKey: '5lWSt0CQ5psKbi3r8h9vKJHe',
+    placeholder: "Just go go",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
