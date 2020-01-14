@@ -58,11 +58,11 @@
 <meta property="og:site_name" content="JUMPSHOT">
 <meta property="og:description" content="时域波束形成问题建模及评价指标（白噪声增益、指向性因数、波束模式等）">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2020&#x2F;01&#x2F;13&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AB%EF%BC%89%EF%BC%9A%E6%97%B6%E5%9F%9F%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;阵列模型.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2020&#x2F;01&#x2F;13&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AB%EF%BC%89%EF%BC%9A%E6%97%B6%E5%9F%9F%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;WX20200115-000637@2x.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2020&#x2F;01&#x2F;13&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AB%EF%BC%89%EF%BC%9A%E6%97%B6%E5%9F%9F%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;框图1.png">
-<meta property="og:updated_time" content="2020-01-14T01:09:51.937Z">
+<meta property="og:updated_time" content="2020-01-14T16:07:25.907Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2020&#x2F;01&#x2F;13&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AB%EF%BC%89%EF%BC%9A%E6%97%B6%E5%9F%9F%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;阵列模型.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;huangzhenyu.github.io&#x2F;2020&#x2F;01&#x2F;13&#x2F;%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AB%EF%BC%89%EF%BC%9A%E6%97%B6%E5%9F%9F%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90&#x2F;WX20200115-000637@2x.png">
 
 <link rel="canonical" href="https://huangzhenyu.github.io/2020/01/13/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AB%EF%BC%89%EF%BC%9A%E6%97%B6%E5%9F%9F%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/">
 
@@ -223,7 +223,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-14 09:09:51" itemprop="dateModified" datetime="2020-01-14T09:09:51+08:00">2020-01-14</time>
+                <time title="修改时间：2020-01-15 00:07:25" itemprop="dateModified" datetime="2020-01-15T00:07:25+08:00">2020-01-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -289,7 +289,7 @@
 <p>下面正式开始</p>
 <h2 id="信号建模"><a href="#信号建模" class="headerlink" title="信号建模"></a>信号建模</h2><p>这部分主要是把时域波束形成接受信号的形式，写成类似于频域的形式，即包含导向向量部分的数学表达式，中间用了许多的数学技巧。</p>
 <p>$M$个麦克风组成的直线阵列，不同麦克风之间的间距为$ \delta$,  选择下图最右侧标记为1的麦克风为参考。</p>
-<p><img src="/2020/01/13/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AB%EF%BC%89%EF%BC%9A%E6%97%B6%E5%9F%9F%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/阵列模型.png" style="zoom:50%;"></p>
+<p><img src="/2020/01/13/%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90%E6%8A%80%E6%9C%AF%EF%BC%88%E5%85%AB%EF%BC%89%EF%BC%9A%E6%97%B6%E5%9F%9F%E6%B3%A2%E6%9D%9F%E5%BD%A2%E6%88%90/WX20200115-000637@2x.png" style="zoom:50%;"></p>
 <p>则第$m$个麦克风接受到的信号为：</p>
 <script type="math/tex; mode=display">
 \begin{aligned} y_{m}(t) &=x\left[t-\Delta-f_{\mathrm{s}} \tau_{m}\left(\cos \theta_{\mathrm{d}}\right)\right]+v_{m}(t) \\ &=x_{m}(t)+v_{m}(t), m=1,2, \ldots, M \end{aligned}</script><p>其中$\Delta$是声源传播到麦克风1所用的时间，$f_s$是采样频率，其中$\tau$是任意两个麦克风之间的时延，$\theta_d$是声源入射角度。</p>
@@ -543,13 +543,13 @@ x_{m}(t) \approx \sum_{n=-P-L_{h}+1}^{P} x(t-\Delta-n) \operatorname{sinc}\left[
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">192k</span>
+    <span title="站点总字数">194k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:54</span>
+    <span title="站点阅读时长">2:56</span>
 </div>
 
 <!--
